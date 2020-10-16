@@ -6,6 +6,11 @@ __pycache__/
 # C extensions
 *.so
 
+# custom, such as other repos:
+pose/mmpose
+tsc/dl-4-tsc
+
+
 # Distribution / packaging
 .Python
 build/

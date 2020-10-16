@@ -1,0 +1,2 @@
+- [ ] only use pytorch?
+- [ ] fix requirement file to run on alvis (basically the one for dl-4-tsc without numpy/scipy?)  
