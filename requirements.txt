@@ -1,15 +1,22 @@
 # consider best way of doing this...
 # mmpose (clone filipkro/mmpose.git to pose folder):
--r pose/mmpose/requirements.txt
-#-r pose/mmpose/requirements/build.txt
-#-r pose/mmpose/requirements/runtime.txt
-#-r pose/mmpose/requirements/tests.txt
+#-r pose/mmpose/requirements.txt
+
+-r pose/mmpose/requirements/build.txt
+-r pose/mmpose/requirements/runtime.txt
+-r pose/mmpose/requirements/tests.txt
+
 # dl-4-tsc (clone filipkro/dl-4-tlc.git to tsc folder):
--r tsc/dl-4-tsc/utils/pip-requirements.txt
+-r tsc/dl-4-tsc/utils/requirements.txt
 
 # for mmdet:
 mmcv-full
 
 # clone mmdetection to mmpose folder
--r pose/mmpose/mmdetection/requirements.txt
+#-r pose/mmpose/mmdetection/requirements.txt
+-r pose/mmpose/mmdetection/requirements/build.txt
+-r pose/mmpose/mmdetection/requirements/optional.txt
+-r pose/mmpose/mmdetection/requirements/runtime.txt
+-r pose/mmpose/mmdetection/requirements/tests.txt
+
 #-v -e pose/mmpose/mmdetection/.
