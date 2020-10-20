@@ -212,7 +212,7 @@ def start(args):
 
     flag, img = cap.read()
     cap.release()
-    person_bboxes, rotate = box_check(img)
+    person_bboxes, rotate = box_check(img, args.device)
 
     print(args.only_box)
     if args.only_box:
