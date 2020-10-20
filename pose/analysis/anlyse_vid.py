@@ -42,7 +42,7 @@ if ON_CLUSTER:
 if ON_CLUSTER:
     def print(obj):
         global PRINTS
-        PRINTS += obj + '\n'
+        PRINTS += str(obj) + '\n'
 
 
 def box_check(img, device='cpu'):
