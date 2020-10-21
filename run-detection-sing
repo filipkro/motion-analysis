@@ -1,26 +1,19 @@
 #!/usr/bin/env bash
 #SBATCH -A SNIC2020-33-20 -p alvis
-#SBATCH -n 1
+#SBATCH -n 4
 #SBATCH --gpus-per-node=T4:1
-#SBATCH -t 2-0 # 2 days
+#SBATCH -t 1-0:20:0 # 20 min
 
 vid="025_FL_R.MOV"
 
 cp -r $HOME/motion-analysis $TMPDIR
-cp -r $HOME/vid/$vid $TMPDIR
+cp -r $HOME/vids/$vid $TMPDIR
 
 cd $TMPDIR
 mkdir results
 
-singularity shell --nv /apps/hpc-ai-containers/PyTorch/PyTorch_v1.6.0-py3.sif
-
 cd motion-analysis
-./install.sh cluster
-
-
-cd pose/analysis
-
-./run-detection-cluster.sh
+singularity exec --nv /apps/hpc-ai-containers/PyTorch/PyTorch_v1.6.0-py3.sif ./install-cluster.sh ./run-detection-cluster.sh
 
 cd $TMPDIR
 cp -r results $HOME/results

@@ -1,25 +1,25 @@
 #!/usr/bin/env bash
 #SBATCH -A SNIC2020-33-20 -p alvis
-#SBATCH -n 1
+#SBATCH -n 4
 #SBATCH --gpus-per-node=T4:1
-#SBATCH -t 2-0 # 2 days
+#SBATCH -t 0-0:40:0 # 40 min
 
 vid="025_FL_R.MOV"
 
 cp -r $HOME/motion-analysis $TMPDIR
-cp -r $HOME/vid/$vid $TMPDIR
+cp -r $HOME/vids/$vid $TMPDIR
 
 cd $TMPDIR
 mkdir results
 
 module load GCC/8.3.0 CUDA/10.1.243 OpenMPI/3.1.4 PyTorch/1.4.0-Python-3.7.4 SciPy-bundle/2019.10-Python-3.7.4
+module load OpenCV/4.2.0-Python-3.7.4 Pillow 
+
+export PYTHONPATH=$PYTHONPATH:/apps/Vera/software/Compiler/GCCcore/8.3.0/Python/3.7.4/lib/python3.7/site-packages/
+export PATH=$PATH:/apps/Vera/software/Compiler/GCCcore/8.3.0/Python/3.7.4/bin
 
 cd motion-analysis
-./install.sh cluster
-
-pythonpath="$(which python)"
-export PYTHONPATH=$PYTHONPATH:$pythonpath/lib/python3.6/site-packages/
-export PATH=$PATH:$pythonpath/bin
+./install-cluster.sh
 
 cd pose/analysis
 

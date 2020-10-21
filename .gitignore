@@ -13,6 +13,8 @@ tsc/dl-4-tsc
 # singularity
 *.sif
 
+slurm-*
+
 # Distribution / packaging
 .Python
 build/
