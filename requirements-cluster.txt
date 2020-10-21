@@ -1,3 +1,6 @@
+# for mmdet:
+mmcv-full
+
 # consider best way of doing this...
 # mmpose (clone filipkro/mmpose.git to pose folder):
 
@@ -6,8 +9,7 @@
 # dl-4-tsc (clone filipkro/dl-4-tlc.git to tsc folder):
 #-r tsc/dl-4-tsc/utils/requirements-cluster.txt
 
-# for mmdet:
-mmcv-full
+
 
 # clone mmdetection to mmpose folder
 #-r pose/mmpose/mmdetection/requirements.txt
