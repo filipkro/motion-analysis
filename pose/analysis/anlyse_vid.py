@@ -39,10 +39,10 @@ if ON_CLUSTER:
     print('NOTHING WILL PRINT, ON CLUSTER')
 
 
-if ON_CLUSTER:
-    def print(obj):
-        global PRINTS
-        PRINTS += str(obj) + '\n'
+# if ON_CLUSTER:
+    # def print(obj):
+    #     global PRINTS
+    #     PRINTS += str(obj) + '\n'
 
 
 def box_check(img, device='cpu'):
@@ -291,9 +291,9 @@ def main():
     # print('lollol')
     # print('lkjfds')
     start(args)
-    if ON_CLUSTER:
-        print_file = open(args.out_video_root + '/print_file.txt', 'w')
-        print_file.write(PRINTS)
+    # if ON_CLUSTER:
+    #     print_file = open(args.out_video_root + '/print_file.txt', 'w')
+    #     print_file.write(PRINTS)
 
 
 if __name__ == '__main__':
