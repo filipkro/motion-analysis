@@ -10,6 +10,8 @@ __pycache__/
 pose/mmpose
 tsc/dl-4-tsc
 
+# singularity
+*.sif
 
 # Distribution / packaging
 .Python
