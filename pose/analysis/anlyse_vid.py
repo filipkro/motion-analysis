@@ -30,6 +30,7 @@ parser.add_argument('--kpt-thr', type=float, default=0.3,
 parser.add_argument('--on_cluster', type=int, default=0)
 parser.add_argument('--file_name', type=str, default='')
 parser.add_argument('--only_box', type=bool, default=False)
+parser.add_argument('--folder_2d', type=str, default='')
 # parser.add_argument('--csv-path', type=str, help='CSV path')
 
 args = parser.parse_args()
@@ -48,9 +49,11 @@ if ON_CLUSTER:
 def box_check(img, device='cpu'):
     global PRINTS, ON_CLUSTER
     flip = False
-    det_config = '/home/filipkr/Documents/xjob/mmpose/mmdetection/' +\
+    #det_config = '/home/filipkr/Documents/xjob/mmpose/mmdetection/' +\
+    #    'configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py'
+    det_config = args.folder_2d +\
         'configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py'
-    det_model = '/home/filipkr/Documents/xjob/mmpose/mmdetection/' +\
+    det_model = args.folder_2d +\
         'checkpoints/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth'
     det_model = init_detector(det_config, det_model, device=device)
     print('loaded detection model')
@@ -201,7 +204,7 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False):
 
 def start(args):
     global PRINTS
-
+    print(args.video_path)
     cap = cv2.VideoCapture(args.video_path)
     print('loaded video...')
     print('checking orientation and position')
@@ -297,6 +300,6 @@ def main():
 
 
 if __name__ == '__main__':
-    # global PRINTS
-    # print('starting...')
+    #global PRINTS
+    print('starting...')
     main()
