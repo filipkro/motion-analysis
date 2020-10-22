@@ -1,5 +1,5 @@
 import os
-from argparse import ArgumentParser
+from argparse import ArgumentParser, ArgumentTypeError
 
 import cv2
 from mmdet.apis import inference_detector, init_detector, show_result_pyplot
@@ -10,54 +10,17 @@ from mmpose.apis import (inference_top_down_pose_model, init_pose_model,
 import time
 import numpy as np
 
-PRINTS = ''
 
-parser = ArgumentParser()
-parser.add_argument('pose_config', help='Config file for pose')
-parser.add_argument('pose_checkpoint', help='Checkpoint file for pose')
-parser.add_argument('--video-path', type=str, help='Video path')
-parser.add_argument('--show', action='store_true', default=False,
-                    help='whether to show visualizations.')
-parser.add_argument('--out-video-root', default='',
-                    help='Root of the output video file. '
-                    'Default not saving the visualization video.')
-parser.add_argument('--device', default='cpu',
-                    help='Device used for inference')
-parser.add_argument('--box-thr', type=float, default=0.3,
-                    help='Bounding box score threshold')
-parser.add_argument('--kpt-thr', type=float, default=0.3,
-                    help='Keypoint score threshold')
-parser.add_argument('--on_cluster', type=int, default=0)
-parser.add_argument('--file_name', type=str, default='')
-parser.add_argument('--only_box', type=bool, default=False)
-parser.add_argument('--folder_2d', type=str, default='')
-# parser.add_argument('--csv-path', type=str, help='CSV path')
-
-args = parser.parse_args()
-
-ON_CLUSTER = args.on_cluster
-if ON_CLUSTER:
-    print('NOTHING WILL PRINT, ON CLUSTER')
-
-
-# if ON_CLUSTER:
-    # def print(obj):
-    #     global PRINTS
-    #     PRINTS += str(obj) + '\n'
-
-
-def box_check(img, device='cpu'):
-    global PRINTS, ON_CLUSTER
+def box_check(img, folder_box, show_box=False, device='cpu'):
     flip = False
-    #det_config = '/home/filipkr/Documents/xjob/mmpose/mmdetection/' +\
+    # det_config = '/home/filipkr/Documents/xjob/mmpose/mmdetection/' +\
     #    'configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py'
-    det_config = args.folder_2d +\
+    det_config = folder_box +\
         'configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py'
-    det_model = args.folder_2d +\
+    det_model = folder_box +\
         'checkpoints/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth'
     det_model = init_detector(det_config, det_model, device=device)
     print('loaded detection model')
-
     det_results = inference_detector(det_model, img)
     # bbox = det_results[0]
     bbox = np.expand_dims(np.array(det_results[0])[0, :], axis=0)
@@ -72,15 +35,13 @@ def box_check(img, device='cpu'):
         bbox[0, 0] -= 100
 
     print('bounding box found: {0}'.format(bbox))
-    if not ON_CLUSTER:
+    if show_box:
         show_result_pyplot(det_model, img, det_results)
 
     return bbox, flip
 
 
 def flip_box(bbox, width):
-    global PRINTS
-
     print(bbox)
     print(width)
     bbox[0, 0] = width - bbox[0, 0]
@@ -89,8 +50,8 @@ def flip_box(bbox, width):
     return bbox
 
 
-def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False):
-    global PRINTS, ON_CLUSTER
+def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
+         t0=time.perf_counter()):
 
     cap = cv2.VideoCapture(args.video_path)
 
@@ -118,7 +79,7 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False):
     rmax = 0
 
     frame = 0
-    t0 = time.perf_counter()
+    # t0 = time.perf_counter()
     prev_pose = 0
     while (cap.isOpened()):
         t1 = time.perf_counter()
@@ -165,9 +126,11 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False):
                     cap.release()
                     videoWriter.release()
                     cv2.destroyAllWindows()
-                    loop(args, rotate, fname, flip_box(person_bboxes, size[0]),
-                         pose_model, True)
-                    return
+                    total_time = loop(args, rotate, fname,
+                                      flip_box(person_bboxes,
+                                               size[0]), pose_model,
+                                      True, t0)
+                    return total_time
 
                 poses[frame, ...] = ratios
 
@@ -182,7 +145,7 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False):
                                   dataset=dataset, kpt_score_thr=args.kpt_thr,
                                   show=False)
 
-        if args.show or frame % skip_ratio == 0 and not ON_CLUSTER:
+        if args.show and frame % skip_ratio == 0:
             cv2.imshow('Image', vis_img)
 
         # if save_out_video:
@@ -201,9 +164,10 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False):
 
     cv2.destroyAllWindows()
 
+    return time.perf_counter() - t0
+
 
 def start(args):
-    global PRINTS
     print(args.video_path)
     cap = cv2.VideoCapture(args.video_path)
     print('loaded video...')
@@ -215,7 +179,8 @@ def start(args):
 
     flag, img = cap.read()
     cap.release()
-    person_bboxes, rotate = box_check(img, args.device)
+    person_bboxes, rotate = box_check(
+        img, args.folder_box, device=args.device, show_box=args.show_box)
 
     print(args.only_box)
     if args.only_box:
@@ -260,46 +225,52 @@ def start(args):
 
         print(fname)
 
-    loop(args, rotate, fname, person_bboxes, pose_model)
+    return loop(args, rotate, fname, person_bboxes, pose_model)
+
+
+def str2bool(v):
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise ArgumentTypeError('Boolean value expected.')
 
 
 def main():
-    global PRINTS, ON_CLUSTER
     """Visualize the demo images.
 
     Using mmdet to detect the human.
     """
-    # parser = ArgumentParser()
-    # parser.add_argument('pose_config', help='Config file for pose')
-    # parser.add_argument('pose_checkpoint', help='Checkpoint file for pose')
-    # parser.add_argument('--video-path', type=str, help='Video path')
-    # parser.add_argument('--show', action='store_true', default=False,
-    #                     help='whether to show visualizations.')
-    # parser.add_argument('--out-video-root', default='',
-    #                     help='Root of the output video file. '
-    #                     'Default not saving the visualization video.')
-    # parser.add_argument('--device', default='cpu',
-    #                     help='Device used for inference')
-    # parser.add_argument('--box-thr', type=float, default=0.3,
-    #                     help='Bounding box score threshold')
-    # parser.add_argument('--kpt-thr', type=float, default=0.3,
-    #                     help='Keypoint score threshold')
-    # parser.add_argument('--file_name', type=str, default='')
-    # parser.add_argument('--only_box', type=bool, default=False)
-    # # parser.add_argument('--csv-path', type=str, help='CSV path')
-    #
-    # args = parser.parse_args()
-    assert args.show or (args.out_video_root != '')
+    parser = ArgumentParser()
+    parser.add_argument('pose_config', help='Config file for pose')
+    parser.add_argument('pose_checkpoint', help='Checkpoint file for pose')
+    parser.add_argument('--video-path', type=str, help='Video path')
+    parser.add_argument('--show', type=str2bool, nargs='?', const=True,
+                        default=False, help="show results.")
+    parser.add_argument('--out-video-root', default='',
+                        help='Root of the output video file. '
+                        'Default not saving the visualization video.')
+    parser.add_argument('--device', default='cpu',
+                        help='Device used for inference')
+    parser.add_argument('--box-thr', type=float, default=0.3,
+                        help='Bounding box score threshold')
+    parser.add_argument('--kpt-thr', type=float, default=0.3,
+                        help='Keypoint score threshold')
+    parser.add_argument('--file_name', type=str, default='')
+    parser.add_argument('--only_box', type=str2bool, nargs='?', const=True,
+                        default=False, help="only show bounding box")
+    parser.add_argument('--folder_box', type=str, default='')
+    parser.add_argument('--show_box', type=str2bool, nargs='?', const=True,
+                        default=False, help="show bounding box.")
 
-    # print('lollol')
-    # print('lkjfds')
+    args = parser.parse_args()
+
     start(args)
-    # if ON_CLUSTER:
-    #     print_file = open(args.out_video_root + '/print_file.txt', 'w')
-    #     print_file.write(PRINTS)
 
 
 if __name__ == '__main__':
-    #global PRINTS
     print('starting...')
     main()

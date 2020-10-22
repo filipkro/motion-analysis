@@ -45,8 +45,8 @@ def main():
 
             # debug = file == 'vis_002FL25HRNetTopDownCocoDataset.npy'
             debug = False
-            mts, mts_labels = parse_mts(
-                poses, kpts.copy(), i % 2, mts, mts_labels, angles, debug=debug)
+            mts, mts_labels = parse_mts(poses, kpts.copy(), i % 2, mts,
+                                        mts_labels, angles, debug=debug)
             # mts = mts[..., :-2]
             i += 1
 
