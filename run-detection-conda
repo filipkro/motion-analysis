@@ -21,7 +21,7 @@ source activate $TMPDIR/detection/
 
 cd motion-analysis
 
-./install-pose-cluster.sh
+./install/install-cluster.sh
 
 cd pose/analysis
 
