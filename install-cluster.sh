@@ -9,6 +9,6 @@ pip install -v -e .
 cd ..
 
 #install mmpose:
-python setup.py develop
+python setup-cluster.py develop
 
 cd ../..
