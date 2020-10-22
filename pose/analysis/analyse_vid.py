@@ -37,6 +37,8 @@ def box_check(img, folder_box, show_box=False, device='cpu'):
     print('bounding box found: {0}'.format(bbox))
     if show_box:
         show_result_pyplot(det_model, img, det_results)
+    
+    bbox = np.array(bbox)
 
     return bbox, flip
 

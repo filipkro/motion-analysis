@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #SBATCH -A SNIC2020-33-20 -p alvis
-#SBATCH -n 4
+#SBATCH -n 4 
 #SBATCH --gpus-per-node=T4:1
-#SBATCH -t 0-5:00:0 # 5h
+#SBATCH -t 0-1:00:0 # 1h
 
 vid="vids2cluster"
 
@@ -25,10 +25,12 @@ bash install/install-pose-cluster.sh
 
 cd pose/analysis
 
+echo "runnning bash script"
+
 ./run-folder-cluster.sh $vid
 
 cd $TMPDIR
-cp -r results $HOME/results-badknee
+cp -r results $HOME/results-badknee-wo6
 
 
 #conda clean --all -y --quiet

@@ -9,4 +9,8 @@ FOLDER_BOX="$TMPDIR/motion-analysis/pose/mmpose/mmdetection/"
 OUT_DIR="$TMPDIR/results"
 ONLY_BOX=false
 
+echo "launching python scripts"
+
+echo "$(which python)"
+
 python analyse_folder.py $MODEL_CONFIG $MODEL_CHECKPOINT $VIDEO_FOLDER --out-video-root $OUT_DIR --device cuda:0 --folder_box $FOLDER_BOX --show false

@@ -4,7 +4,7 @@
 #SBATCH --gpus-per-node=T4:1
 #SBATCH -t 0-0:40:0 # 40 min
 
-vid="025_FL_R.MOV"
+vid="006FL.MTS"
 
 cp -r $HOME/motion-analysis $TMPDIR
 cp -r $HOME/vids/$vid $TMPDIR
@@ -28,7 +28,7 @@ cd pose/analysis
 ./run-detection-cluster.sh $vid
 
 cd $TMPDIR
-cp -r results $HOME/results
+cp -r results $HOME/results-vid6
 
 
 #conda clean --all -y --quiet
