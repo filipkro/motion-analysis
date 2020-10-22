@@ -18,6 +18,7 @@ def str2bool(v):
 
 
 def main():
+    print('parsing arguments...')
     parser = ArgumentParser()
     parser.add_argument('pose_config', help='Config file for pose')
     parser.add_argument('pose_checkpoint', help='Checkpoint file for pose')
@@ -41,6 +42,8 @@ def main():
                         default=False, help="show bounding box.")
 
     args = parser.parse_args()
+
+    print('arguments parsed, starting')
 
     # i have only access to gpu on cluster, hence:
     if args.device != 'cpu':
@@ -73,4 +76,5 @@ def main():
 
 
 if __name__ == '__main__':
+    print('starting...')
     main()
