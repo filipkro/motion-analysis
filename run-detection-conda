@@ -21,7 +21,7 @@ source activate $TMPDIR/detection/
 
 cd motion-analysis
 
-./install-cluster.sh
+./install-pose-cluster.sh
 
 cd pose/analysis
 
@@ -31,5 +31,5 @@ cd $TMPDIR
 cp -r results $HOME/results
 
 
-conda clean --all -y
-conda remove -n detection --all -y
+conda clean --all -y --quiet
+conda remove -n detection --all -y --quiet
