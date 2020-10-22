@@ -14,6 +14,7 @@ tsc/dl-4-tsc
 *.sif
 
 slurm-*
+*.swp
 
 # Distribution / packaging
 .Python
