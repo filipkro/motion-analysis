@@ -102,9 +102,9 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
                                                          dataset=dataset)
             t = time.perf_counter()
 
-            print('Frame {0} out of {1} '.format(frame, frames) +
-                  'analysed in {0} secs. '.format(t - t1) +
-                  'Total time: {0} secs'.format(t - t0))
+            print('Frame {:.4f} out of {:.4f} '.format(frame, frames) +
+                  'analysed in {:.4f} secs. '.format(t - t1) +
+                  'Total time: {:.4f} secs'.format(t - t0))
 
             # show the results
             if np.shape(pose_results)[0] > 0:

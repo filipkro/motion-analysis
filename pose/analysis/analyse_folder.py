@@ -3,7 +3,7 @@ import os
 import analyse_vid
 import time
 
-FILE_FORMATS = ('.avi', '.mp4', '.MTS', '.MOV')
+FILE_FORMATS = ('.avi', '.mp4', '.MTS', '.MOV', 'mp2t')
 
 
 def str2bool(v):
@@ -21,7 +21,7 @@ def main():
     parser = ArgumentParser()
     parser.add_argument('pose_config', help='Config file for pose')
     parser.add_argument('pose_checkpoint', help='Checkpoint file for pose')
-    parser.add_argument('--video-folder', type=str, help='Video folder')
+    parser.add_argument('video_folder', type=str, help='Video folder')
     parser.add_argument('--show', type=str2bool, nargs='?', const=True,
                         default=False, help="show results.")
     parser.add_argument('--out-video-root', default='',
@@ -51,6 +51,8 @@ def main():
     if args.video_folder[-1] != '/':
         args.video_folder += '/'
 
+    print(args.video_folder)
+
     print('files to be processed: {0}'.format(os.listdir(args.video_folder)))
 
     nbr_of_files = len(os.listdir(args.video_folder))
@@ -63,9 +65,9 @@ def main():
 
             process_time = analyse_vid.start(args)
             t = time.perf_counter()
-            print('Video {0} out of {1} processed \
-                in {2} seconds.'.format(processed, nbr_of_files, process_time))
-            print('Total time: {0} seconds'.format(t - t0))
+            print('Video {:.4f} out of {:.4f} processed in {:.4f} \
+                seconds.'.format(processed, nbr_of_files, process_time))
+            print('Total time: {:.4f} seconds'.format(t - t0))
 
     print('DONE')
 
