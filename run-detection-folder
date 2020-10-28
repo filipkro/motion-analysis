@@ -2,9 +2,9 @@
 #SBATCH -A SNIC2020-33-20 -p alvis
 #SBATCH -n 4 
 #SBATCH --gpus-per-node=T4:1
-#SBATCH -t 0-1:00:0 # 1h
+#SBATCH -t 0-10:00:0 # 1h
 
-vid="vids2cluster"
+vid="vids2cluster-badknee"
 
 cp -r $HOME/motion-analysis $TMPDIR
 cp -r $HOME/vids/$vid $TMPDIR
@@ -30,7 +30,7 @@ echo "runnning bash script"
 ./run-folder-cluster.sh $vid
 
 cd $TMPDIR
-cp -r results $HOME/results-badknee-wo6
+cp -r results $HOME/results-badknee-new
 
 
 #conda clean --all -y --quiet

@@ -71,9 +71,10 @@ def main():
             args.video_path = args.video_folder + vid
             print(vid)
             process_time = analyse_vid.start(args)
-            print('Video {} out of {} processed in {:.4f} \
+            t = time.perf_counter()
+            print('Video {:.0f} out of {:.0f} processed in {:.4f} \
                 seconds.'.format(processed, nbr_of_files, process_time))
-            # print('Total time: {:.4f} seconds'.format(t - t0))
+        
 
         processed += 1
 
