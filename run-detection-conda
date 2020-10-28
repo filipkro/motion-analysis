@@ -6,7 +6,7 @@
 
 vid="36SLS1R_Oqus_2_14902.avi"
 allow_flip="False"
-
+save_pixels="True"
 
 cp -r $HOME/motion-analysis $TMPDIR
 cp -r $HOME/vids/$vid $TMPDIR
@@ -27,7 +27,7 @@ bash install/install-pose-cluster.sh
 
 cd pose/analysis
 
-./run-detection-cluster.sh $vid $allow_flip
+./run-detection-cluster.sh $vid $allow_flip $save_pixels
 
 cd $TMPDIR
 cp -r results $HOME/results-FL
