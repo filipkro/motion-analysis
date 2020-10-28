@@ -44,6 +44,7 @@ def box_check(img, folder_box, show_box=False, device='cpu'):
 def flip_box(bbox, width):
     print(bbox)
     print(width)
+
     bbox[0, 0] = width - bbox[0, 0]
     bbox[0, 2] = width - bbox[0, 2]
 
@@ -117,9 +118,9 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
                 rmin = min((ratios[14, 1], rmin))
                 rmax = max((ratios[14, 1], rmax))
 
-                if not flipped and ((rmax - rmin) > 0.1 or
-                                    (frame > 150 and
-                                     (rmax - rmin) > (lmax - lmin))):
+                if args.allow_flip and not flipped and ((rmax - rmin) > 0.1 or
+                                                        (frame > 150 and
+                                                         (rmax - rmin) > (lmax - lmin))):
                     # flipped = True
                     print('Left knee evaluated, restarting ' +
                           'with flipped images...')
@@ -265,6 +266,8 @@ def main():
     parser.add_argument('--folder_box', type=str, default='')
     parser.add_argument('--show_box', type=str2bool, nargs='?', const=True,
                         default=False, help="show bounding box.")
+    parser.add_argument('--allow_flip', type=str2bool, nargs='?', const=True,
+                        default=True, help='for FL')
 
     args = parser.parse_args()
 

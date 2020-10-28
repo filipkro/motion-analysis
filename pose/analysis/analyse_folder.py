@@ -1,7 +1,7 @@
 from argparse import ArgumentParser, ArgumentTypeError
 import os
 import analyse_vid
-import time
+
 
 FILE_FORMATS = ('.avi', '.mp4', '.MTS', '.MOV', 'mp2t')
 
@@ -40,6 +40,8 @@ def main():
     parser.add_argument('--folder_box', type=str, default='')
     parser.add_argument('--show_box', type=str2bool, nargs='?', const=True,
                         default=False, help="show bounding box.")
+    parser.add_argument('--allow_flip', type=str2bool, nargs='?', const=True,
+                        default=True, help='for FL')
 
     args = parser.parse_args()
 
@@ -61,16 +63,16 @@ def main():
     nbr_of_files = len(os.listdir(args.video_folder))
     processed = 1
 
-    t0 = time.perf_counter()
     for vid in os.listdir(args.video_folder):
         if vid.endswith(FILE_FORMATS):
             args.video_path = args.video_folder + vid
-
+            print(vid)
             process_time = analyse_vid.start(args)
-            t = time.perf_counter()
-            print('Video {:.4f} out of {:.4f} processed in {:.4f} \
+            print('Video {} out of {} processed in {:.4f} \
                 seconds.'.format(processed, nbr_of_files, process_time))
-            print('Total time: {:.4f} seconds'.format(t - t0))
+            # print('Total time: {:.4f} seconds'.format(t - t0))
+
+        processed += 1
 
     print('DONE')
 
