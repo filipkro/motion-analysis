@@ -9,6 +9,7 @@ __pycache__/
 # custom, such as other repos:
 pose/mmpose
 tsc/dl-4-tsc
+pose/VideoPose3D
 
 # singularity
 *.sif
