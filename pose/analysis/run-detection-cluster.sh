@@ -8,6 +8,8 @@ FOLDER_BOX="$TMPDIR/motion-analysis/pose/mmpose/mmdetection/"
 VIDEO="$TMPDIR/$1"
 OUT_DIR="$TMPDIR/results/"
 ALLOW_FLIP=$2
+SAVE_PIXELS=$3
 
-
-python analyse_vid.py $MODEL_CONFIG $MODEL_CHECKPOINT --video-path $VIDEO --out-video-root $OUT_DIR --device cuda:0 --folder_box $FOLDER_BOX --allow_flip $ALLOW_FLIP
+python analyse_vid.py $MODEL_CONFIG $MODEL_CHECKPOINT --video-path $VIDEO
+--out-video-root $OUT_DIR --device cuda:0 --folder_box $FOLDER_BOX --allow_flip
+$ALLOW_FLIP --save_pixels $SAVE_PIXELS
