@@ -68,9 +68,11 @@ def main():
 
             process_time = analyse_vid.start(args)
             t = time.perf_counter()
-            print('Video {:.4f} out of {:.4f} processed in {:.4f} \
+            print('Video {:.0f} out of {:.0f} processed in {:.4f} \
                 seconds.'.format(processed, nbr_of_files, process_time))
             print('Total time: {:.4f} seconds'.format(t - t0))
+        
+        processed += 1
 
     print('DONE')
 
