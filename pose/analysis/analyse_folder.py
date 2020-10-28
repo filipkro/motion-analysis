@@ -42,6 +42,9 @@ def main():
                         default=False, help="show bounding box.")
     parser.add_argument('--allow_flip', type=str2bool, nargs='?', const=True,
                         default=True, help='for FL')
+    parser.add_argument('--save_pixels', type=str2bool, nargs='?',
+                        const=True, default=False,
+                        help='saveposes as pixels or ratio of im')
 
     args = parser.parse_args()
 

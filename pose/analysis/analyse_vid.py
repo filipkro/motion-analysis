@@ -37,7 +37,7 @@ def box_check(img, folder_box, show_box=False, device='cpu'):
     print('bounding box found: {0}'.format(bbox))
     if show_box:
         show_result_pyplot(det_model, img, det_results)
-    
+
     bbox = np.array(bbox)
 
     return bbox, flip
@@ -135,7 +135,8 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
                                       True, t0)
                     return total_time
 
-                poses[frame, ...] = ratios
+                poses[frame, ...] = pose_results[0]['keypoints'][:, 0:2] \
+                    if args.save_pixels else ratios
 
             else:
                 pose_results = prev_pose  # or maybe just skip saving
@@ -270,6 +271,9 @@ def main():
                         default=False, help="show bounding box.")
     parser.add_argument('--allow_flip', type=str2bool, nargs='?', const=True,
                         default=True, help='for FL')
+    parser.add_argument('--save_pixels', type=str2bool, nargs='?',
+                        const=True, default=False,
+                        help='saveposes as pixels or ratio of im')
 
     args = parser.parse_args()
 
