@@ -56,15 +56,32 @@ def parse_mts(poses, kpts, label, mts=None, mts_labels=None, angle_pts=None,
                 # if len(peak) > 0:
                 print(len(peak))
                 peak = peak[0]
-                if ((peak >= int(min_len / 2)) and
-                        (peak <= p_len - int(min_len / 2))):
-                    crop[i, ...] = split_poses[i, peak - int(min_len / 2):
-                                               peak +
-                                               int(np.ceil(min_len / 2)), ...]
-                elif peak < p_len / 2:
+
+                if peak <= int(min_len / 2):
                     crop[i, ...] = split_poses[i, :min_len, ...]
+                elif peak <= (p_len - int(min_len / 2)):
+                    print('IN IF')
+                    print(int(np.ceil(min_len / 2)))
+                    print(len(split_poses[i, peak - int(np.ceil(min_len / 2)):
+                                          peak - int(np.ceil(min_len / 2))
+                                          + min_len, ...]))
+                    crop[i, ...] = split_poses[i, peak -
+                                               int(np.ceil(min_len / 2)):
+                                               peak -
+                                               int(np.ceil(min_len / 2))
+                                               + min_len, ...]
                 else:
                     crop[i, ...] = split_poses[i, -min_len:, ...]
+
+                # if ((peak >= int(min_len / 2)) and
+                #         (peak <= p_len - int(min_len / 2))):
+                #     crop[i, ...] = split_poses[i, peak - int(min_len / 2):
+                #                                peak +
+                #                                int(np.ceil(min_len / 2)), ...]
+                # elif peak < p_len / 2:
+                #     crop[i, ...] = split_poses[i, :min_len, ...]
+                # else:
+                #     crop[i, ...] = split_poses[i, -min_len:, ...]
 
             split_poses = crop
 
@@ -105,7 +122,7 @@ def parse_mts(poses, kpts, label, mts=None, mts_labels=None, angle_pts=None,
         mts = split_poses
         mts_labels = label * np.ones(split_poses.shape[0])
 
-    # print('Shape of MTS: {0}', format(mts.shape))
+    print('Shape of MTS: {0}', format(mts.shape))
     # plt.plot(mts[:, :, -1].T)
     # plt.show()
 
@@ -153,7 +170,7 @@ def fake_mts(file, kpts, angles=None):
 def main():
     parser = ArgumentParser()
     parser.add_argument('np_file', help='Numpy file to filter')
-    parser.add_argument('np_file2', default='', help='Numpy file to filter')
+    parser.add_argument('--np_file2', default='', help='Numpy file to filter')
     args = parser.parse_args()
 
     poses = np.load(args.np_file)

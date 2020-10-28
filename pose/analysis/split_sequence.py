@@ -23,7 +23,11 @@ def split(poses, debug=False):
     for i in range(nbr_peaks - 1):
         idx = int(np.mean((peaks[i], peaks[i + 1]))) - removed
         min_len = np.min((min_len, idx))
-
+        if debug:
+            print('idx', idx)
+            print(seqs.shape) if seqs is not None else print('none')
+            plt.plot(poses[:idx, joint, 1])
+            plt.show()
         # if (peaks[i] - removed) > 30 and (idx - peaks[i]) > 30:
         if seqs is None:
             seqs = np.array(poses[:idx, ...], dtype=object)
@@ -34,6 +38,9 @@ def split(poses, debug=False):
         poses = poses[idx:, ...]
         removed += idx
 
+    if debug:
+        plt.plot(poses[:, joint, 1])
+        plt.show()
     peaks[-1] -= removed
     seqs = np.array((seqs, poses), dtype=object)
     min_len = np.min((min_len, poses.shape[0]))
@@ -48,12 +55,13 @@ def split(poses, debug=False):
         # if debug:
         #     plt.plot(pose_seqs[i, :, joint, 1])
         #     plt.show()
-
+        print(seqs.shape)
         if len(seqs.shape) == 1:
             ts = seqs[1]
         else:
             ts = seqs
         print('min len {0}'.format(min_len))
+        print(ts.shape)
         if debug:
             plt.plot(ts[:, joint, 1])
             plt.show()
@@ -62,13 +70,24 @@ def split(poses, debug=False):
                                                        int(min_len / 2),
                                                        peaks[-i - 1],
                                                        len(ts) - int(min_len / 2)))
-        if peaks[-i - 1] < int(min_len / 2):
+        if peaks[-i - 1] <= int(min_len / 2):
             pose_seqs[i, ...] = ts[:min_len, ...]
         elif peaks[-i - 1] <= (len(ts) - int(min_len / 2)):
             print('IN IF')
-            pose_seqs[i, ...] = ts[peaks[-i - 1] - int(min_len / 2):
-                                   peaks[-i - 1] +
-                                   int(np.ceil(min_len / 2)), ...]
+            print(int(np.ceil(min_len / 2)))
+            print(len(ts[peaks[-i - 1] - int(np.ceil(min_len / 2)):
+                         peaks[-i - 1] - int(np.ceil(min_len / 2))
+                         + min_len, ...]))
+            pose_seqs[i, ...] = ts[peaks[-i - 1] - int(np.ceil(min_len / 2)):
+                                   peaks[-i - 1] - int(np.ceil(min_len / 2))
+                                   + min_len, ...]
+            # pose_seqs[i, ...] = ts[peaks[-i - 1] - int(min_len / 2):
+            #                        peaks[-i - 1] +
+            #                        int(np.ceil(min_len / 2)), ...]
+            # print(len(ts[peaks[-i - 1] - int(np.ceil(min_len / 2)):
+            #              peaks[-i - 1] + int(np.ceil(min_len / 2))]))
+            # pose_seqs[i, ...] = ts[peaks[-i - 1] - int(min_len / 2):
+            #                        peaks[-i - 1] - int(min_len / 2) + min_len]
         else:
             pose_seqs[i, ...] = ts[-min_len:, ...]
         seqs = seqs[0]
@@ -92,6 +111,7 @@ def split(poses, debug=False):
             plt.show()
 
     print(pose_seqs[:, :, joint, 1].shape)
+
     # plt.plot(pose_seqs[0, :, joint, 1])
     # # plt.plot(pose_seqs[1, :, joint, 1])
     # plt.plot(pose_seqs[2, :, joint, 1])
@@ -104,7 +124,8 @@ def split(poses, debug=False):
     if debug:
         plt.plot(pose_seqs[:, :, joint, 1].T)
         plt.show()
-
+    # plt.plot(pose_seqs[:, :, joint, 1].T)
+    # plt.show()
     return pose_seqs, peaks
 
 
