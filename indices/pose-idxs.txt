@@ -1,0 +1,8 @@
+mpii:
+kpts = [0=right foot, 1=right knee, 2=right hip, 3=left hip, 4=left knee, 5=left foot, 6=mid hip, 7=mid shoulder, 8=throut, 9=head, 10=right hand, 11=right elbow, 12=right shoulder, 13=left shoulder, 14=left elbow, 15=left hand]
+
+coco:
+kpts = [0=nose, 1=left eye, 2=right eye, 3=left ear, 4=right ear, 5=left shoulder, 6=right shoulder, 7=left elbow, 8=right elbow, 9=left hand, 10=right hand, 11=left hip, 12=right hip, 13=left knee, 14=right knee, 15=left foot, 16=right foot]
+
+coco-whoebody:
+kpts = []

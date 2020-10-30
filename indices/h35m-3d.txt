@@ -1,0 +1,17 @@
+center_hip = 0
+left_hip = 1
+left_knee = 2
+left_ankle = 3
+right_hip = 4
+right_knee = 5
+right_ankle = 6
+mid_section = 7
+neck = 8
+nose = 9
+head = 10
+right_shoulder = 11
+right_elbow = 12
+right_hand = 13
+left_shoulder = 14
+left_elbow = 15
+left_hand = 16
