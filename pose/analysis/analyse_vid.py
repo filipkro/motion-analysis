@@ -164,24 +164,24 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
     if args.save4_3d:
         meta = {}
         meta['video_metadata'] = {}
-        meta['video_metadata'][os.basename(args.video_path)] = {}
+        meta['video_metadata'][os.path.basename(args.video_path)] = {}
 
         meta = {'layout_name': 'coco', 'num_joints': 17,
                 'keypoints_symmetry': [[1, 3, 5, 7, 9, 11, 13, 15],
                                        [2, 4, 6, 8, 10, 12, 14, 16]],
-                'video_metadata': {os.basename(args.video_path):
+                'video_metadata': {os.path.basename(args.video_path):
                                    {'w':
                                     int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
                                     'h':
                                     int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))}}}
 
         meta_poses = {}
-        meta_poses[os.basename(args.video_path)] = {}
-        meta_poses[os.basename(args.video_path)]['custom'] = [
+        meta_poses[os.path.basename(args.video_path)] = {}
+        meta_poses[os.path.basename(args.video_path)]['custom'] = [
             poses.astype('float32')]
         output_prefix_2d = 'data_2d_custom_'
         file_3d_name = args.out_video_root + output_prefix_2d \
-            + os.basename(args.video_path)
+            + os.path.basename(args.video_path)
         np.savez_compressed(file_3d_name, positions_2d=meta_poses,
                             metadata=meta)
 
@@ -247,8 +247,7 @@ def start(args):
                 if idx == 0:
                     fname += '-0.mp4'
                 else:
-                    fname = fname[:idx] +
-                    str(int(fname[idx::]) + 1) + '.mp4'
+                    fname = fname[:idx] + str(int(fname[idx::]) + 1) + '.mp4'
         else:
             fname = os.path.join(args.out_video_root, args.file_name)
 
