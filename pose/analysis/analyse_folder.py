@@ -85,11 +85,13 @@ def main():
 
     poses_data = {}
 
-    for root, directories, files in os.walk(args.video_folder):
-        for vid in files:
+    # for root, directories, files in os.walk(args.video_folder):
+    #     print(directories)
+    for files in os.listdir(args.video_folder):
+        for vid in os.listdir(args.video_folder + '/' + files):
             print(vid)
             if vid.endswith(FILE_FORMATS):
-                args.video_path = args.video_folder + vid
+                args.video_path = args.video_folder + '/' + files + '/' + vid
                 print(vid)
                 poses, meta, name = analyse_vid.start(args)
                 print('Video {:.0f} out of {:.0f}'.format(
