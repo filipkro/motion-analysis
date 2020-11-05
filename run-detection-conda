@@ -4,7 +4,7 @@
 #SBATCH --gpus-per-node=T4:1
 #SBATCH -t 0-0:40:0 # 40 min
 
-vid="36SLS1R_Oqus_2_14902.avi"
+vid="006FL.MTS"
 allow_flip="False"
 save_pixels="True"
 
@@ -30,7 +30,7 @@ cd pose/analysis
 ./run-detection-cluster.sh $vid $allow_flip $save_pixels
 
 cd $TMPDIR
-cp -r results $HOME/results-FL
+cp -r results $HOME/results-w-meta
 
 
 #conda clean --all -y --quiet
