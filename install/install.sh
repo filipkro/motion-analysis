@@ -12,6 +12,6 @@ fi
 
 
 #install mmpose:
-cd pose/mmpose
+cd ../pose/mmpose
 python setup.py develop
 cd ../..
