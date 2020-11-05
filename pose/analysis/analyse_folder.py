@@ -1,6 +1,7 @@
 from argparse import ArgumentParser, ArgumentTypeError
 import os
 import analyse_vid
+import numpy as np
 
 
 FILE_FORMATS = ('.avi', '.mp4', '.MTS', '.MOV', 'mp2t')
@@ -45,9 +46,15 @@ def main():
     parser.add_argument('--save_pixels', type=str2bool, nargs='?',
                         const=True, default=False,
                         help='saveposes as pixels or ratio of im')
+    parser.add_argument('--save4_3d', type=str2bool, nargs='?',
+                        const=True, default=True,
+                        help='save poses in format for VidePose3D.')
+    parser.add_argument('--return_3d', type=str2bool, nargs='?',
+                        const=True, default=False,
+                        help='return poses in format for VidePose3D.')
 
     args = parser.parse_args()
-
+    args.save_3d = True
     print('arguments parsed, starting')
 
     # i have only access to gpu on cluster, hence:
@@ -63,21 +70,37 @@ def main():
 
     print('files to be processed: {0}'.format(os.listdir(args.video_folder)))
 
-    nbr_of_files = len(os.listdir(args.video_folder))
+    nbr_of_files = 0
+    for _, _, files in os.walk(args.video_folder):
+        for vid in files:
+            if vid.endswith(FILE_FORMATS):
+                nbr_of_files += 1
     processed = 1
 
-    for vid in os.listdir(args.video_folder):
-        if vid.endswith(FILE_FORMATS):
-            args.video_path = args.video_folder + vid
+    meta_data = {}
+    meta_data = {'layout_name': 'coco', 'num_joints': 17,
+                 'keypoints_symmetry': [[1, 3, 5, 7, 9, 11, 13, 15],
+                                        [2, 4, 6, 8, 10, 12, 14, 16]],
+                 'video_metadata': {}}
+
+    poses_data = {}
+
+    for root, directories, files in os.walk(args.video_folder):
+        for vid in files:
             print(vid)
-            process_time = analyse_vid.start(args)
-            t = time.perf_counter()
-            print('Video {:.0f} out of {:.0f} processed in {:.4f} \
-                seconds.'.format(processed, nbr_of_files, process_time))
-        
+            if vid.endswith(FILE_FORMATS):
+                args.video_path = args.video_folder + vid
+                print(vid)
+                poses, meta, name = analyse_vid.start(args)
+                print('Video {:.0f} out of {:.0f}'.format(
+                    processed, nbr_of_files))
+                meta_data['video_metadata'][name] = meta
+                poses_data[name] = poses
 
-        processed += 1
+            processed += 1
 
+    save_name = args.out_video_root + 'data_2d_custom_' + 'complete.npz'
+    np.savez_compressed(save_name, positions_2d=poses_data, metadata=meta_data)
     print('DONE')
 
 

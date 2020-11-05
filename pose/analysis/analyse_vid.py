@@ -58,7 +58,7 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
 
     cap = cv2.VideoCapture(args.video_path)
 
-    fps = cap.get(cv2.CAP_PROP_FPS)
+    fps = int(cap.get(cv2.CAP_PROP_FPS))
     frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
     if rotate:
@@ -161,30 +161,6 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
 
         frame += 1
 
-    if args.save4_3d:
-        meta = {}
-        meta['video_metadata'] = {}
-        meta['video_metadata'][os.basename(args.video_path)] = {}
-
-        meta = {'layout_name': 'coco', 'num_joints': 17,
-                'keypoints_symmetry': [[1, 3, 5, 7, 9, 11, 13, 15],
-                                       [2, 4, 6, 8, 10, 12, 14, 16]],
-                'video_metadata': {os.basename(args.video_path):
-                                   {'w':
-                                    int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
-                                    'h':
-                                    int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))}}}
-
-        meta_poses = {}
-        meta_poses[os.basename(args.video_path)] = {}
-        meta_poses[os.basename(args.video_path)]['custom'] = [
-            poses.astype('float32')]
-        output_prefix_2d = 'data_2d_custom_'
-        file_3d_name = args.out_video_root + output_prefix_2d \
-            + os.basename(args.video_path)
-        np.savez_compressed(file_3d_name, positions_2d=meta_poses,
-                            metadata=meta)
-
     cap.release()
     # if save_out_video:
     videoWriter.release()
@@ -193,7 +169,33 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
 
     cv2.destroyAllWindows()
 
-    return time.perf_counter() - t0
+    name = os.path.basename(args.video_path).split('_')[0]
+    # meta[name]
+    meta = {'w': size[0], 'h': size[1], 'fps': fps}
+    poses_3d = {}
+    poses_3d['custom'] = [poses.astype('float32')]
+
+    if args.return_3d:
+        return poses_3d, meta, name
+
+    if args.save4_3d:
+        meta_d = {}
+        meta_d['video_metadata'] = {}
+
+        meta_d = {'layout_name': 'coco', 'num_joints': 17,
+                  'keypoints_symmetry': [[1, 3, 5, 7, 9, 11, 13, 15],
+                                         [2, 4, 6, 8, 10, 12, 14, 16]],
+                  'video_metadata': {name: meta}}
+
+        meta_poses = {}
+        meta_poses[name] = poses_3d
+        output_prefix_2d = 'data_2d_custom_'
+        file_3d_name = args.out_video_root + output_prefix_2d \
+            + os.path.basename(args.video_path)
+        np.savez_compressed(file_3d_name, positions_2d=meta_poses,
+                            metadata=meta_d)
+
+    # return time.perf_counter() - t0
 
 
 def start(args):
@@ -247,8 +249,7 @@ def start(args):
                 if idx == 0:
                     fname += '-0.mp4'
                 else:
-                    fname = fname[:idx] +
-                    str(int(fname[idx::]) + 1) + '.mp4'
+                    fname = fname[:idx] + str(int(fname[idx::]) + 1) + '.mp4'
         else:
             fname = os.path.join(args.out_video_root, args.file_name)
 
@@ -302,6 +303,9 @@ def main():
     parser.add_argument('--save4_3d', type=str2bool, nargs='?',
                         const=True, default=False,
                         help='save poses along with meta data for 3d')
+    parser.add_argument('--return_3d', type=str2bool, nargs='?',
+                        const=True, default=False,
+                        help='return poses in format for VidePose3D.')
 
     args = parser.parse_args()
 
