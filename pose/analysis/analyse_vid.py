@@ -192,6 +192,7 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
         output_prefix_2d = 'data_2d_custom_'
         file_3d_name = args.out_video_root + output_prefix_2d \
             + os.path.basename(args.video_path)
+        print(file_3d_name)
         np.savez_compressed(file_3d_name, positions_2d=meta_poses,
                             metadata=meta_d)
 

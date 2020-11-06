@@ -101,7 +101,8 @@ def main():
 
             processed += 1
 
-    save_name = args.out_video_root + 'data_2d_custom_' + 'complete.npz'
+    save_name = args.out_video_root + '/data_2d_custom_' + 'complete.npz'
+    print(save_name)
     np.savez_compressed(save_name, positions_2d=poses_data, metadata=meta_data)
     print('DONE')
 

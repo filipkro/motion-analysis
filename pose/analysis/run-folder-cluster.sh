@@ -12,5 +12,5 @@ ONLY_BOX=false
 echo "launching python scripts"
 
 echo "$(which python)"
-
-python analyse_folder.py $MODEL_CONFIG $MODEL_CHECKPOINT $VIDEO_FOLDER --out-video-root $OUT_DIR --device cuda:0 --folder_box $FOLDER_BOX --show false
+echo "$(ls)"
+python analyse_folder.py $MODEL_CONFIG $MODEL_CHECKPOINT $VIDEO_FOLDER --out-video-root $OUT_DIR --device cuda:0 --folder_box $FOLDER_BOX --show false --save_pixels true --save4_3d true --return_3d true --allow_flip false
