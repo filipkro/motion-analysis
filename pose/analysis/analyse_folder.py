@@ -2,6 +2,7 @@ from argparse import ArgumentParser, ArgumentTypeError
 import os
 import analyse_vid
 import numpy as np
+import utils.dict_utils as du
 
 
 FILE_FORMATS = ('.avi', '.mp4', '.MTS', '.MOV', 'mp2t')
@@ -49,9 +50,6 @@ def main():
     parser.add_argument('--save4_3d', type=str2bool, nargs='?',
                         const=True, default=True,
                         help='save poses in format for VidePose3D.')
-    parser.add_argument('--return_3d', type=str2bool, nargs='?',
-                        const=True, default=False,
-                        help='return poses in format for VidePose3D.')
 
     args = parser.parse_args()
     args.save_3d = True
@@ -94,10 +92,11 @@ def main():
                 args.video_path = args.video_folder + '/' + files + '/' + vid
                 print(vid)
                 poses, meta, name = analyse_vid.start(args)
+
                 print('Video {:.0f} out of {:.0f}'.format(
                     processed, nbr_of_files))
-                meta_data['video_metadata'][name] = meta
-                poses_data[name] = poses
+
+                poses_data = du.generate_dict(name, poses, '2d', poses_data)
 
             processed += 1
 

@@ -172,11 +172,6 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
     name = os.path.basename(args.video_path).split('_')[0]
     # meta[name]
     meta = {'w': size[0], 'h': size[1], 'fps': fps}
-    poses_3d = {}
-    poses_3d['custom'] = [poses.astype('float32')]
-
-    if args.return_3d:
-        return poses_3d, meta, name
 
     if args.save4_3d:
         meta_d = {}
@@ -186,7 +181,8 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
                   'keypoints_symmetry': [[1, 3, 5, 7, 9, 11, 13, 15],
                                          [2, 4, 6, 8, 10, 12, 14, 16]],
                   'video_metadata': {name: meta}}
-
+        poses_3d = {}
+        poses_3d['custom'] = [poses.astype('float32')]
         meta_poses = {}
         meta_poses[name] = poses_3d
         output_prefix_2d = 'data_2d_custom_'
@@ -196,6 +192,7 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
         np.savez_compressed(file_3d_name, positions_2d=meta_poses,
                             metadata=meta_d)
 
+    return poses, meta, os.path.basename(args.video_path)
     # return time.perf_counter() - t0
 
 
@@ -304,9 +301,6 @@ def main():
     parser.add_argument('--save4_3d', type=str2bool, nargs='?',
                         const=True, default=False,
                         help='save poses along with meta data for 3d')
-    parser.add_argument('--return_3d', type=str2bool, nargs='?',
-                        const=True, default=False,
-                        help='return poses in format for VidePose3D.')
 
     args = parser.parse_args()
 
