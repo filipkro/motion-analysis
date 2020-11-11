@@ -50,9 +50,22 @@ def main():
     parser.add_argument('--save4_3d', type=str2bool, nargs='?',
                         const=True, default=True,
                         help='save poses in format for VidePose3D.')
+    parser.add_argument('--flip2right', type=str2bool, nargs='?',
+                        const=True, default=False,
+                        help='flips video if name contains L')
+    parser.add_argument('--fname_format', type=str2bool, nargs='?',
+                        default=True,
+                        help='if filename has format of marked videos')
+    parser.add_argument('--skip_rate', type=int, default=1)
 
     args = parser.parse_args()
-    args.save_3d = True
+
+    if not args.fname_format:
+        args.flip2right = False
+
+    if args.flip2right:
+        args.allow_flip = False
+
     print('arguments parsed, starting')
 
     # i have only access to gpu on cluster, hence:
@@ -96,7 +109,9 @@ def main():
                 print('Video {:.0f} out of {:.0f}'.format(
                     processed, nbr_of_files))
 
-                poses_data = du.generate_dict(name, poses, '2d', poses_data)
+                poses_data = du.generate_dict(name, poses, '2d', poses_data,
+                                              meta)
+                meta_data['video_metadata'][name.split('_')[0]] = meta
 
             processed += 1
 

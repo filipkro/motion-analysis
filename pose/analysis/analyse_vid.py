@@ -58,7 +58,7 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
 
     cap = cv2.VideoCapture(args.video_path)
 
-    fps = int(cap.get(cv2.CAP_PROP_FPS))
+    fps = int(np.round(cap.get(cv2.CAP_PROP_FPS)))
     frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
     if rotate:
@@ -67,6 +67,12 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
     else:
         size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
                 int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+
+    if args.fname_format and args.flip2right:
+        if fname.split('-')[2] == 'L':
+            flipped = True
+            person_bboxes = flip_box(person_bboxes, size[0])
+
     m_dim = max(size)
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     videoWriter = cv2.VideoWriter(fname, fourcc, fps, size)
@@ -74,7 +80,7 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
                       pose_model.cfg.channel_cfg['num_output_channels'], 2))
     dataset = pose_model.cfg.data['test']['type']
 
-    skip_ratio = 1
+    # skip_ratio = 1
 
     lmin = 1
     lmax = 0
@@ -96,7 +102,7 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
 
         # if frame > 66:
         # check every nd frame
-        if frame % skip_ratio == 0:
+        if frame % args.skip_rate == 0:
             # test a single image, with a list of bboxes.
             pose_results = inference_top_down_pose_model(pose_model, img,
                                                          person_bboxes,
@@ -130,11 +136,11 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
                     cap.release()
                     videoWriter.release()
                     cv2.destroyAllWindows()
-                    total_time = loop(args, rotate, fname,
-                                      flip_box(person_bboxes,
-                                               size[0]), pose_model,
-                                      True, t0)
-                    return total_time
+                    poses, meta, path = loop(args, rotate, fname,
+                                             flip_box(person_bboxes,
+                                                      size[0]), pose_model,
+                                             flipped=True, t0=t0)
+                    return poses, meta, path
 
                 poses[frame, ...] = pose_results[0]['keypoints'][:, 0:2] \
                     if args.save_pixels else ratios
@@ -150,7 +156,7 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
                                   dataset=dataset, kpt_score_thr=args.kpt_thr,
                                   show=False)
 
-        if args.show and frame % skip_ratio == 0:
+        if args.show and frame % args.skip_rate == 0:
             cv2.imshow('Image', vis_img)
 
         # if save_out_video:
@@ -202,14 +208,12 @@ def start(args):
     print('loaded video...')
     print('checking orientation and position')
 
-    fps = cap.get(cv2.CAP_PROP_FPS)
+    fps = int(np.round(cap.get(cv2.CAP_PROP_FPS)))
 
     print(fps)
 
     flag, img = cap.read()
     cap.release()
-    person_bboxes, rotate = box_check(
-        img, args.folder_box, device=args.device, show_box=args.show_box)
 
     print(args.only_box)
     if args.only_box:
@@ -233,25 +237,42 @@ def start(args):
     mod_used = pose_model.cfg.model['backbone']['type']
     print('model used {0}'.format(mod_used))
 
-    if save_out_video:
-        if args.file_name == '':
-            fname = os.path.join(args.out_video_root,
-                                 f'vis_{os.path.basename(args.video_path)}')
-            fname = fname.replace(fname[fname.find('.', -5)::], '')
-            fname += str(int(np.round(fps))) + mod_used + dataset + '.mp4'
-            print('FN {0}'.format(fname))
-            while os.path.isfile(fname):
-                fname = fname.replace('.mp4', '')
+    orig_fname = os.path.basename(args.video_path)
+    if args.fname_format:
+        subject = orig_fname[0:2]
+        action = orig_fname[2:5]
+        leg = orig_fname[6]
 
-                idx = fname.find('-', -4) + 1
-                if idx == 0:
-                    fname += '-0.mp4'
-                else:
-                    fname = fname[:idx] + str(int(fname[idx::]) + 1) + '.mp4'
-        else:
-            fname = os.path.join(args.out_video_root, args.file_name)
+        # if args.flip2right and leg == 'L':
+        #     img =
 
-        print(fname)
+        if save_out_video:
+            fname = os.path.join(args.out_video_root, subject + '-' + action +
+                                 '-' + leg + '-' + str(fps) + '.mp4')
+    else:
+        if save_out_video:
+            if args.file_name == '':
+                fname = os.path.join(args.out_video_root,
+                                     f'vis_{os.path.basename(args.video_path)}')
+                fname = fname.replace(fname[fname.find('.', -5)::], '')
+                fname += str(int(np.round(fps))) + mod_used + dataset + '.mp4'
+                print('FN {0}'.format(fname))
+                while os.path.isfile(fname):
+                    fname = fname.replace('.mp4', '')
+
+                    idx = fname.find('-', -4) + 1
+                    if idx == 0:
+                        fname += '-0.mp4'
+                    else:
+                        fname = fname[:idx] + \
+                            str(int(fname[idx::]) + 1) + '.mp4'
+            else:
+                fname = os.path.join(args.out_video_root, args.file_name)
+
+    print(fname)
+
+    person_bboxes, rotate = box_check(
+        img, args.folder_box, device=args.device, show_box=args.show_box)
 
     return loop(args, rotate, fname, person_bboxes, pose_model)
 
@@ -293,16 +314,29 @@ def main():
     parser.add_argument('--folder_box', type=str, default='')
     parser.add_argument('--show_box', type=str2bool, nargs='?', const=True,
                         default=False, help="show bounding box.")
-    parser.add_argument('--allow_flip', type=str2bool, nargs='?', const=True,
-                        default=True, help='for FL')
+    parser.add_argument('--allow_flip', type=str2bool, nargs='?',  # const=True,
+                        default=False, help='for FL')
     parser.add_argument('--save_pixels', type=str2bool, nargs='?',
                         const=True, default=False,
                         help='saveposes as pixels or ratio of im')
     parser.add_argument('--save4_3d', type=str2bool, nargs='?',
                         const=True, default=False,
                         help='save poses along with meta data for 3d')
+    parser.add_argument('--flip2right', type=str2bool, nargs='?',
+                        const=True, default=False,
+                        help='flips video if name contains L')
+    parser.add_argument('--fname_format', type=str2bool, nargs='?',
+                        default=True,
+                        help='if filename has format of marked videos')
+    parser.add_argument('--skip_rate', type=int, default=1)
 
     args = parser.parse_args()
+
+    if not args.fname_format:
+        args.flip2right = False
+
+    if args.flip2right:
+        args.allow_flip = False
 
     start(args)
 
