@@ -65,7 +65,6 @@ def main():
 
     if args.flip2right:
         args.allow_flip = False
-
     print('arguments parsed, starting')
 
     # i have only access to gpu on cluster, hence:
@@ -98,22 +97,23 @@ def main():
 
     # for root, directories, files in os.walk(args.video_folder):
     #     print(directories)
-    for files in os.listdir(args.video_folder):
-        for vid in os.listdir(args.video_folder + '/' + files):
+    # for files in os.listdir(args.video_folder):
+    #     for vid in os.listdir(args.video_folder + files):
+    for vid in os.listdir(args.video_folder):
+        print(vid)
+        if vid.endswith(FILE_FORMATS):
+            args.video_path = args.video_folder + vid
             print(vid)
-            if vid.endswith(FILE_FORMATS):
-                args.video_path = args.video_folder + '/' + files + '/' + vid
-                print(vid)
-                poses, meta, name = analyse_vid.start(args)
+            poses, meta, name = analyse_vid.start(args)
 
-                print('Video {:.0f} out of {:.0f}'.format(
-                    processed, nbr_of_files))
+            print('Video {:.0f} out of {:.0f}'.format(
+                processed, nbr_of_files))
 
-                poses_data = du.generate_dict(name, poses, '2d', poses_data,
-                                              meta)
-                meta_data['video_metadata'][name.split('_')[0]] = meta
+            poses_data = du.generate_dict(name, poses, '2d', poses_data,
+                                          meta)
+            meta_data['video_metadata'][name.split('_')[0]] = meta
 
-            processed += 1
+        processed += 1
 
     save_name = args.out_video_root + '/data_2d_custom_' + 'complete.npz'
     print(save_name)

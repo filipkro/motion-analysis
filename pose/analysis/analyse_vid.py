@@ -69,7 +69,7 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
                 int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
 
     if args.fname_format and args.flip2right:
-        if fname.split('-')[2] == 'L':
+        if os.path.basename(fname).split('-')[2] == 'L':
             flipped = True
             person_bboxes = flip_box(person_bboxes, size[0])
 
@@ -337,6 +337,9 @@ def main():
 
     if args.flip2right:
         args.allow_flip = False
+
+    print('format', args.fname_format)
+    print('flip', args.flip2right)
 
     start(args)
 
