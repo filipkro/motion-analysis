@@ -55,12 +55,6 @@ def check_pose4_flip180(pose_model, img, rotate, bbox, args, size):
                                          format='xyxy',
                                          dataset=dataset)
 
-    print(np.shape(pose)[0])
-    print('fkn shoulder:',pose[0]['keypoints'][6, 1])
-    print('fot',pose[0]['keypoints'][15, 1])
-    cv2.imshow('lol', img)
-    cv2.waitKey(0)
-
     if np.shape(pose)[0] > 0:
         if pose[0]['keypoints'][6, 1] > pose[0]['keypoints'][16, 1]:
             new_box = np.zeros((1, 5))
@@ -90,7 +84,6 @@ def loop(args, rotate, fname, bbox, pose_model, flipped=False,
          rotate_180=False, t0=time.perf_counter()):
 
     cap = cv2.VideoCapture(args.video_path)
-
 
     fps = int(np.round(cap.get(cv2.CAP_PROP_FPS)))
     frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
