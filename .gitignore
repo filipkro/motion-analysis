@@ -18,6 +18,14 @@ slurm-*
 *.swp
 *.swo
 
+*.aux
+*.out
+*.fls
+*.bbl
+*.fdb_latexmk
+*.blg
+*.synctex.gz
+
 # Distribution / packaging
 .Python
 build/

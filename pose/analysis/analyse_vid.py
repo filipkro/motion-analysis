@@ -43,7 +43,32 @@ def box_check(img, folder_box, show_box=False, device='cpu'):
     return bbox, flip
 
 
+def check_pose4_flip180(pose_model, img, rotate, bbox, args, size):
+    dataset = pose_model.cfg.data['test']['type']
+
+    if rotate:
+        img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
+
+    pose = inference_top_down_pose_model(pose_model, img, bbox,
+                                         bbox_thr=args.box_thr,
+                                         format='xyxy',
+                                         dataset=dataset)
+
+    if np.shape(pose)[0] > 0:
+        if pose[0]['keypoints'][0, 1] > pose[0]['keypoints'][15, 1]:
+            new_box = np.array((1, 4))
+            new_box[0, 0] = size[0] - bbox[0, 2]
+            new_box[0, 1] = size[1] - bbox[0, 3]
+            new_box[0, 2] = size[0] - bbox[0, 0]
+            new_box[0, 3] = size[1] - bbox[0, 1]
+            return True, new_box
+    return False, bbox
+
+
 def flip_box(bbox, width):
+    '''
+        flip boxes when evaluating left leg
+    '''
     print(bbox)
     print(width)
 
@@ -53,8 +78,8 @@ def flip_box(bbox, width):
     return bbox
 
 
-def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
-         t0=time.perf_counter()):
+def loop(args, rotate, fname, bbox, pose_model, flipped=False,
+         rotate_180=False, t0=time.perf_counter()):
 
     cap = cv2.VideoCapture(args.video_path)
 
@@ -71,7 +96,7 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
     if args.fname_format and args.flip2right:
         if os.path.basename(fname).split('-')[2] == 'L':
             flipped = True
-            person_bboxes = flip_box(person_bboxes, size[0])
+            bbox = flip_box(bbox, size[0])
 
     m_dim = max(size)
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
@@ -95,6 +120,9 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
         flag, img = cap.read()
         if rotate:
             img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
+        if rotate_180:
+            img = cv2.rotate(img, cv2.ROTATE_180)
+            print('FLIPPIN 180')
         if flipped:
             img = cv2.flip(img, 1)
         if not flag:
@@ -105,7 +133,7 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
         if frame % args.skip_rate == 0:
             # test a single image, with a list of bboxes.
             pose_results = inference_top_down_pose_model(pose_model, img,
-                                                         person_bboxes,
+                                                         bbox,
                                                          bbox_thr=args.box_thr,
                                                          format='xyxy',
                                                          dataset=dataset)
@@ -137,9 +165,8 @@ def loop(args, rotate, fname, person_bboxes, pose_model, flipped=False,
                     videoWriter.release()
                     cv2.destroyAllWindows()
                     poses, meta, path = loop(args, rotate, fname,
-                                             flip_box(person_bboxes,
-                                                      size[0]), pose_model,
-                                             flipped=True, t0=t0)
+                                             flip_box(bbox, size[0]),
+                                             pose_model, flipped=True, t0=t0)
                     return poses, meta, path
 
                 poses[frame, ...] = pose_results[0]['keypoints'][:, 0:2] \
@@ -213,7 +240,6 @@ def start(args):
     print(fps)
 
     flag, img = cap.read()
-    cap.release()
 
     print(args.only_box)
     if args.only_box:
@@ -271,10 +297,22 @@ def start(args):
 
     print(fname)
 
-    person_bboxes, rotate = box_check(
+    bbox, rotate = box_check(
         img, args.folder_box, device=args.device, show_box=args.show_box)
 
-    return loop(args, rotate, fname, person_bboxes, pose_model)
+    if rotate:
+        size = (int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
+                int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)))
+    else:
+        size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
+                int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+
+    cap.release()
+
+    rotate_180, bbox = check_pose4_flip180(pose_model, img, rotate,
+                                           bbox, args, size)
+
+    return loop(args, rotate, fname, bbox, pose_model, rotate_180)
 
 
 def str2bool(v):
