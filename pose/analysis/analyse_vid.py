@@ -46,6 +46,7 @@ def box_check(img, folder_box, show_box=False, device='cpu'):
 def check_pose4_flip180(pose_model, img, rotate, bbox, args, size):
     dataset = pose_model.cfg.data['test']['type']
 
+    print(bbox)
     if rotate:
         img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
 
@@ -54,13 +55,20 @@ def check_pose4_flip180(pose_model, img, rotate, bbox, args, size):
                                          format='xyxy',
                                          dataset=dataset)
 
+    print(np.shape(pose)[0])
+    print('fkn shoulder:',pose[0]['keypoints'][6, 1])
+    print('fot',pose[0]['keypoints'][15, 1])
+    cv2.imshow('lol', img)
+    cv2.waitKey(0)
+
     if np.shape(pose)[0] > 0:
-        if pose[0]['keypoints'][0, 1] > pose[0]['keypoints'][15, 1]:
-            new_box = np.array((1, 4))
+        if pose[0]['keypoints'][6, 1] > pose[0]['keypoints'][16, 1]:
+            new_box = np.zeros((1, 5))
             new_box[0, 0] = size[0] - bbox[0, 2]
             new_box[0, 1] = size[1] - bbox[0, 3]
             new_box[0, 2] = size[0] - bbox[0, 0]
             new_box[0, 3] = size[1] - bbox[0, 1]
+            new_box[0, 4] = bbox[0, 4]
             return True, new_box
     return False, bbox
 
@@ -82,6 +90,7 @@ def loop(args, rotate, fname, bbox, pose_model, flipped=False,
          rotate_180=False, t0=time.perf_counter()):
 
     cap = cv2.VideoCapture(args.video_path)
+
 
     fps = int(np.round(cap.get(cv2.CAP_PROP_FPS)))
     frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -122,7 +131,6 @@ def loop(args, rotate, fname, bbox, pose_model, flipped=False,
             img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
         if rotate_180:
             img = cv2.rotate(img, cv2.ROTATE_180)
-            print('FLIPPIN 180')
         if flipped:
             img = cv2.flip(img, 1)
         if not flag:
@@ -312,7 +320,7 @@ def start(args):
     rotate_180, bbox = check_pose4_flip180(pose_model, img, rotate,
                                            bbox, args, size)
 
-    return loop(args, rotate, fname, bbox, pose_model, rotate_180)
+    return loop(args, rotate, fname, bbox, pose_model, rotate_180=rotate_180)
 
 
 def str2bool(v):
