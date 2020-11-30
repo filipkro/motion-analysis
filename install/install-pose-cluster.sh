@@ -1,4 +1,4 @@
-pip install torchvision==0.5.0 # make sure compatible with pytorch on cluster
+pip install torchvision==0.7.0 # make sure compatible with pytorch on cluster
 pip install mmcv-full
 
 pip install -r install/requirements-cluster.txt
