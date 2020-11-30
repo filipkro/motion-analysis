@@ -5,7 +5,7 @@ import numpy as np
 import utils.dict_utils as du
 
 
-FILE_FORMATS = ('.avi', '.mp4', '.MTS', '.MOV', 'mp2t')
+FILE_FORMATS = ('.avi', '.mp4', '.MTS', '.MOV', '.mp2t', '.mts')
 
 
 def str2bool(v):
