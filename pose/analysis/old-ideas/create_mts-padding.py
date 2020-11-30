@@ -1,17 +1,18 @@
 import numpy as np
 # import filt
 from argparse import ArgumentParser
-from split_sequence import split
+from utils.split_sequence import split_peaks_pad
 from scipy.signal import find_peaks
 import matplotlib.pyplot as plt
 
 
-def parse_mts(poses, kpts, label, mts=None, mts_labels=None, angle_pts=None,
-              debug=False):
+def parse_mts(poses, kpts, label, samples_ahead, peak_joint, mts=None,
+              mts_labels=None, angle_pts=None, debug=False):
 
     print('')
     print('line 11 {0}'.format(poses.shape))
-    split_poses, _ = split(poses, debug=debug)
+    split_poses, _ = split_peaks_pad(poses, samples_ahead, joint=peak_joint,
+                                     debug=debug)
     print('split', split_poses.shape)
 
     if angle_pts is not None:
@@ -73,16 +74,6 @@ def parse_mts(poses, kpts, label, mts=None, mts_labels=None, angle_pts=None,
                 else:
                     crop[i, ...] = split_poses[i, -min_len:, ...]
 
-                # if ((peak >= int(min_len / 2)) and
-                #         (peak <= p_len - int(min_len / 2))):
-                #     crop[i, ...] = split_poses[i, peak - int(min_len / 2):
-                #                                peak +
-                #                                int(np.ceil(min_len / 2)), ...]
-                # elif peak < p_len / 2:
-                #     crop[i, ...] = split_poses[i, :min_len, ...]
-                # else:
-                #     crop[i, ...] = split_poses[i, -min_len:, ...]
-
             split_poses = crop
 
         elif min_len < mts.shape[1]:
@@ -130,24 +121,27 @@ def parse_mts(poses, kpts, label, mts=None, mts_labels=None, angle_pts=None,
 
 
 def calc_angle(poses, kpts):
-    angles = None
+    angles = []
     for pt in kpts:
-        ang = np.expand_dims(np.arctan2(poses[..., pt[0], 1] -
-                                        poses[..., pt[1], 1],
-                                        poses[..., pt[0], 0] -
-                                        poses[..., pt[1], 0]), axis=-1)
+        angles.append(np.arctan2(poses[..., pt[0], 1] - poses[..., pt[1], 1],
+                                 poses[..., pt[0], 0] - poses[..., pt[1], 0]))
+    #     ang = np.expand_dims(np.arctan2(poses[..., pt[0], 1] -
+    #                                     poses[..., pt[1], 1],
+    #                                     poses[..., pt[0], 0] -
+    #                                     poses[..., pt[1], 0]), axis=-1)
+    #
+    #     angles = ang if angles is None else np.append(angles, ang, axis=-1)
+    #
+    # print('dims in
+# calac, {0}, {1}'.format(poses.shape, angles.shape))
 
-        angles = ang if angles is None else np.append(angles, ang, axis=-1)
-
-    print('dims in calac, {0}, {1}'.format(poses.shape, angles.shape))
-
-    return angles
+    return np.array(angles)
 
 
-def fake_mts(file, kpts, angles=None):
+def fake_mts(file, kpts, samples_ahead, joint=13, angles=None):
     mts = np.load(file)
     mts = mts[6:-1, :, 0:2]
-    mts, _ = split(mts)
+    mts, _ = split_peaks_pad(mts, samples_ahead)
     if angles is not None:
         ang = calc_angle(mts, angles)
     kpts.append(14)
@@ -171,6 +165,10 @@ def main():
     parser = ArgumentParser()
     parser.add_argument('np_file', help='Numpy file to filter')
     parser.add_argument('--np_file2', default='', help='Numpy file to filter')
+    parser.add_argument('--samples_ahead', type=int, default=100,
+                        help='samples to keep before peak sequence is long')
+    parser.add_argument('--peak_joint', type=int, default=0,
+                        help='joint to use to find peaks in sequences')
     args = parser.parse_args()
 
     poses = np.load(args.np_file)
@@ -180,11 +178,12 @@ def main():
     if args.np_file2 != '':
         # ang = calc_angle(poses, 11, 13)
         angles = np.array([[11, 13], [13, 15]])
-        mts = fake_mts(args.np_file2, kpts.copy(), angles=angles)
-        parse_mts(poses, kpts, 1, mts=mts,
+        mts = fake_mts(args.np_file2, kpts.copy(), args.samples_ahead,
+                       joint=args.peak_joint, angles=angles)
+        parse_mts(poses, kpts, 1, args.samples_ahead, args.peak_joint, mts=mts,
                   mts_labels=np.ones(mts.shape[1]), angle_pts=angles)
     else:
-        parse_mts(poses, kpts, 1)
+        parse_mts(poses, kpts, 1, args.samples_ahead)
 
 
 if __name__ == '__main__':
