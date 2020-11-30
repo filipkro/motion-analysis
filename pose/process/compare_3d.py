@@ -43,6 +43,15 @@ def main():
     dtruths = np.sqrt((np.mean(poses[:, 0, 0]) - np.mean(poses[:, 5, 0]))**2 +
                       (np.mean(poses[:, 0, 1]) - np.mean(poses[:, 5, 1]))**2 +
                       (np.mean(poses[:, 0, 2]) - np.mean(poses[:, 5, 2]))**2)
+    orig = preds.copy()
+
+    print(orig)
+    plt.figure()
+    plt.plot(orig[:, :, 0])
+    plt.figure()
+    plt.plot(orig[:, :, 1])
+    plt.figure()
+    plt.plot(orig[:, :, 2])
     preds = preds * dtruths / dpreds
     # truth = truth[]
 
