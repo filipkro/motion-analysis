@@ -11,12 +11,13 @@ POE_fields = ['_trunk', '_hip', '_femval', '_KMFP',
               '_fem_med_shank', '_foot']
 NAME_PATH = '/home/filipkr/Documents/xjob/motion-analysis/names/lit-names-datasets.npy'
 
-KPTS = np.array([[12, 0], [13, 1]])
+# KPTS = np.array([[6, 0], [12, 0], [14, 0], [16, 0]])
 KPTS = np.array([[]])
-ANGLES = [[12, 14]]  # , [14, 16]]
+ANGLES = [[12, 14], [14, 16]]  # , [14, 16]]
 
 # if len(KPTS) < 1:
 #     KPTS =[[]]
+TV_subj = [3, 7, 12, 16, 24, 25, 38, 52]
 
 
 def str2bool(v):
@@ -64,30 +65,33 @@ def main(args):
     POE_field = POE_fields[2]
     pad = 4 * args.rate
 
-    lit_names = np.load(NAME_PATH, allow_pickle=True)
-    lit_idx = np.random.choice(lit_names.size)
-    lit_name = lit_names[lit_idx]
-    lit_names = np.delete(lit_names, lit_idx)
-    print('The lucky laureate is {}!'.format(lit_name))
-    print('Names left: {}'.format(lit_names.size))
-    np.save(NAME_PATH, lit_names)
-
-    save_path = args.save_path.split('.')[0] + '-' + lit_name + '.npz'
-
     if args.info_file:
+        lit_names = np.load(NAME_PATH, allow_pickle=True)
+        lit_idx = np.random.choice(lit_names.size)
+        lit_name = lit_names[lit_idx]
+        lit_names = np.delete(lit_names, lit_idx)
+        print('The lucky laureate is {}!'.format(lit_name))
+        print('Names left: {}'.format(lit_names.size))
+        # np.save(NAME_PATH, lit_names)
+        save_path = args.save_path.split('.')[0] + 'data_' + lit_name + '.npz'
+
         ifile = open(save_path.split('.')[0] + '-info.txt', 'w')
-        ifile.write('Dataset {} created {}, {}\n'.format(
+        ifile.write('Dataset {}, created {}, {}\n'.format(
             lit_name, datetime.date(datetime.now()),
             str(datetime.time(datetime.now())).split('.')[0]))
-        ifile.write('Action: {}\n'.format(POE_field))
-        ifile.write('FPS: {}\n'.format(args.rate))
-        ifile.write('Keypoints: {}\n'.format(KPTS))
-        ifile.write('Angles: {}\n \n'.format(ANGLES))
+        ifile.write('Action:, {},\n'.format(POE_field))
+        ifile.write('FPS:, {},\n'.format(args.rate))
+        ifile.write('Keypoints:, {},\n'.format(str(KPTS).replace(',', ' ')))
+        ifile.write('Angles:, {},\n \n'.format(str(ANGLES).replace(',', ' ')))
         ifile.write('index,subject,repetition\n')
 
     dataset_labels = []
     dataset = []
     k = 0
+    t = 0
+    ti = np.array([])
+    vi = np.array([])
+    train_idx = np.array([])
     for file_name in os.listdir(args.data_folder):
         if file_name.endswith('.npy'):
             if args.debug:
@@ -119,9 +123,17 @@ def main(args):
                     dataset.append(feats)
                     dataset_labels.append(label)
 
+                    if subject in TV_subj and args.gen_idx:
+                        if t % 2 == 0:
+                            vi = np.append(vi, k)
+                        else:
+                            ti = np.append(ti, k)
+                        t += 1
+                    elif args.gen_idx:
+                        train_idx = np.append(train_idx, k)
                     if args.info_file:
                         ifile.write('{},{},{}\n'.format(k, subject, i))
-                        k += 1
+                    k += 1
 
     dataset_labels = np.array(dataset_labels)
     dataset = np.array(dataset)
@@ -138,8 +150,13 @@ def main(args):
         plt.ylim((-2, 0))
         plt.show()
 
-    np.savez(save_path, mts=dataset, labels=dataset_labels)
-    ifile.close()
+    if args.info_file:
+        np.savez(save_path, mts=dataset, labels=dataset_labels)
+        ifile.close()
+
+    if args.gen_idx:
+        np.savez('/home/filipkr/Documents/xjob/data/datasets/indices.npz',
+                 train_idx=train_idx, test_idx=ti, val_idx=vi)
 
 
 if __name__ == '__main__':
@@ -150,6 +167,7 @@ if __name__ == '__main__':
     parser.add_argument('--debug', type=str2bool, nargs='?', default=False)
     parser.add_argument('--rate', type=int, default=25)
     parser.add_argument('--info_file', type=str2bool, nargs='?', default=True)
+    parser.add_argument('--gen_idx', type=str2bool, nargs='?', default=False)
     args = parser.parse_args()
     if args.save_path == '':
         args.save_path = os.path.join(args.data_folder, 'dataset.npz')
