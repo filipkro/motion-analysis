@@ -34,6 +34,7 @@ def main():
     plt.plot(poses_norm[:, 14, 0], label='normalized x')
     plt.plot(poses_norm[:, 14, 1], label='normalized y')
     plt.legend()
+    plt.show()
 
     # fp = findpeaks(method='peakdetect')
     # fp = findpeaks(method='topology', limit=1)

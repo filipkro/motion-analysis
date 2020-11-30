@@ -8,7 +8,7 @@ def rescale(poses, im=False):
     if im:
         dist = abs(poses[5, 12, 1] - poses[5, 16, 1])
     else:
-        dist = abs(poses[25, 2] - poses[25, -1])
+        dist = abs(poses[25, 2] - poses[25, 8])
 
     print(dist)
 
@@ -32,7 +32,7 @@ def main():
     # print(poses[0, :])
     # print(poses[1, :])
     # print(poses[2, :])
-    coords = [2, 3, 4, 7, 8, 9, 12, 13, 14]
+    coords = [2, 3, 4, 7, 8, 9, 12, 13, 14, 17, 18, 19]
     poses = poses_csv[2:, coords]
     poses, dist = rescale(poses)
 
@@ -47,52 +47,119 @@ def main():
 
     fig, axs = plt.subplots(2)
     # axs[0].plot(poses[:, 0], label='X')
-    axs[0].plot(-poses[:, 2], label='Z')
+    # axs[0].plot(-poses[:, 2], label='Z')
     # axs[0].plot(rh[:, 0], label='X')
     # # axs[0].legend()
     # axs[0].plot(-rh[:, 2], label='Z')
     # axs[0].plot(-ra[:, 2], label='ankle')
     # axs[0].plot(-rk[:, 2], label='knee')
-    axs[0].legend()
+    # axs[0].legend()
 
     if args.np_file != '':
         meas = np.load(args.np_file)
         meas, _ = rescale(meas, True)
-        # axs[1].plot(meas[:, 12, 0], label='Measured X')
-        diff = -poses[25, 2] - meas[5, 12, 1]
-        axs[1].plot(meas[:, 12, 1] + diff, label='Measured Y')
+        diffX = poses[25, 0] - meas[5, 12, 0]
+
         ratio = len(poses[:, 2]) / len(meas[:, 12, 1])
+        dsX = resample(poses[:, 0], ratio)
+
+        diff = -poses[25, 2] - meas[5, 12, 1]
+        axs[1].plot(dist * (meas[:, 12, 1] + diff), label='Image Y')
+
         print('ratio {0} \n'.format(ratio))
         ds = resample(-poses[:, 2], ratio)
-        axs[1].plot(ds, label='Markers')
+        axs[1].plot(dist * ds, label='Marker - Y')
         axs[1].legend()
 
-        plt.figure(2)
-        plt.plot(meas[:, 12, 1] + diff, label='Estimated Y')
-        plt.plot(ds, label='Markers')
-        plt.legend()
+        axs[0].plot(dist * (meas[:, 12, 0] + diffX), label='Image - X')
+        plt.title('Right hip')
+        axs[0].plot(dist * dsX, label='Marker - X')
+        axs[0].legend()
 
-        e = (meas[:, 12, 1] + diff - ds) * dist
-        m = np.mean(e)
+        eY = (meas[:, 12, 1] + diff - ds) * dist
+        eX = (meas[:, 12, 0] + diffX - dsX) * dist
+
+        # plt.figure(2)
+        fig, axs = plt.subplots(2)
+        diffX = poses[25, 3] - meas[5, 14, 0]
+
+        dsX = resample(poses[:, 3], ratio)
+
+        diff = -poses[25, 5] - meas[5, 14, 1]
+        axs[1].plot(dist * (meas[:, 14, 1] + diff + 0.025), label='Image Y')
+
+        print('ratio {0} \n'.format(ratio))
+        ds = resample(-poses[:, 5], ratio)
+        axs[1].plot(dist * ds, label='Marker - Y')
+        axs[1].legend()
+
+        axs[0].plot(dist * (meas[:, 14, 0] + diffX + 0.025), label='Image - X')
+        plt.title('Right knee')
+        axs[0].plot(dist * dsX, label='Marker - X')
+        axs[0].legend()
+
+        eKY = (meas[:, 14, 1] + diff - ds) * dist
+        eKX = (meas[:, 14, 0] + diffX - dsX) * dist
+
+        fig, axs = plt.subplots(2)
+        diffX = poses[25, 6] - meas[5, 16, 0]
+
+        dsX = resample(poses[:, 6], ratio)
+
+        diff = -poses[25, 8] - meas[5, 16, 1]
+        axs[1].plot(meas[:, 16, 1] + diff, label='Image Y')
+
+        print('ratio {0} \n'.format(ratio))
+        ds = resample(-poses[:, 8], ratio)
+        axs[1].plot(ds, label='Marker - Y')
+        axs[1].legend()
+
+        axs[0].plot(meas[:, 16, 0] + diffX, label='Image - X')
+        plt.title('Right ankle')
+        axs[0].plot(dsX, label='Marker - X')
+        axs[0].legend()
+
+        fig, axs = plt.subplots(2)
+        diffX = poses[25, 9] - meas[5, 11, 0]
+
+        dsX = resample(poses[:, 9], ratio)
+
+        diff = -poses[25, 11] - meas[5, 11, 1]
+        axs[1].plot(meas[:, 11, 1] + diff, label='Image Y')
+
+        print('ratio {0} \n'.format(ratio))
+        ds = resample(-poses[:, 11], ratio)
+        axs[1].plot(ds, label='Marker - Y')
+        axs[1].legend()
+
+        axs[0].plot(meas[:, 11, 0] + diffX, label='Image - X')
+        plt.title('Right ankle')
+        axs[0].plot(dsX, label='Marker - X')
+        axs[0].legend()
+
+        # plt.plot(meas[:, 12, 1] + diff, label='Estimated Y')
+        # plt.plot(ds, label='Markers')
+        # plt.legend()
+
+        # m = np.mean(eY)
+        m = 0
         print(m)
-        print(np.std(e - m))
-        print(np.max(abs(e - m)))
-
-        plt.figure(3)
-        plt.plot(e)
-        plt.ylabel('Error / m')
-
-        ds_k = resample(-poses[:, 5], ratio)
-
-        plt.figure(4)
-        plt.plot(ds_k)
-        plt.plot(meas[:, 14, 1] + diff)
-
-        ds_a = resample(-poses[:, 8], ratio)
+        print(np.std(eY - m))
+        print(np.max(abs(eY - m)))
 
         plt.figure(5)
-        plt.plot(ds_a)
-        plt.plot(meas[:, 16, 1] + diff)
+        plt.plot(eY, label='error y')
+        plt.plot(eX, label='error x')
+        plt.ylabel('Error / m (?)')
+        plt.legend()
+        plt.title('error hip')
+
+        plt.figure(6)
+        plt.plot(eKY, label='error y')
+        plt.plot(eKX, label='error x')
+        plt.ylabel('Error / m (?)')
+        plt.legend()
+        plt.title('error knee')
 
     plt.show()
 
