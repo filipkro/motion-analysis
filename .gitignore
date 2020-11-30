@@ -16,6 +16,7 @@ pose/VideoPose3D
 
 slurm-*
 *.swp
+*.swo
 
 # Distribution / packaging
 .Python

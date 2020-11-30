@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+#SBATCH -A SNIC2020-33-20 -p alvis
+#SBATCH -n 4
+#SBATCH --gpus-per-node=T4:1
+#SBATCH -t 0-5:0:0 # 40 min
+
+
+cp -r $HOME/motion-analysis $TMPDIR
+cp -r $HOME/data-3d $TMPDIR
+
+data_folder=$TMPDIR/data-3d
+
+
+cd $TMPDIR
+mkdir results-3d-m
+
+module purge
+module load GCC/8.3.0 CUDA/10.1.243 OpenMPI/3.1.4 PyTorch/1.4.0-Python-3.7.4 SciPy-bundle/2019.10-Python-3.7.4
+module load OpenCV/4.2.0-Python-3.7.4 Pillow Anaconda3 
+
+conda create -p $TMPDIR/detection python=3.7.4 -y
+source activate $TMPDIR/detection/
+
+cd motion-analysis
+
+bash install/install-pose3d.sh
+
+
+cd pose/VideoPose3D
+python run-train-cluster.py -e 200 -arc 3,3,3,3,3 -b 512 -no-da -no-tta -s 1 --export-training-curves --checkpoint-frequency 10 --save_folder $TMPDIR/results-3d-m/ --save_home $HOME/save-3d/ --lol_path $data_folder/data_2d_custom_lol-take2.npz --big_data $data_folder/big_data-orig-dims.npz --chck_load $data_folder/pretrained_h36m_detectron_coco.bin
+
+
+
+#./run-detection-cluster.sh $vid $allow_flip $save_pixels
+
+cd $TMPDIR
+cp -r results-3d-m $HOME
+
+
+#conda clean --all -y --quiet
+#condaresu remove -n detection --all -y --quiet

@@ -8,9 +8,11 @@ VIDEO_FOLDER="$TMPDIR/$1"
 FOLDER_BOX="$TMPDIR/motion-analysis/pose/mmpose/mmdetection/"
 OUT_DIR="$TMPDIR/results"
 ONLY_BOX=false
+FLIP2RIGHT=true
+FNAME_FORMAT=true
 
 echo "launching python scripts"
 
 echo "$(which python)"
 echo "$(ls)"
-python analyse_folder.py $MODEL_CONFIG $MODEL_CHECKPOINT $VIDEO_FOLDER --out-video-root $OUT_DIR --device cuda:0 --folder_box $FOLDER_BOX --show false --save_pixels true --save4_3d true --return_3d true --allow_flip false
+python analyse_folder.py $MODEL_CONFIG $MODEL_CHECKPOINT $VIDEO_FOLDER --out-video-root $OUT_DIR --device cuda:0 --folder_box $FOLDER_BOX --show false --save_pixels false --save4_3d true --allow_flip false --flip2right $FLIP2RIGHT --fname_format $FNAME_FORMAT 

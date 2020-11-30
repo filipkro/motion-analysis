@@ -4,23 +4,21 @@
 #SBATCH --gpus-per-node=T4:1
 #SBATCH -t 0-20:00:0 # 1h
 
-vid="vids-w-markers"
-#vid="folder-test"
+vid="shield-SLS"
 
 cp -r $HOME/motion-analysis $TMPDIR
-mv $HOME/vids/$vid $TMPDIR
+cp -r $HOME/vids/$vid $TMPDIR
 
 cd $TMPDIR
 
-echo "$(ls)"
 mkdir results
 
 module purge
-module load GCC/8.3.0 CUDA/10.1.243 OpenMPI/3.1.4 PyTorch/1.4.0-Python-3.7.4 SciPy-bundle/2019.10-Python-3.7.4
-module load OpenCV/4.2.0-Python-3.7.4 Pillow Anaconda3 
+module load GCC/8.3.0 CUDA/10.1.243 OpenMPI/3.1.4 PyTorch/1.6.0-Python-3.7.4 SciPy-bundle/2019.10-Python-3.7.4
+module load OpenCV/4.2.0-Python-3.7.4 Pillow
 
-conda create -p $TMPDIR/detection python=3.7.4 -y
-source activate $TMPDIR/detection/
+virtualenv detect
+source detect/bin/activate
 
 cd motion-analysis
 
@@ -35,7 +33,7 @@ echo "runnning bash script"
 #rm -rf $HOME/vids/$vid
 
 cd $TMPDIR
-cp -r results $HOME/results
+cp -r results $HOME/results-train/$vid
 
 
 #conda clean --all -y --quiet
