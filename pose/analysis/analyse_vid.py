@@ -390,7 +390,7 @@ def main():
                         help='Device used for inference')
     parser.add_argument('--box-thr', type=float, default=0.1,
                         help='Bounding box score threshold')
-    parser.add_argument('--kpt-thr', type=float, default=0.3,
+    parser.add_argument('--kpt-thr', type=float, default=0.1,
                         help='Keypoint score threshold')
     parser.add_argument('--file_name', type=str, default='')
     parser.add_argument('--only_box', type=str2bool, nargs='?', const=True,
