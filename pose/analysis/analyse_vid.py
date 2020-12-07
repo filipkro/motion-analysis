@@ -25,6 +25,7 @@ def box_check(img, folder_box, show_box=False, device='cpu'):
     # bbox = det_results[0]
     bbox = np.expand_dims(np.array(det_results[0])[0, :], axis=0)
     bbox[0, 2:4] = bbox[0, 2:4] + 100
+    bbox[0, 4] = 1
     # print(bbox)
     if abs(bbox[0, 0] - bbox[0, 2]) > abs(bbox[0, 1] - bbox[0, 3]):
         flip = True
@@ -238,7 +239,7 @@ def start(args):
 
     fps = int(np.round(cap.get(cv2.CAP_PROP_FPS)))
 
-    print(fps)
+    print('Frame rate: {} fps'.format(fps))
 
     flag, img = cap.read()
 
@@ -343,7 +344,7 @@ def main():
                         'Default not saving the visualization video.')
     parser.add_argument('--device', default='cpu',
                         help='Device used for inference')
-    parser.add_argument('--box-thr', type=float, default=0.3,
+    parser.add_argument('--box-thr', type=float, default=0.1,
                         help='Bounding box score threshold')
     parser.add_argument('--kpt-thr', type=float, default=0.3,
                         help='Keypoint score threshold')

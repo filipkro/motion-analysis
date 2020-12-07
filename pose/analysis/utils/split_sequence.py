@@ -12,11 +12,13 @@ def resample(x, factor, kind='linear'):
     f = interp1d(np.linspace(0, 1, x.shape[0]), x, kind, axis=0)
     return f(np.linspace(0, 1, n))
 
+
 def normalize_coords(poses):
-    dist = abs(poses[10,0,1] - poses[10,16,1])
+    dist = abs(poses[10, 0, 1] - poses[10, 16, 1])
     poses = poses / dist
-    poses = poses - poses[0,12,:]#np.expand_dims(poses[0, 0, :], 1)
+    poses = poses - poses[0, 12, :]  # np.expand_dims(poses[0, 0, :], 1)
     return poses
+
 
 def split_peaks(poses, joint=13, debug=False):
     # joint = 13
@@ -113,20 +115,25 @@ def split_peaks(poses, joint=13, debug=False):
     return pose_seqs, peaks
 
 
-def split_peaks_pad(poses, xtra_samp, rate, joint=0, debug=False):
-    dist = int(rate*2/3)
-    width = int(rate/5)
+def split_peaks_pad(poses, rate, xtra_samp=100, joint=5, debug=False,
+                    only_peaks=False, prom=0.048):
+    dist = int(rate * 2 / 3)
+    width = int(rate / 5)
 
     # peaks, props = find_peaks(poses[:, joint, 1], distance=dist, prominence=0.02,
     #                           width=width, plateau_size=1)
-    peaks, props = find_peaks(poses[:, joint, 1], distance=dist, prominence=0.048,
+    peaks, props = find_peaks(poses[:, joint, 1], distance=dist, prominence=prom,
                               width=width, plateau_size=1)
 
     nbr_peaks = len(peaks)
 
     left_ips = props['left_ips'].astype(int)
     right_ips = props['right_ips'].astype(int)
-    peaks = ((left_ips + right_ips)/2).astype(int)
+    peaks = ((left_ips + right_ips) / 2).astype(int)
+
+    if only_peaks:
+        edges = np.array([left_ips, right_ips])
+        return peaks, edges
 
     if debug:
         print(props)
@@ -194,7 +201,7 @@ def main():
 
     # samples = 210
 
-    split_peaks_pad(poses, samples, rate, joint=5, debug=True)
+    split_peaks_pad(poses, rate, xtra_samp=samples, joint=5, debug=True)
 
 
 if __name__ == '__main__':
