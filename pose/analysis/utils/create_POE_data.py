@@ -102,7 +102,8 @@ def main(args):
             fps = int(file_name.split('.')[0].split('-')[3])
             data = resample(data, fps / args.rate)
             data = normalize_coords(data)
-            motions, _ = split_peaks_pad(data, pad, args.rate, joint=5)
+            motions, _ = split_peaks_pad(data, args.rate,
+                                         xtra_samp=pad, joint=5)
             for i in range(5):
 
                 field = action + POE_field + str(i + 1)
