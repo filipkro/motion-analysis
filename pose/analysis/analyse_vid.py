@@ -22,6 +22,7 @@ def box_check(img, folder_box, show_box=False, device='cpu'):
     det_model = init_detector(det_config, det_model, device=device)
     print('loaded detection model')
     det_results = inference_detector(det_model, img)
+    # print(det_results)
     # bbox = det_results[0]
     bbox = np.expand_dims(np.array(det_results[0])[0, :], axis=0)
     bbox[0, 2:4] = bbox[0, 2:4] + 100
@@ -68,6 +69,33 @@ def check_pose4_flip180(pose_model, img, rotate, bbox, args, size):
     return False, bbox
 
 
+def re_est_bbox(img, folder_box, flip90, flip180, flip2right, device='cpu'):
+    det_config = folder_box +\
+        'configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py'
+    det_model = folder_box +\
+        'checkpoints/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth'
+    det_model = init_detector(det_config, det_model, device=device)
+
+    if flip90:
+        img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
+    if flip180:
+        img = cv2.rotate(img, cv2.ROTATE_180)
+    if flip2right:
+        img = cv2.flip(img, 1)
+
+    det_results = inference_detector(det_model, img)
+    bbox = np.expand_dims(np.array(det_results[0])[0, :], axis=0)
+    dy = bbox[0,3] - bbox[0,1]
+    dx = bbox[0,2] - bbox[0,0]
+    bbox[0,3] += 0.1 * dy
+    bbox[0,0] -= 0.1 * dx
+    bbox[0,2] += 0.1 * dx
+    # bbox[0, 2:4] = bbox[0, 2:4] + 100
+    bbox[0, 4] = 1
+
+    return bbox
+
+
 def flip_box(bbox, width):
     '''
         flip boxes when evaluating left leg
@@ -96,7 +124,9 @@ def loop(args, rotate, fname, bbox, pose_model, flipped=False,
         size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
                 int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
 
-    if args.fname_format and args.flip2right:
+    print(size)
+
+    if args.fname_format and args.flip2right and False:
         if os.path.basename(fname).split('-')[2] == 'L':
             flipped = True
             bbox = flip_box(bbox, size[0])
@@ -314,7 +344,21 @@ def start(args):
     rotate_180, bbox = check_pose4_flip180(pose_model, img, rotate,
                                            bbox, args, size)
 
-    return loop(args, rotate, fname, bbox, pose_model, rotate_180=rotate_180)
+    #
+    # if rotate or rotate_180:
+    flip2right = False
+    if args.fname_format and args.flip2right:
+        if os.path.basename(fname).split('-')[2] == 'L':
+            flip2right = True
+
+    bbox = re_est_bbox(img, args.folder_box, rotate, rotate_180, flip2right,
+                       device=args.device)
+
+    # print('orig bbox: {}'.format(bbox))
+    # print('new bbox: {}'.format(comp_box))
+
+    return loop(args, rotate, fname, bbox, pose_model, rotate_180=rotate_180,
+                flipped=flip2right)
 
 
 def str2bool(v):

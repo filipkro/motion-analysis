@@ -12,6 +12,6 @@ FILE_NAME=""
 ONLY_BOX=false
 FLIP2RIGHT=true
 FNAME_FORMAT=true
-SKIP_RATE=10
+SKIP_RATE=1
 
 python analyse_vid.py $MODEL_CONFIG $MODEL_CHECKPOINT --video-path $VIDEO --out-video-root $OUT_DIR --folder_box $FOLDER_BOX --show true --flip2right $FLIP2RIGHT --fname_format $FNAME_FORMAT --skip_rate $SKIP_RATE
