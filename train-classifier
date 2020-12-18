@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #SBATCH -A SNIC2020-33-20 -p alvis
 #SBATCH -n 4
-#SBATCH --gpus-per-node=V100:1
+#SBATCH --gpus-per-node=T4:1
 #SBATCH -t 0-5:00:0 # 5 h 
 
 data_set="data_Octavio-Paz.npz"
@@ -32,7 +32,7 @@ source train-class/bin/activate
 pip install tensorflow==2.3.1
 pip install keras==2.4
 #cd motion-analysis/tsc/dl-4-tsc
-cd motion-analysis/tsc/tsc
+cd motion-analysis/classification/tsc
 
 pip install -r utils/requirements-cluster.txt
 
