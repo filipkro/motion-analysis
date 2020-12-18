@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+#SBATCH -A SNIC2020-33-20 -p alvis
+#SBATCH -n 4
+#SBATCH --gpus-per-node=T4:1
+#SBATCH -t 0-5:00:0 # 5 h 
+
+classifier=$1
+itr="_itr_"$3
+train_idx="train-idx-val.npy"
+test_idx="test-idx-val.npy"
+train_idx="indices.npz"
+test_idx=""
+
+model="Herta-Moller/"
+cp -r $HOME/training/net1d/Herta-Moller/$model $TMPDIR
+cp -r $HOME/motion-analysis $TMPDIR
+cp -r $HOME/datasets $TMPDIR
+cp $HOME/datasets/$train_idx $TMPDIR
+cd $TMPDIR
+mkdir results
+
+module purge
+module load GCC/8.3.0 CUDA/10.1.243 OpenMPI/3.1.4 cuDNN/7.6.4.38
+#module load GCC/8.3.0 CUDA/10.1.243 OpenMPI/3.1.4 TensorFlow/2.1.0-Python-3.7.4 
+module load SciPy-bundle/2019.10-Python-3.7.4 matplotlib/3.1.1-Python-3.7.4
+#module load Keras/2.3.1-Python-3.7.4
+
+virtualenv train-class
+source train-class/bin/activate
+
+pip install tensorflow==2.3.1
+pip install keras==2.4
+#cd motion-analysis/tsc/dl-4-tsc
+cd motion-analysis/classification/tsc/utils
+
+pip install -r requirements-cluster.txt
+
+python eval_w_idx.py $TMPDIR/$model $TMPDIR/datasets --outdir $TMPDIR/results
+
+cp -r $TMPDIR/results $HOME/eval-results
