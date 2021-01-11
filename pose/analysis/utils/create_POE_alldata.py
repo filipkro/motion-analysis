@@ -3,6 +3,7 @@ from argparse import ArgumentParser, ArgumentTypeError
 import pandas as pd
 import os
 from scipy.interpolate import interp1d
+import scipy
 from split_sequence import split_peaks_pad
 import matplotlib.pyplot as plt
 from datetime import datetime
@@ -14,14 +15,26 @@ data_dirs = ('healthy-SLS', 'hipp-SLS', 'marked-SLS', 'musse-SLS',
 NAME_PATH = '/home/filipkr/Documents/xjob/motion-analysis/names/lit-names-datasets.npy'
 
 # KPTS = np.array([[6, 0], [12, 0], [14, 0], [16, 0]])
-KPTS = np.array([[]])
-ANGLES = [[12, 14], [14, 16]]  # , [14, 16]]
-KPTS = 'all'
-ANGLES = []
+KPTS = np.array([[5, 0], [5, 1], [6, 0], [6, 1], [11, 0], [11, 1],
+                 [12, 0], [12, 1], [14, 0], [14, 1]])
+KPTS = np.array([[5, 0], [5, 1], [6, 0], [6, 1], [7, 0], [7, 1],
+                 [8, 0], [8, 1], [11, 0], [11, 1], [12, 0], [12, 1],
+                 [14, 0], [14, 1]])
+KPTS = np.array([[11, 1], [12, 0], [12, 1], [14, 0]])
+KPTS = np.array([[5, 0], [6, 1], [7, 0],
+                 [8, 0], [8, 1], [11, 1], [12, 0], [12, 1],
+                 [14, 0]])
+KPTS = np.array([[6, 1], [12, 0], [14, 0]])
+
+# KPTS = np.array([[]])
+ANGLES = [[14, 16]]  # , [14, 16]]
+# ANGLES = []
+# KPTS = 'all'
+# ANGLES = [[14, 16]]
+# KPTS = np.array([[6, 1], [12, 0], [14, 0]])
 
 # if len(KPTS) < 1:
 #     KPTS =[[]]
-TV_subj = [3, 7, 12, 16, 24, 25, 38, 52]
 
 lower_peaks = ('hipp12-SLS-L-25.npy', 'marked04-SLS-L-25.npy',
                'musse05-SLS-R-25.npy', 'musse08-SLS-R-25.npy',
@@ -77,11 +90,9 @@ def main(args):
         lit_names = np.load(NAME_PATH, allow_pickle=True)
         lit_idx = np.random.choice(lit_names.size)
         lit_name = lit_names[lit_idx]
-        lit_names = np.delete(lit_names, lit_idx)
 
-        # lit_name = 'Ivan-Bunin'
-        # print('The lucky laureate is {}!'.format(lit_name))
-        print('Names left: {}'.format(lit_names.size))
+        # lit_name = 'Par-Lagerkvist'
+        print('The lucky laureate is {}!'.format(lit_name))
 
         save_path = args.save_path.split('.')[0] + 'data_' + lit_name + '.npz'
 
@@ -100,12 +111,7 @@ def main(args):
     dataset_labels = []
     dataset = []
     k = 0
-    t = 0
     glob_subject_nbr = 0
-    subject_list = []
-    ti = np.array([])
-    vi = np.array([])
-    train_idx = np.array([])
     for dir in os.listdir(args.root):
         if dir in data_dirs:
             cohort = dir.split('-')[0]
@@ -129,12 +135,22 @@ def main(args):
                             # idx ???
 
                             data = resample(data, fps / args.rate)
+                            b, a = scipy.signal.butter(4, 0.2)
+                            data = scipy.signal.filtfilt(b, a, data, axis=0)
                             data = normalize_coords(data)
+                            # if cohort + file_name == 'hipp12-SLS-L-25.npy':
+                            #     motions, _ = split_peaks_pad(data, args.rate,
+                            #                                  xtra_samp=pad,
+                            #                                  joint=5,
+                            #                                  debug=args.debug,
+                            #                                  prom=0.022)
+                            # print(motions.shape)
                             if cohort + file_name in lower_peaks:
                                 motions, _ = split_peaks_pad(data, args.rate,
                                                              xtra_samp=pad,
                                                              joint=5,
-                                                             prom=0.025)
+                                                             prom=0.02,
+                                                             debug=args.debug)
                             else:
                                 motions, _ = split_peaks_pad(data, args.rate,
                                                              xtra_samp=pad,
@@ -150,35 +166,37 @@ def main(args):
                                 label = labels.filter(like=field).values[idx]
 
                                 if not np.isnan(label):
-                                    if KPTS == 'all':
+                                    # if KPTS == 'all':
+                                    if False:
                                         feats = motions[i, ...]
-                                        feats = feats.reshape(feats.shape[0], -1)
+                                        feats = feats.reshape(
+                                            feats.shape[0], -1)
                                     else:
                                         angles = calc_angle(
                                             motions[i, ...], ANGLES)
                                         # kpts = np.moveaxis(motions[i, :, KPTS, :], 1, 0)
                                         # kpts = kpts.reshape(kpts.shape[0], -1)
+
                                         if KPTS.size > 0:
                                             kpts = motions[i, :,
                                                            KPTS[:, 0], KPTS[:, 1]].T
+
+                                            diff = np.expand_dims(motions[i, :, 12, 0] - motions[i, :, 14, 0], axis=-1)
                                         else:
                                             kpts = np.moveaxis(
                                                 motions[i, :, [], :], 1, 0)
-                                            kpts = kpts.reshape(kpts.shape[0], -1)
+                                            kpts = kpts.reshape(
+                                                kpts.shape[0], -1)
                                         # print(motions[i,:,KPTS].shape)
                                         # print(kpts - motions[i,:,KPTS])
-                                        feats = np.append(kpts, angles, axis=-1)
+                                        feats = np.append(
+                                            kpts, angles, axis=-1)
+                                        # print(feats.shape)
+                                        # print(diff.shape)
+                                        feats = np.append(feats, diff, axis=-1)
                                     dataset.append(feats)
                                     dataset_labels.append(label)
 
-                                    if subject in TV_subj and args.gen_idx:
-                                        if t % 2 == 0:
-                                            vi = np.append(vi, k)
-                                        else:
-                                            ti = np.append(ti, k)
-                                        t += 1
-                                    elif args.gen_idx:
-                                        train_idx = np.append(train_idx, k)
                                     if args.info_file:
                                         ifile.write('{},{},{},{},{}\n'.format(
                                             k, glob_subject_nbr, i, subject, cohort))
@@ -207,11 +225,10 @@ def main(args):
     if args.info_file:
         np.savez(save_path, mts=dataset, labels=dataset_labels)
         ifile.close()
-        # np.save(NAME_PATH, lit_names)
+        lit_names = np.delete(lit_names, lit_idx)
+        print('Names left: {}'.format(lit_names.size))
+        np.save(NAME_PATH, lit_names)
 
-    if args.gen_idx:
-        np.savez('/home/filipkr/Documents/xjob/data/datasets/indices.npz',
-                 train_idx=train_idx, test_idx=ti, val_idx=vi)
 
 
 if __name__ == '__main__':

@@ -3,7 +3,7 @@ from argparse import ArgumentParser, ArgumentTypeError
 import pandas as pd
 import os
 from scipy.interpolate import interp1d
-from split_sequence import split_peaks_pad
+import scipy.signal
 import matplotlib.pyplot as plt
 from datetime import datetime
 
@@ -16,9 +16,13 @@ KPTS = np.array([[]])
 KPTS = 'all'
 ANGLES = [[12, 14], [14, 16]]  # , [14, 16]]
 
+KPTS = np.array([[6, 0], [6, 1], [7, 0], [7, 1], [8, 0],
+                 [8, 1], [12, 0], [12, 1], [14, 0],
+                 [14, 1], [16, 0], [16, 1]])
+ANGLES = [[12, 14], [14, 16], [6, 12]]  # , [14, 16]]
+
 # if len(KPTS) < 1:
 #     KPTS =[[]]
-TV_subj = [3, 7, 12, 16, 24, 25, 38, 52]
 
 
 def str2bool(v):
@@ -74,7 +78,7 @@ def main(args):
         # lit_name = 'Czeslaw-Milosz'
         print('The lucky laureate is {}!'.format(lit_name))
         print('Names left: {}'.format(lit_names.size))
-        np.save(NAME_PATH, lit_names)
+
         save_path = args.save_path.split('.')[0] + 'data_' + lit_name + '.npz'
 
         ifile = open(save_path.split('.')[0] + '-info.txt', 'w')
@@ -125,6 +129,8 @@ def main(args):
 
                             data = np.load(os.path.join(dir_path, file_name))
                             data = resample(data, fps / args.rate)
+                            b, a = scipy.signal.butter(4, 0.2)
+                            data = scipy.signal.filtfilt(b, a, data, axis=0)
                             data = normalize_coords(data)
                             # print('line 127 (data): ', data.shape)
                             if not np.isnan(label):
@@ -181,6 +187,7 @@ def main(args):
 
     if args.info_file:
         np.savez(save_path, mts=dataset, labels=dataset_labels)
+        np.save(NAME_PATH, lit_names)
         ifile.close()
 
 
