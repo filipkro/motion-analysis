@@ -4,9 +4,6 @@
 #SBATCH --gpus-per-node=T4:1
 #SBATCH -t 0-5:00:0 # 5 h 
 
-data_set="data_Octavio-Paz.npz"
-archive="VA-classification"
-data_set="data_"$2".npz"
 classifier=$1
 itr="_itr_"$3
 train_idx="train-idx-val.npy"
@@ -14,6 +11,8 @@ test_idx="test-idx-val.npy"
 train_idx="indices.npz"
 test_idx=""
 
+model="Herta-Moller/"
+cp -r $HOME/training/net1d/Herta-Moller/$model $TMPDIR
 cp -r $HOME/motion-analysis $TMPDIR
 cp -r $HOME/datasets $TMPDIR
 cp $HOME/datasets/$train_idx $TMPDIR
@@ -31,15 +30,11 @@ source train-class/bin/activate
 
 pip install tensorflow==2.3.1
 pip install keras==2.4
-pip install -U --no-deps git+https://github.com/ck37/coral-ordinal/
 #cd motion-analysis/tsc/dl-4-tsc
-cd motion-analysis/classification/tsc
+cd motion-analysis/classification/tsc/utils
 
-pip install -r utils/requirements-cluster.txt
+pip install -r requirements-cluster.txt
 
+python eval_w_idx.py $TMPDIR/$model $TMPDIR/datasets --outdir $TMPDIR/results
 
-python train-classifier.py $TMPDIR/results $TMPDIR/datasets/$data_set $classifier --itr $itr --gen_idx t
-
-#python train-classifier.py $TMPDIR/results $TMPDIR/$data_set $classifier --train_idx $TMPDIR/$train_idx --test_idx $TMPDIR/$test_idx --itr $itr
-
-cp -r $TMPDIR/results/. $HOME/training/
+cp -r $TMPDIR/results $HOME/eval-results

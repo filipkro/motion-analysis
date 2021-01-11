@@ -38,7 +38,7 @@ cd motion-analysis/classification/tsc
 pip install -r utils/requirements-cluster.txt
 
 
-python train-classifier.py $TMPDIR/results $TMPDIR/datasets/$data_set $classifier --itr $itr --gen_idx t
+python retrain.py $TMPDIR/results $TMPDIR/datasets/$data_set $classifier --itr $itr --idx $TMPDIR/motion-analysis/classification/tsc/idx.npz
 
 #python train-classifier.py $TMPDIR/results $TMPDIR/$data_set $classifier --train_idx $TMPDIR/$train_idx --test_idx $TMPDIR/$test_idx --itr $itr
 

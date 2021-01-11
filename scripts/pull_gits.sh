@@ -2,4 +2,4 @@
 git pull
 git -C pose/mmpose pull
 git -C pose/mmpose/mmdetection pull
-git -C tsc/dl-4-tsc pull
+git -C classification/tsc pull
