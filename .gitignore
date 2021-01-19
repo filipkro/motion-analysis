@@ -19,6 +19,7 @@ slurm-*
 *.swp
 *.swo
 
+# latex
 *.aux
 *.out
 *.fls
@@ -26,6 +27,9 @@ slurm-*
 *.fdb_latexmk
 *.blg
 *.synctex.gz
+*.bcf
+*.run.xml
+*.toc
 
 # Distribution / packaging
 .Python
