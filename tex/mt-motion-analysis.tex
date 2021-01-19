@@ -1,0 +1,26 @@
+\documentclass[12pt, openany]{book}
+
+\input{files/settings/setup-long.tex}
+\input{files/settings/setup-envs.tex}
+\input{files/settings/setup-commands.tex}
+
+% \bibliography{files/bibtex/bib}
+% \bibliography{files/bib}
+\addbibresource{files/bibtex/bib.bib}
+
+\title{Thesis}
+\author{Filip Kronström}
+\date{\today}
+
+\begin{document}
+\setstretch{1.4}
+\maketitle
+\pagenumbering{roman}
+\include{files/text/0-pre-content}
+\pagenumbering{arabic}
+\include{files/text/1-introduction}
+\include{files/text/2-methods}
+\addcontentsline{toc}{chapter}{References}
+\textbf{If you are using mendeley to manage references, you might have to export them manually in the end as the automatic ways removes the "date accessed" field}
+\printbibliography
+\end{document}
