@@ -1,11 +1,11 @@
-% !TEX root=../mt-motion-analysis.tex
+% !TEX root=../../mt-motion-analysis.tex
 \usepackage[
-	citestyle=ieee,
-    bibstyle=ieee,
-    style=numeric-comp,
-    sorting=nty,
-    maxbibnames=99, % Make sure we are printing all authors in the appendix
-    ]{biblatex}
+ citestyle=ieee,
+ bibstyle=ieee,
+ style=numeric-comp,
+ sorting=nty,
+ maxbibnames=99, % Make sure we are printing all authors in the appendix
+]{biblatex}
 
 \usepackage[utf8]{inputenc}
 
@@ -66,6 +66,8 @@
 
 \usepackage{unicode-math}
 
+% \usepackage{bm}
+
 
 
 
@@ -108,22 +110,24 @@
 \setlength{\headheight}{15.5pt}
 
 
+
+
 \fancypagestyle{plain}{
-    \fancyhf{}
-    \fancyhead{}
-    \fancyfoot{}
-    \renewcommand{\headrulewidth}{0pt}
-    \fancyfoot[R]{\footerfont\thepage}
+ \fancyhf{}
+ \fancyhead{}
+ \fancyfoot{}
+ \renewcommand{\headrulewidth}{0pt}
+ \fancyfoot[R]{\footerfont\thepage}
 }
 
 \pagestyle{fancy}
 
 % Making the command for placing text in random locations
 \newcommand\PlaceText[3]{%
-\begin{tikzpicture}[remember picture,overlay]
-\node[outer sep=0pt,inner sep=0pt,anchor=south west]
+ \begin{tikzpicture}[remember picture,overlay]
+  \node[outer sep=0pt,inner sep=0pt,anchor=south west]
   at ([xshift=#1,yshift=-#2]current page.north west) {#3};
-\end{tikzpicture}%
+ \end{tikzpicture}%
 }
 
 % Disable hyphenation
