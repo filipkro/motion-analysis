@@ -397,3 +397,108 @@ year = {2015}
   number={},
   pages={1-1},
   doi={10.1109/TPAMI.2020.2983686}}
+
+  @misc{UCRArchive,
+  title={The UCR Time Series Classification Archive},
+  author={ Chen, Yanping and Keogh, Eamonn and Hu, Bing and Begum, Nurjahan and Bagnall, Anthony and Mueen, Abdullah and Batista, Gustavo},
+  year={2015},
+  month={July},
+  note = {\url{www.cs.ucr.edu/~eamonn/time_series_data/}}
+  }
+
+  @article{Dau2018,
+abstract = {The UCR Time Series Archive - introduced in 2002, has become an important resource in the time series data mining community, with at least one thousand published papers making use of at least one data set from the archive. The original incarnation of the archive had sixteen data sets but since that time, it has gone through periodic expansions. The last expansion took place in the summer of 2015 when the archive grew from 45 to 85 data sets. This paper introduces and will focus on the new data expansion from 85 to 128 data sets. Beyond expanding this valuable resource, this paper offers pragmatic advice to anyone who may wish to evaluate a new algorithm on the archive. Finally, this paper makes a novel and yet actionable claim: of the hundreds of papers that show an improvement over the standard baseline (1-nearest neighbor classification), a large fraction may be mis-attributing the reasons for their improvement. Moreover, they may have been able to achieve the same improvement with a much simpler modification, requiring just a single line of code.},
+archivePrefix = {arXiv},
+arxivId = {1810.07758},
+author = {Dau, Hoang Anh and Bagnall, Anthony and Kamgar, Kaveh and Yeh, Chin-Chia Michael and Zhu, Yan and Gharghabi, Shaghayegh and Ratanamahatana, Chotirat Ann and Keogh, Eamonn},
+eprint = {1810.07758},
+journal = {IEEE/CAA Journal of Automatica Sinica},
+keywords = {Index Terms-Data mining,UCR time series archive,time series classification},
+mendeley-groups = {xjob},
+month = {oct},
+number = {6},
+pages = {1293--1305},
+publisher = {Institute of Electrical and Electronics Engineers Inc.},
+title = {{The UCR Time Series Archive}},
+volume = {6},
+year = {2018}
+}
+
+@article{Bagnall2017,
+abstract = {In the last 5 years there have been a large number of new time series classification algorithms proposed in the literature. These algorithms have been evaluated on subsets of the 47 data sets in the University of California, Riverside time series classification archive. The archive has recently been expanded to 85 data sets, over half of which have been donated by researchers at the University of East Anglia. Aspects of previous evaluations have made comparisons between algorithms difficult. For example, several different programming languages have been used, experiments involved a single train/test split and some used normalised data whilst others did not. The relaunch of the archive provides a timely opportunity to thoroughly evaluate algorithms on a larger number of datasets. We have implemented 18 recently proposed algorithms in a common Java framework and compared them against two standard benchmark classifiers (and each other) by performing 100 resampling experiments on each of the 85 datasets. We use these results to test several hypotheses relating to whether the algorithms are significantly more accurate than the benchmarks and each other. Our results indicate that only nine of these algorithms are significantly more accurate than both benchmarks and that one classifier, the collective of transformation ensembles, is significantly more accurate than all of the others. All of our experiments and results are reproducible: we release all of our code, results and experimental details and we hope these experiments form the basis for more robust testing of new algorithms in the future.},
+author = {Bagnall, Anthony and Lines, Jason and Bostrom, Aaron and Large, James and Keogh, Eamonn},
+doi = {10.1007/s10618-016-0483-9},
+issn = {1573756X},
+journal = {Data Mining and Knowledge Discovery},
+keywords = {Elastic distance measures,Shapelets,Time series classification,Time series similarity},
+mendeley-groups = {xjob},
+month = {may},
+number = {3},
+pages = {606--660},
+publisher = {Springer New York LLC},
+title = {{The great time series classification bake off: a review and experimental evaluation of recent algorithmic advances}},
+volume = {31},
+year = {2017}
+}
+
+@article{Lines2015,
+abstract = {Several alternative distance measures for comparing time series have recently been proposed and evaluated on time series classification (TSC) problems. These include variants of dynamic time warping (DTW), such as weighted and derivative DTW, and edit distance-based measures, including longest common subsequence, edit distance with real penalty, time warp with edit, and move–split–merge. These measures have the common characteristic that they operate in the time domain and compensate for potential localised misalignment through some elastic adjustment. Our aim is to experimentally test two hypotheses related to these distance measures. Firstly, we test whether there is any significant difference in accuracy for TSC problems between nearest neighbour classifiers using these distance measures. Secondly, we test whether combining these elastic distance measures through simple ensemble schemes gives significantly better accuracy. We test these hypotheses by carrying out one of the largest experimental studies ever conducted into time series classification. Our first key finding is that there is no significant difference between the elastic distance measures in terms of classification accuracy on our data sets. Our second finding, and the major contribution of this work, is to define an ensemble classifier that significantly outperforms the individual classifiers. We also demonstrate that the ensemble is more accurate than approaches not based in the time domain. Nearly all TSC papers in the data mining literature cite DTW (with warping window set through cross validation) as the benchmark for comparison. We believe that our ensemble is the first ever classifier to significantly outperform DTW and as such raises the bar for future work in this area.},
+author = {Lines, Jason and Bagnall, Anthony},
+doi = {10.1007/s10618-014-0361-2},
+issn = {13845810},
+journal = {Data Mining and Knowledge Discovery},
+keywords = {Elastic distance measures,Ensembles,Time series classification},
+month = {apr},
+number = {3},
+pages = {565--592},
+publisher = {Kluwer Academic Publishers},
+title = {{Time series classification with ensembles of elastic distance measures}},
+volume = {29},
+year = {2015}
+}
+
+@ARTICLE{Bagnall2015,
+  author={A. {Bagnall} and J. {Lines} and J. {Hills} and A. {Bostrom}},
+  journal={IEEE Transactions on Knowledge and Data Engineering},
+  title={Time-Series Classification with COTE: The Collective of Transformation-Based Ensembles},
+  year={2015},
+  volume={27},
+  number={9},
+  pages={2522-2535},
+  doi={10.1109/TKDE.2015.2416723}}
+
+@INPROCEEDINGS{Lines2016,
+  author={J. {Lines} and S. {Taylor} and A. {Bagnall}},
+  booktitle={2016 IEEE 16th International Conference on Data Mining (ICDM)},
+  title={HIVE-COTE: The Hierarchical Vote Collective of Transformation-Based Ensembles for Time Series Classification},
+  year={2016},
+  volume={},
+  number={},
+  pages={1041-1046},
+  doi={10.1109/ICDM.2016.0133}}
+
+@INPROCEEDINGS{Wang2017,
+  author={Z. {Wang} and W. {Yan} and T. {Oates}},
+  booktitle={2017 International Joint Conference on Neural Networks (IJCNN)},
+  title={Time series classification from scratch with deep neural networks: A strong baseline},
+  year={2017},
+  volume={},
+  number={},
+  pages={1578-1585},
+  doi={10.1109/IJCNN.2017.7966039}}
+
+  @article{Zheng2016,
+  abstract = {Time series classification is related to many different domains, such as health informatics, finance, and bioinformatics. Due to its broad applications, researchers have developed many algorithms for this kind of tasks, e.g., multivariate time series classification. Among the classification algorithms, k-nearest neighbor (k-NN) classification (particularly 1-NN) combined with dynamic time warping (DTW) achieves the state of the art performance. The deficiency is that when the data set grows large, the time consumption of 1-NN with DTWwill be very expensive. In contrast to 1-NN with DTW, it is more efficient but less effective for feature-based classification methods since their performance usually depends on the quality of hand-crafted features. In this paper, we aim to improve the performance of traditional feature-based approaches through the feature learning techniques. Specifically, we propose a novel deep learning framework, multi-channels deep convolutional neural networks (MC-DCNN), for multivariate time series classification. This model first learns features from individual univariate time series in each channel, and combines information from all channels as feature representation at the final layer. Then, the learnt features are applied into a multilayer perceptron (MLP) for classification. Finally, the extensive experiments on real-world data sets show that our model is not only more efficient than the state of the art but also competitive in accuracy. This study implies that feature learning is worth to be investigated for the problem of time series classification.},
+  author = {Zheng, Yi and Liu, Qi and Chen, Enhong and Ge, Yong and Zhao, J. Leon},
+  doi = {10.1007/s11704-015-4478-2},
+  issn = {20952236},
+  journal = {Frontiers of Computer Science},
+  keywords = {convolutional neural networks,deep learning,feature learning,time series classification},
+  month = {feb},
+  number = {1},
+  pages = {96--112},
+  publisher = {Higher Education Press},
+  title = {{Exploiting multi-channels deep convolutional neural networks for multivariate time series classification}},
+  volume = {10},
+  year = {2016}
+  }

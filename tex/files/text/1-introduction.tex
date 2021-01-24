@@ -1,6 +1,8 @@
 % !TEX root=../../mt-motion-analysis.tex
 \chapter{Introduction}
 
+
+
 skriv om risker med bias fr dataset osv...
 
 \section{Medical background}
@@ -14,101 +16,4 @@ skriv om att ml blivit s[ stort sen alexnet och gpu osv
 
 skriv om backprop o s[nt h'r?
 
-The emergence of computing power discussed in Section \ref{sec:ML} allowing deeper networks shown by AlexNet \cite{Krizhevsky2012}
-
-\section{Human pose estimation} \label{sec:pose_estimation}
-Human pose estimation is a well explored problem which, like many other computer vision tasks has developed rapidly in the recent years. The reasons behind this progress can mainly be explained by two factors. Firstly the emergence of computing power discussed in Section \ref{sec:ML}, allowing more powerful deep learning models. Secondly several datasets with images labeled with human body joints has been made available \cite{Chen2020}. These datasets not only provide data, but also introduces competition in the research community making it possible to compare the results of different approaches.
-
-\subsection{Datasets} \label{sec:datasets}
-Some of the widely used datasets today are Max Planck Institute for Informatics (\textbf{MPII}) \cite{Andriluka2014}, Microsoft Common Objects in Context (\textbf{COCO}) \cite{Lin2014}, AI Challenger Human Keypoint Detection (\textbf{AIC-HKD}) \cite{Wu2017}, and COCO-wholebody \cite{Jin2020}.% The two COCO datasets will now be described in more detail.
-
-The COCO dataset consists of 328k images containing 91 different object types. The images come from Google, Bing, and Flickr image search and are mainly hand annotated through Amazon  Mechanical Turk. The interesting part of the dataset for this work is the one with human poses. In total there are 250k instances of people labeled with joint locations \cite{Lin2014}. The joints, 17 per person, in the dataset can be seen in Figure \ref{fig:coco}. Along with the datasets containing body keypoints mentioned above there are also datasets with dense keypoints for specific bodyparts, e.g. OneHand10k \cite{Wang2019}. COCO-wholebody is an attempt to combine these two types of datasets by extending COCO with dense keypoints at hands, feet, and faces. The resulting 133 joints can be seen in Figure \ref{fig:coco-wholebody}.
-
-\begin{figure}
- \centering
- \begin{subfigure}[t]{0.4\textwidth}
-  \includegraphics[width=\textwidth]{files/figs/coco.png}
-  \caption{Regular COCO.}
-  \label{fig:coco}
- \end{subfigure}
- ~
- \begin{subfigure}[t]{0.4\textwidth}
-  \includegraphics[width=\textwidth]{files/figs/coco-whole.png}
-  \caption{COCO-wholebody.}
-  \label{fig:coco-wholebody}
- \end{subfigure}
- \caption{Keypoints for the two COCO datasets.}
-\end{figure}
-
-
-\subsection{Pose estimation models}
-The human pose estimation (HPE) problem has been explored since long before the most recent deep learning era. Pictoral Structures were introduced by Fishler and Elschlager in the 1970s. This meant identifying individual parts or features in images modeled with pair-wise spring-like connections \cite{Fischler1973}. LeCun et al. showed that convolutional neural networks (CNN) could be trained with backpropagation \cite{LeCun1989} and how gradient based learning together with CNN outperformed other image analysis methods at the time \cite{LeCun1998}. Today CNNs form the basis in most computer vision methods, including the state-of-the-art (SOTA) HPE models \cite{Newell2016, Sun2019}. In 2014 Toshev and Szegedy successfully presented DeepPose, the first HPE method based on deep neural networks (DNNs) \cite{Toshev2014}. Today's HPE methods are generally categorized as top-down or bottom-up approaches. This has to do with how they handle multiple persons. Bottom-up models starts by finding all keypoints for all persons in an image and then match them together to form persons. Top-down models on the other hand starts by finding bounding boxes for all individuals and then identifies keypoints for one person at a time. The sequential nature of the top-down methods and the fact that two models are needed means that bottom-up models scale better with the number of persons to analyze. However top-down models tends to be more accurate \cite{Cheng2019}. Since the application we present requires single person recognition only the top-down SOTA methods presented below are used.
-
-\subsubsection{High-Resolution Net (HRNet)} \label{sec:hrnet}
-Sun et al. \cite{Sun2019} presented the HRNet architecture in 2019, initially for HPE, but also for other computer vision tasks such as semantic segmentation and object detection. Such problems had traditionally been solved using networks built on high-to-low resolution convolutions with increasing numbers of feature maps (e.g ResNet \cite{He2016}, VGGNet \cite{Simonyan2015}). The classification task was solved in the low-resolution space and then transformed back to form the high-resolution representation needed for e.g. the HPE. Sun et al's proposed architecture preserves a high resolution representation throughout the network. It does so while also producing low-resolution/high dimensional representations suitable for classification.
-
-The network architecture is shown in Figure \ref{fig:hrnet} and consists of four stages (blue blocks in depth direction in Figure) with convolutional layers. After each stage a new low-resolution representation is created by performing strided convolutions. At these instances the existing representations also exchange information by either nearest neighbor upsampling or strided convolutions. The $K$ estimated keypoints are represented as heatmaps, $\{\mathbf{H}_1, \hdots, \mathbf{H}_K\}$, indicating the locations. These heatmaps are formed from the last high-resolution feature map (top right in Figure \ref{fig:hrnet}) \cite{Sun2019}. Although a high resolution heatmap is desirable as it gives smaller quantization errors, the computational cost increases quadratically with the size \cite{Zhang2020}. Hence, to make the computations feasible the input image is downsampled through strided convolutions, resulting in a four times smaller heatmap \cite{Wang2020}.  %The heatmaps used for training are generated by applying 2D Gaussians to the dataset keypoints.
-
-\begin{figure}
- \centering
- \includegraphics[width=\textwidth]{files/figs/hrnet.png}
- \caption{Network architecture for HRNet. The top row shows high resolution representations with fewer number of feature maps. Each step downwards reduces the resolution with a factor of two while the number of feature maps are doubled \cite{Wang2020}.}
- \label{fig:hrnet}
-\end{figure}
-
-\subsubsection{Distribution-Aware coordinate Representation of Key-point (DARK)} \label{sec:dark}
-As discussed above a high resolution heatmap should result in higher accuracy, but is computationally expensive. Zhang et al. \cite{Zhang2020} propose a way to reduce the quantization error by i) analyzing the distributions of the predicted heatmaps, and ii) creating the training heatmaps in a slightly new fashion.
-
-The actual keypoint location is found at the maximal activation of the heatmap. Since it is smaller than the actual image this turns into a sub-pixel localisation problem. Newel et al. \cite{Newell2016} empirically found that a weighted average between the two highest activations, according to \eqref{eq:pixel-empiric}, yielded a good result.
-
-\begin{equation}
-  \pmb{p} = \symbfit{m} + \frac{1}{4}\frac{\symbfit{s} - \symbfit{m}}{\lVert \symbfit{s} - \symbfit{m} \rVert_2}
-  \label{eq:pixel-empiric}
-\end{equation}
-\begin{conditions}
-    \italbf{p}   & =   & predicted maximum \\
-    \italbf{m}      & =   & highest activation \\
-    \italbf{s}      & =   & second highest activation
-\end{conditions}
-
-This has been the de facto standard heatmap decoding, but Zhang et al. suggests using the fact that the heatmaps used for training usually are created as 2D Gaussian distributions, i.e. that the heatmaps can be expressed as \eqref{eq:gaussian-heatmap}.
-
-\begin{equation}
-  \mathcal{G}(\pmb{x}; \pmb{\mu}, \Sigma) = \frac{1}{2\pi \mid \Sigma \mid^{\frac{1}{2}}}
-  \exp \Big( -\frac{1}{2} (\pmb{x} - \pmb{\mu})^\intercal \Sigma^{-1} (\pmb{x} - \pmb{\mu}) \Big)
-  \label{eq:gaussian-heatmap}
-\end{equation}
-\begin{conditions}
-    $$\pmb{\mu}$$ & =   & maximum of heatmap \\
-    \italbf{x}    & =   & pixel location \\
-    $$\Sigma$$    & =   & diagonal covariance matrix
-\end{conditions}
-
-By Taylor expanding of the logarithm of \eqref{eq:gaussian-heatmap} in the point \italbf{m}, i.e. the point with the highest sampled activation, an expression for $\pmb{\mu}}$ is obtained:
-
-\begin{equation}
-    \pmb{\mu} = \pmb{m} - \Big(\mathcal{D''}(\pmb{m})\Big)^{-1} \mathcal{D'}(\pmb{m})
-    \label{eq:opt-mu}
-\end{equation}
-\begin{conditions}
-    $$\mathcal{D}(\pmb{x})$$ & = & $-\frac{1}{2} (\pmb{x} - \pmb{\mu})^\intercal \Sigma^{-1} (\pmb{x} - \pmb{\mu})$, \\
-      & & i.e. the non constant term in the logarithm of \eqref{eq:gaussian-heatmap}
-\end{conditions}
-
-The derivatives $\mathcal{D'}(\pmb{m})$ and $\mathcal{D''}(\pmb{m})$ are efficiently estimated from the heatmap. As this approach strongly assumes a Gaussian structure it is proposed to modulate the heatmap before estimating the maximal activation. This is done by performing a convolution with a Gaussian kernel with the same covariance as the one used for the training data.
-
-The second improvement suggested by Zhang et al. concerns the creation of the training heatmaps. Traditionally these have been created from the quantized keypoint locations, resulting in a slightly biased heatmap. In Figure \ref{fig:pixel-quantization} this would correspond to having the peak activation in the purple dot. By instead using the non-quantized location an unbiased heatmap is obtained. This would correspond to having the peak off-grid, in the blue dot in Figure \ref{fig:pixel-quantization}.
-
-\begin{figure}
-  \centering
-  \includegraphics[width=0.4\textwidth]{files/figs/quantization.png}
-  \caption{Quantization error due to off-grid keypoint location. Correct location (blue) represented by on-grid coordinate, here using floor quantization \cite{Zhang2020}. SKRIV ANTAGLIGEN NAGOT BATTRE HAR!!!!!}
-  \label{fig:pixel-quantization}
-\end{figure}
-
-% The combination of DARK and HRNet is the method that as of today yields the highest accuracy on both the COCO and MPII dataset
-
-\section{Time series classification}
-\cite{IsmailFawaz2019}
-
-% \subsubsection{??}
+The emergence of computing power discussed in Section \ref{sec:ML} allowing deeper networks shown by AlexNet \cite{Krizhevsky2012} blabla

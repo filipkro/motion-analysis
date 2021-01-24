@@ -3,23 +3,30 @@
 \input{files/settings/setup-long.tex}
 \input{files/settings/setup-envs.tex}
 \input{files/settings/setup-commands.tex}
+\input{files/settings/abbreviations.tex}
 
 % \bibliography{files/bibtex/bib}
 % \bibliography{files/bib}
 \addbibresource{files/bibtex/bib.bib}
 
-\title{Thesis}
+\title{POE assessments of movements using deep learning}
 \author{Filip Kronström}
 \date{\today}
 
+
+% \includeonly{files/text/1-introduction}
 \begin{document}
-\setstretch{1.2}
+\setstretch{1}
 \maketitle
 \pagenumbering{roman}
 \include{files/text/0-pre-content}
+\setstretch{1.2}
+% \printglossary[type=\acronymtype,title=Abbreviations]
 \pagenumbering{arabic}
 \include{files/text/1-introduction}
-\include{files/text/2-methods}
+\include{files/text/2-related-work-hpe}
+\include{files/text/3-related-work-tsc}
+\include{files/text/4-methods}
 \addcontentsline{toc}{chapter}{References}
 
 \fontsize{10}{12}
