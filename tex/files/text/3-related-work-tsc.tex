@@ -19,4 +19,55 @@ Traditionally a nearest neighbor method together with dynamic time warping has b
 
 In 2016 Zheng et al. \cite{Zheng2016} presented a neural network model based on convolutional layers for the classification task. Wang et al. \cite{Wang2017} developed these ideas and presented models with performance close to that of \gls{cote} on the \gls{ucr} archive. The development of neural network based classification has since then continued and below the two architectures inspiring our model are presented.
 
+\section{Network architectures}
+The last few years the number of proposed neural network based time series classifiers has increased drastically. Below the two most influential architectures for our work are presented.
+
 \subsection{InceptionTime}
+InceptionTime, presented by Fawaz et al. \cite{IsmailFawaz2020}, is, as the name suggests, inspired by Inception \cite{Szegedy2015} which is an architecture successful in computer vision tasks. It is comprised of several stacked Inception modules consisting of differently sized convolutions as well as pooling layers. To reduce the number of parameters in the network 1$\times$1 convolutions are often used as a dimensionality reduction. One such module can be seen in Figure \ref{fig:inception-module}. The architecture of Fawaz et al. is similar, but with only one temporal dimension instead of two spatial dimensions. As with the computer vision task the dimensionality is reduced, here through a bottleneck of size $m$. The bottleneck is achieved by convolutions with $m$ filters of length 1. The InceptionTime module is shown in Figure \ref{fig:inceptiontime-module}.
+
+Figure \ref{fig:inceptiontime} shows how stacked modules makes up the InceptionTime architecture. Residual connections are used to decrease the risk of vanishing gradients once the network becomes deeper, as suggested by He et al. \cite{He2016}. The InceptionTime modules are followed by a \gls{gap} layer which averages each time series over its time dimension. The classification is performed by fully connected layers with softmax activations.
+
+Many deep learning based time series classifiers experiences a significant variance in their accuracy, especially when evaluated on the \gls{ucr} archive with rather small training sets \cite{IsmailFawaz2019ensemble}. To overcome this Fawaz et al. suggest the use of an ensemble of identical InceptionTime networks, but with randomly initialized weights before training. The ensemble's output is then calculated as the average of the outputs of the individual models. Such an ensemble of five models achieves a performance similar to that of \gls{hive-cote} on the \gls{ucr} archive.
+
+% As was showed with ResNet \cite{He2016} residual connections reduces the risk for vanishing gradients and enables deeper networks. Hence this is
+
+% Using residual connections between blocks reduces the risk of vanishing gradients and allows for deeper networks
+
+%The 1D convolutions together with dimensionality reduction allows for longer filters than what is feasible to use for images.
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[c]{0.6\textwidth}
+    \includegraphics[width=\textwidth]{files/figs/inception-module-dimred.png}
+    \caption{}
+    % \caption{Inception module for computer vision \cite{Szegedy2015}.}
+    \label{fig:inception-module}
+  \end{subfigure}
+  \begin{subfigure}[c]{0.6\textwidth}
+    \includegraphics[width=\textwidth]{files/figs/inception-time-module.png}
+    \caption{}
+    % \caption{Inception module for \gls{tsc} \cite{IsmailFawaz2020}.}
+    \label{fig:inceptiontime-module}
+  \end{subfigure}
+  \caption{Inception modules for computer vision (a) \cite{Szegedy2015} with dimensionality reduction ahead of the 3$\times$3 and 5$\times$5 convolutions and InceptionTime module for \gls{tsc} (b) \cite{IsmailFawaz2020}, here illustrated with a bottleneck size of 1.}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.6\textwidth]{files/figs/inceptiontime.png}
+  \caption{InceptionTime architecture for \gls{tsc} \cite{IsmailFawaz2020}.}
+  \label{fig:inceptiontime}
+\end{figure}
+
+\subsection{Explainable Convolutional Neural Networkfor Multivariate Time Series Classification (XCM)}
+As discussed in Section \ref{sec:explainability} explainability is desirable, but not inherent in most black-box deep learning models. Fauvel et al. \cite{Fauvel2020} propose an architecture which allows for tracking which time steps and which inputs are important for the classification decision. By using 2D convolutions with kernels of size $ks$$\times$1, where $ks$ is the kernel size hyperparameter, the convolution is only performed in the time dimension and the input channels are kept separated throughout the feature extraction. Through dimensionality reduction from a 1$\times$1 2D convolution a single feature map for each input is produced. In parallel to this 1D convolutions are also performed over all channels resulting in a combined feature map along the time dimension. From this the importance of input channels and time steps can be traced using \gls{grad-cam}, described in Section \ref{sec:grad-cam}.
+
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.7\textwidth]{files/figs/xcm.png}
+  \caption{The XCM architecture with $BN$ - Batch Normalization, $D$ - number of input channels, $F$ - number of filters, $T$ - length of time series \cite{Fauvel2020}.}
+  \label{fig:xcm}
+\end{figure}
+
+\subsection{Consistent Rank Logits (CORAL)}
