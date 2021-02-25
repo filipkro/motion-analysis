@@ -30,6 +30,16 @@ slurm-*
 *.bcf
 *.run.xml
 *.toc
+*.acn
+*.acr
+*.glg
+*.alg
+*.glo
+*.gls
+*.xdv
+*.xdy
+*.lot
+*.lof
 
 # Distribution / packaging
 .Python

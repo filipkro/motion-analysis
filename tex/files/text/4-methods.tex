@@ -56,15 +56,18 @@ Helo I am now mispealing.
 
 
 \section{Body part localization} \label{sec:met-loc}
-\subsection{Preprocessing}
-...
-rotation, flip etc
+% \subsection{Preprocessing}
+% ...
+% rotation, flip etc
+% \subsection{Pose estimation}
+%The pose estimation can be seen as a feature extraction and dimensionality reduction.
+The pose estimation is built around the open-source toolbox MMPose \cite{mmpose} from MMLab. Each frame is considered to be an independent image and is analyzed with the \gls{dark}-\gls{hrnet} trained on the \gls{coco}-wholebody dataset described in Section \ref{sec:pose_estimation}. % \ref{sec:hrnet, sec:dark, sec:coco}.
 
-\subsection{Pose estimation}
-The pose estimation can be seen as a feature extraction and dimensionality reduction.
-The pose estimation is built around the open-source toolbox MMPose \cite{mmpose} from MMLab. Each frame is considered to be an independent image and is analyzed with the DARK-HRNet trained on the COCO-dataset \cite{Lin2014} described in Section \ref{sec:pose_estimation}. % \ref{sec:hrnet, sec:dark, sec:coco}.
+To get comparable results some of the videos were rotated and flipped before inferring the keypoints. This was needed since the videos were recorded in different orientations and the actions were performed with different legs. The rotations were based on the orientation of the subject (position of head w.r.t. the feet) in the first frame to have it standing up in the $y$-direction. Videos where the squats were performed with the left leg were then flipped around the $y$-axis to be able to use the same model for the left and right leg in a more efficient manner.
 
+A bounding box for the subject is found using a Faster R-CNN model trained on the \gls{coco} dataset. This bounding box, including some margins around it, is resized to match the input size of the \gls{hpe} model used, which in our case was 384$\times$288 pixels. The final result of this is sequences with $x$- and $y$-coordinates of 17 keypoints per video frame.
 
+%The file names contained information about which. The rotations were performed based on the position of the head with respect to the feet in the first frame.
 \section{Classification} \label{sec:met-class}
 
 \subsection{Preprocessing and dataset blabla..} \label{esc:met-class-preproc}
@@ -94,3 +97,10 @@ After these preprocessing steps a dataset $\in \mathbb{R}^{N \times T \times F}$
 
 \subsection{Models}
 x-inception, coral osv. custom losses osv?
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{files/figs/x-inception.pdf}
+  \caption{}
+  \label{}
+\end{figure}

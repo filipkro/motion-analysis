@@ -10,7 +10,7 @@ FIXAA DEN HAR SECTION INDELNINGEN...
 \section{Deep Neural Networks}
 \glspl{dnn} are combinations of linear and non-linear functions trained to approximate some other, potentially very complicated, function. The output of the network is formed as $f(x) = f_n \circ f_{n-1} \circ \hdots \circ f_1 \circ f_0(x)$ resulting in the layer terminology since the output from one function is passed as input to the subsequent one \cite{Goodfellow2016}.
 
-Below the layers functions used in our work are briefly explained.
+Below the layers used in our work are briefly explained.
 
 \subsubsection{Dense layer}
 The dense, or fully connected, layer is the basic model for a feedforward network. The outputs of such a layer is formed as linear combinations of the inputs and bias terms. Usually a non-linear activation function is applied to to this to be able to capture more general behaviors, resulting in the output
@@ -39,7 +39,45 @@ Convolutional layers have proved successful for feature extraction from for inst
 
 $x$ is the input and $w$ is the kernel or filter which consist of the trainable parameters. As the kernel size is not affected by the input size the convolutional layer can be applied to inputs of different size, which is not possible with for instance the fully connected layer \cite{Goodfellow2016}.
 
-, layers, optimizers
+\subsubsection{Pooling layers}
+Pooling layers are used to reduce the dimensionality of feature maps. Common types of poolings are the max and the average pooling methods. Traditional max pooling represents nearby numbers by it maximum value while average pooling uses their average. This type of max pooling has proved efficient together with convolutional layers for computer vision tasks. Figure \ref{fig:pooling} illustrates how the pooling works. It can also be performed globally, i.e. on the entire feature map, which can be a way of handling differently sized data. For a \gls{tsc} problem it is for instance possible to use size agnostic convolutional layers as feature extractors followed by a \gls{gap} layer resulting in a fixed size of the data to be classified \cite{Chollet2018}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.4\textwidth]{files/figs/pooling.png}
+  \caption{Illustration of max and average pooling with pooling size 2$\times$2 and stride 2$\times$2. Image from \cite{Wang2018}.}
+  \label{fig:pooling}
+\end{figure}
+
+\subsubsection{Activation functions}
+The activation functions in a neural network has two main tasks. The first one is to introduce non-linearity to an otherwise linear model. For a dense layer performed with the function $h(\cdot)$ in \eqref{eq:dense}. A common such function is \gls{relu}, $h(z) = \max\{0,z\}$. Benefits with \gls{relu} is that it in its active region ($z>0$) does not have a suppressing effect on the gradient and it is easily computable. A drawback, however, is that the gradient is zero in its inactive region ($z < 0$) meaning gradient based training methods does not work here. An alternative to avoid this issue is the leaky \gls{relu} given by $h(z) = \max\{0.01 z, z\}$. \gls{relu} and leaky \gls{relu} are shown in Figure \ref{fig:relu} and \ref{fig:leaky-relu} respectively. Activation functions are also used for the output of the network, e.g. to obtain outputs representing probabilities. The sigmoid function, $h(z) = 1/(1+\exp(-z))$, shown in Figure \ref{fig:sigmoid}, can be used for this. The sigmoid function will saturate the output between 0 and 1, however, if the model has several outputs e.g. representing the probabilities of the input belonging to different classes the total probability will not sum to 1. In this case the softmax function, $h(z)_i = \exp(z_i)/\sum_{j=1}^K \exp(z_j)$, can be used instead \cite{Goodfellow2016}. %With such an activation each output will be directly dependent on every other output .
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[t]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{files/figs/relu.png}
+    \caption{ReLU}
+    \label{fig:relu}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[t]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{files/figs/leaky_relu.png}
+    \caption{Leaky ReLU}
+    \label{fig:leaky-relu}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[t]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{files/figs/sigmoid.png}
+    \caption{Sigmoid}
+    \label{fig:sigmoid}
+  \end{subfigure}
+  \caption{Different activation functions, note that the slope of leaky ReLU for negative numbers is exaggerated for visualization purposes. }
+  \label{fig:activations}
+\end{figure}
+
+\section{Evaluation metrics}
+skriv kort om accuracy, f1 o confusion matrix
+
 
 \section{Training of }
 % The training of a network is performed by evaluating a loss function, which describes the desired behavior, on the training data.
@@ -73,29 +111,28 @@ For a network where $f_0, f_1, \hdots, f_n$ denotes the outputs of the $n+1$ lay
 \end{subequations}
 
 \subsubsection{Loss functions}
-For a classification problem with $K$ mutually exclusive classes the categorical cross-entropy is commonly used. With this loss the labels are one-hot encoded meaning that each label is represented by $K$ binary variables, i.e. $y_i \in \mathbb{Z}_2^K$. Each variable represents a class and $y_i^{(k)} = 1$ for the $k$ corresponding to the class of the label and 0 otherwise. The final layer of the model has $K$ outputs with softmax activation. The loss to be minimized is shown in \eqref{eq:cat-cross-entr} \cite{Bishop2006}.
+For a classification problem with $K$ mutually exclusive classes the categorical cross-entropy is commonly used. With this loss the labels are one-hot encoded meaning that each label is represented by $K$ binary variables, i.e. $y_n \in \mathbb{Z}_2^K$. Each variable represents a class and $y_n^{(k)} = 1$ for the $k$ corresponding to the class of the label and 0 otherwise. The final layer of the model has $K$ outputs with softmax activation. The loss to be minimized is shown in \eqref{eq:cat-cross-entr} \cite{Bishop2006}.
 
 \begin{equation}
- \mathcal{L}(\pmb{x}, \pmb{W}) = - \sum_{i=1}^N \sum_{k=1}^K \lambda^{(k)} y_i^{(k)} \log \hat{y}_i^{(k)}(x_i, \pmb{W})
+ \mathcal{L}(\pmb{x}, \pmb{W}) = - \sum_{n=1}^N \sum_{k=1}^K \lambda^{(k)} y_i^{(k)} \log \hat{y}_n^{(k)}(x_n, \pmb{W})
  \label{eq:cat-cross-entr}
 \end{equation}
 \begin{conditions}
-    $$y_i^{(k)}$$       & = & the correct binary label of class $k$ for data point $i$ in the training set \\
-    $$\hat{y}_i^{(k)}$$ & = & the corresponding prediction from the model \\
+    $$y_n^{(k)}$$       & = & the correct binary label of class $k$ for data point $n$ in the training set \\
+    $$\hat{y}_n^{(k)}$$ & = & the corresponding prediction from the model \\
     $$\lambda^{(k)}$$   & = & weight for class $k$.
 \end{conditions}
 
-The categorical cross-entropy will aim to maximize the predicted probability for the correct class. However, incorrect probabilities have no direct effect on the loss. To be able to affect what kind of errors the model makes in its predictions a modification of this loss can be used. This modified loss, here referred to as confusion-entropy, introduces a matrix, $U$, which can be seen as a target confusion matrix distribution. Entries in $U$ rewards predictions at the corresponding positions in the confusion matrix, including possible incorrect classifications.
+The categorical cross-entropy will aim to maximize the predicted probability for the correct class. However, incorrect probabilities have no direct effect on the loss. To be able to affect what kind of errors the model makes in its predictions a modification of this loss can be used. This modified loss, here referred to as confusion-entropy, introduces a matrix, $U$, which can be seen as a target confusion matrix distribution. Entries in $U$ rewards predictions at the corresponding positions in the confusion matrix, including possibly incorrect classifications. The confusion-entropy loss is shown in \eqref{eq:confusion-entropy} \cite{Abbass2018}.
 
-skriv ekvation
-
-skriv om att de har samma extrempunkt (ynk=1)
-
-
-
-\subsubsection{activations osv, typ softmax, relu}
-
-
+\begin{equation}
+    \mathcal{L}(\pmb{x}, \pmb{W}, U) = - \sum_{i=1}^K \sum_{j=1}^K u_{ij} \log \sum_{n=1}^N y_n^{(i)} \hat{y}_n^{(j)}(x_n, \pmb{W}).
+    \label{eq:confusion-entropy}
+\end{equation}
+%
+% With
+%
+% skriv om att de har samma extrempunkt (ynk=1)
 
 %The convolution, $(x * w)(t)$, can be seen as a weighted average of some points around $x(t)$
 
@@ -123,10 +160,10 @@ Categorical data with a natural ordering are considered to be ordinal, examples 
 
 When classifying ordinal data it is desirable to exploit the fact that the categories are ordered \cite{Agresti2007}. An ordinal classification problem, or ordinal regression as it is also referred to, can be formulated as assigning labels, $y \in \mathcal{Y} = \{\mathcal{C}_0, \mathcal{C}_1, \hdots, \mathcal{C}_{K-1} \}$, to inputs $\pmb{x}$, where the classes $\mathcal{C}_0 \prec \mathcal{C}_1 \prec \hdots \prec \mathcal{C}_{K-1}$ according to some ordering relation \cite{Cao2019}.
 
-Li and Lin \cite{Li2007} presented a method for ordinal regression where the combined result of $K-1$ binary classifiers for $K$ classes were used. Each classifier checked whether the rank of the sample class was larger than rank $r_k \in \{r_1, \hdots r_{K-1}\}$. Niu et al. \cite{Niu2016} developed this further using a multi-output \gls{cnn} as $K-1$ binary classifiers, called OR-CNN. The classifiers share all weights except the ones in the output layer. This method achieved \gls{sota} performance on datasets where age was estimated based on facial images. However, consistency was not guaranteed in the predictions, e.g. sometimes simultaneously predicting an age under 20 and over 30. Cao et al. \cite{Cao2019} addressed this issue with \gls{coral} which is an architecture-agnostic method that can extend any neural network based classifier. Similarly to OR-CNN \gls{coral} uses $K-1$ binary classifiers, here however sharing all weights parameters apart from the biases in the output layer. Instead of representing the labels as one-hot encodings they are now formed as $K-1$ binary labels, i.e. $y \in \mathbb{Z}_2^{K-1}$, where $y_i^{(k)} = 1$ if the the rank of the class is greater than $r_k$ and 0 otherwise. By minimizing the loss function
+Li and Lin \cite{Li2007} presented a method for ordinal regression where the combined result of $K-1$ binary classifiers for $K$ classes were used. Each classifier checked whether the rank of the sample class was larger than rank $r_k \in \{r_1, \hdots r_{K-1}\}$. Niu et al. \cite{Niu2016} developed this further using a multi-output \gls{cnn} as $K-1$ binary classifiers, called OR-CNN. The classifiers share all weights except the ones in the output layer. This method achieved \gls{sota} performance on datasets where age was estimated based on facial images. However, consistency was not guaranteed in the predictions, e.g. sometimes simultaneously predicting an age under 20 and over 30. Cao et al. \cite{Cao2019} addressed this issue with \gls{coral} which is an architecture-agnostic method that can extend any neural network based classifier. Similarly to OR-CNN \gls{coral} uses $K-1$ binary classifiers, here however sharing all weights parameters apart from the biases in the output layer. Instead of representing the labels as one-hot encodings they are now formed as $K-1$ binary labels, i.e. $y_n \in \mathbb{Z}_2^{K-1}$, where $y_n^{(k)} = 1$ if the the rank of the class is greater than $r_k$ and 0 otherwise. By minimizing the loss function
 
 \begin{equation}
- \mathcal{L}(\pmb{x}, \pmb{W}, \pmb{b}) = - \sum_{i=1}^N \sum_{k=1}^{K-1} \lambda^{(k)} [\log(\sigma(g(\pmb{x}_i, \pmb{W}) + b_k))y_i^{(k)} + \log(1 - \sigma(g(\pmb{x}_i, \pmb{W}) + b_k))(1 - y_i^{(k)})],
+ \mathcal{L}(\pmb{x}, \pmb{W}, \pmb{b}) = - \sum_{n=1}^N \sum_{k=1}^{K-1} \lambda^{(k)} [\log(\sigma(g(\pmb{x}_n, \pmb{W}) + b_k))y_n^{(k)} + \log(1 - \sigma(g(\pmb{x}_n, \pmb{W}) + b_k))(1 - y_n^{(k)})],
  \label{eq:coral-loss}
 \end{equation}
 
@@ -134,9 +171,9 @@ Li and Lin \cite{Li2007} presented a method for ordinal regression where the com
  $$\pmb{W}$$               & = & all model parameters except biases of final layer \\
  $$\pmb{b}$$               & = & bias weights of final layer \\
  $$\lambda^{(k)}$$         & = & loss weight for class $k$ \\
- $$g(\pmb{x}_i, \pmb{W})$$ & = & output of penultimate layer \\
+ $$g(\pmb{x}_n, \pmb{W})$$ & = & output of penultimate layer \\
  $$\sigma(z)$$             & = & logistic sigmoid function, $1/(1 + \exp(-z))$ \\
- $$\sigma(g(\pmb{x}_i, \pmb{W}) + b_k)$$ & = & predicted output of binary classifier $k$
+ $$\sigma(g(\pmb{x}_n, \pmb{W}) + b_k)$$ & = & predicted output of binary classifier $k$
 \end{conditions}
 
 it can be shown that
@@ -148,16 +185,16 @@ it can be shown that
 The proof can be found in \cite{Cao2019} and from this and the shared weights it follows that
 
 \begin{equation}
- \widehat{P} \big( y_i > r_1 \big) \geq \widehat{P} \big( y_i > r_2 \big) \geq \hdots \geq \widehat{P} \big( y_i > r_{K-1} \big)
+ \widehat{P} \big( y_n > r_1 \big) \geq \widehat{P} \big( y_n > r_2 \big) \geq \hdots \geq \widehat{P} \big( y_n > r_{K-1} \big)
 \end{equation}
 
 since the only thing that differs between the predictions is the bias. The probabilities for the individual classes are computed from this as
 
 \begin{equation}
  \begin{alignedat}{2}
-  &\widehat{P}\big(\mathcal{C}_0 \big) &&= 1 - \widehat{P}\big(y_i > r_1\big) \\
-  &\widehat{P}\big(\mathcal{C}_1 \big) &&= \widehat{P}\big(y_i > r_1\big) - \widehat{P}\big(y_i > r_2\big) \\
+  &\widehat{P}\big(\mathcal{C}_0 \big) &&= 1 - \widehat{P}\big(y_n > r_1\big) \\
+  &\widehat{P}\big(\mathcal{C}_1 \big) &&= \widehat{P}\big(y_n > r_1\big) - \widehat{P}\big(y_n > r_2\big) \\
   & &&\vdots \\
-  &\widehat{P}\big(\mathcal{C}_{K-1} \big) &&= \widehat{P}\big(y_i > r_{K-1}\big).
+  &\widehat{P}\big(\mathcal{C}_{K-1} \big) &&= \widehat{P}\big(y_n > r_{K-1}\big).
  \end{alignedat}
 \end{equation}
