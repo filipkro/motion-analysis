@@ -3,9 +3,9 @@
 \gls{hpe} is a well explored problem which, like many other computer vision tasks has developed rapidly in the recent years. The reasons behind this progress can mainly be explained by two factors. Firstly the emergence of computing power discussed in Section \ref{sec:dl-history}, allowing more powerful deep learning models. Secondly several datasets with images labeled with human body joints has been made available \cite{Chen2020}. These datasets not only provide data, but also introduces competition in the research community making it possible to compare the results of different approaches.
 
 \section{Datasets} \label{sec:datasets}
-Some of the widely used datasets today are \gls{mpii} \cite{Andriluka2014}, \gls{coco} \cite{Lin2014}, \gls{aic-hkd} \cite{Wu2017}, and \gls{coco-whole} \cite{Jin2020}.% The two COCO datasets will now be described in more detail.
+Some of the widely used datasets today are \gls{mpii} \cite{Andriluka2014}, \gls{coco} \cite{Lin2014}, \gls{aic-hkd} \cite{Wu2017}, and \gls{coco}-wholebody \cite{Jin2020}.% The two COCO datasets will now be described in more detail.
 
-The \gls{coco} dataset consists of 328k images containing 91 different object types. The images come from Google, Bing, and Flickr image search and are mainly hand annotated through Amazon  Mechanical Turk. The interesting part of the dataset for this work is the one with human poses. In total there are 250k instances of people labeled with joint locations \cite{Lin2014}. The joints, 17 per person, in the dataset can be seen in Figure \ref{fig:coco}. Along with the datasets containing body keypoints mentioned above there are also datasets with dense keypoints for specific bodyparts, e.g. OneHand10k \cite{Wang2019}. \gls{coco-whole} is an attempt to combine these two types of datasets by extending \gls{coco} with dense keypoints at hands, feet, and faces. The resulting 133 joints can be seen in Figure \ref{fig:coco-wholebody}.
+The \gls{coco} dataset consists of 328k images containing 91 different object types. The images come from Google, Bing, and Flickr image search and are mainly hand annotated through Amazon  Mechanical Turk. The interesting part of the dataset for this work is the one with human poses. In total there are 250k instances of people labeled with joint locations \cite{Lin2014}. The joints, 17 per person, in the dataset can be seen in Figure \ref{fig:coco}. Along with the datasets containing body keypoints mentioned above there are also datasets with dense keypoints for specific bodyparts, e.g. OneHand10k \cite{Wang2019}. \gls{coco}-wholebody is an attempt to combine these two types of datasets by extending \gls{coco} with dense keypoints at hands, feet, and faces. The resulting 133 joints can be seen in Figure \ref{fig:coco-wholebody}.
 
 \begin{figure}
  \centering
@@ -17,11 +17,13 @@ The \gls{coco} dataset consists of 328k images containing 91 different object ty
  ~
  \begin{subfigure}[t]{0.4\textwidth}
   \includegraphics[width=\textwidth]{files/figs/coco-whole.png}
-  \caption{\gls{coco-whole}.}
+  \caption{\gls{coco}-wholebody.}
   \label{fig:coco-wholebody}
  \end{subfigure}
  \caption{Keypoints for the two COCO datasets.}
 \end{figure}
+
+\FloatBarrier
 
 
 % \section{Pose estimation models}
@@ -33,11 +35,12 @@ The \gls{hpe} problem has been explored since long before the most recent deep l
 Below the \gls{hpe} models used in our work are presented. As we are interested in single person recognition the model used is of top-down type.
 
 \subsection{High-Resolution Net (HRNet)} \label{sec:hrnet}
-Sun et al. \cite{Sun2019} presented the \gls{hrnet} architecture in 2019, initially for \gls{hpe}, but also for other computer vision tasks such as semantic segmentation and object detection. Such problems had traditionally been solved using networks built on high-to-low resolution convolutions with increasing numbers of feature maps (e.g ResNet \cite{He2016}, VGGNet \cite{Simonyan2015}). The classification task was solved in the low-resolution space and then transformed back to form the high-resolution representation needed for e.g. the \gls{hpe}. Sun et al's proposed architecture preserves a high resolution representation throughout the network. It does so while also producing low-resolution/high dimensional representations suitable for classification.
+Sun et al. presented the \gls{hrnet} \cite{Sun2019} architecture in 2019, initially for \gls{hpe}, but also for other computer vision tasks such as semantic segmentation and object detection. Such problems had traditionally been solved using networks built on high-to-low resolution convolutions with increasing numbers of feature maps (e.g ResNet \cite{He2016}, VGGNet \cite{Simonyan2015}). The classification task was solved in the low-resolution space and then transformed back to form the high-resolution representation needed for e.g. the \gls{hpe}. Sun et al's proposed architecture preserves a high resolution representation throughout the network. It does so while also producing low-resolution/high dimensional representations suitable for classification.
 
-The network architecture is shown in Figure \ref{fig:hrnet} and consists of four stages (blue blocks in depth direction in Figure) with convolutional layers. After each stage a new low-resolution representation is created by performing strided convolutions. At these instances the existing representations also exchange information by either nearest neighbor upsampling or strided convolutions. The $K$ estimated keypoints are represented as heatmaps, $\{\mathbf{H}_1, \hdots, \mathbf{H}_K\}$, indicating the locations. These heatmaps are formed from the last high-resolution feature map (top right in Figure \ref{fig:hrnet}). Corresponding ground truth heatmaps are generated by applying 2D Gaussians to the correct keypoint locations and the model is trained by minimizing the mean squared error between these \cite{Sun2019}. Although a high resolution heatmap is desirable as it gives smaller quantization errors, the computational cost increases quadratically with the size \cite{Zhang2020}. Hence, the performance of the model can be improved by extracting the region of interest from the input image. This can for instance be done using an object detection model, e.g. Faster R-CNN \cite{Ren2017}, trained to find bounding boxes for humans.
+The network architecture is shown in Figure \ref{fig:hrnet} and consists of four stages (blue blocks in depth direction in Figure) with convolutional layers. After each stage a new low-resolution representation is created by performing strided convolutions. At these instances the existing representations also exchange information by either nearest neighbor upsampling or strided convolutions. The $K$ estimated keypoints are represented as heatmaps, $\{\mathbf{H}_1, \hdots, \mathbf{H}_K\}$, indicating the locations. These heatmaps are formed from the last high-resolution feature map (top right in Figure \ref{fig:hrnet}). Corresponding ground truth heatmaps are generated by applying 2D Gaussians to the correct keypoint locations and the model is trained by minimizing the mean squared error between these \cite{Sun2019}. Although a high resolution heatmap is desirable as it gives smaller quantization errors, the computational cost increases quadratically with the size \cite{Zhang2020}. Hence, the performance of the model can be improved by extracting the region of interest from the input image. This can for instance be done using an object detection model trained to find humans.
 
-BESKRIV FASTER RCNN LITE KORT KANSKE
+Object detectors usually work by first producing a large number of regions of interest in the image which are then classified to either belong to some object class or the background. Faster R-CNN by Ren et al. \cite{Ren2017} is an example of such a detector where these steps are performed by a single \gls{cnn}. The model outputs bounding boxes and class scores for the objects in the image deemed not to be part of the background. %kanske skriva ngt om vad den ska blivit tr'nad p[?
+
 %Hence, to make the computations feasible the input image is downsampled through strided convolutions, resulting in a four times smaller heatmap \cite{Wang2020}. To achieve more accurate results   %The heatmaps used for training are generated by applying 2D Gaussians to the dataset keypoints.
 
 \begin{figure}
@@ -47,8 +50,10 @@ BESKRIV FASTER RCNN LITE KORT KANSKE
  \label{fig:hrnet}
 \end{figure}
 
+\FloatBarrier
+
 \subsection{Distribution-Aware coordinate Representation of Key-point (DARK)} \label{sec:dark}
-As discussed above a high resolution heatmap should result in higher accuracy, but is computationally expensive. Zhang et al. \cite{Zhang2020} propose a method they call \gls{dark} to reduce the quantization error by i) analyzing the distributions of the predicted heatmaps, and ii) creating the training heatmaps in a slightly new fashion.
+As discussed above a high resolution heatmap should result in higher accuracy, but is computationally expensive. Zhang et al. propose a method they call \gls{dark} \cite{Zhang2020} to reduce the quantization error by i) analyzing the distributions of the predicted heatmaps, and ii) creating the training heatmaps in a slightly new fashion.
 
 The actual keypoint location is found at the maximal activation of the heatmap. Since it is smaller than the actual image this turns into a sub-pixel localisation problem. Newel et al. \cite{Newell2016} empirically found that a weighted average between the two highest activations, according to \eqref{eq:pixel-empiric}, yielded a good result.
 
@@ -96,5 +101,7 @@ The second improvement suggested by Zhang et al. concerns the creation of the tr
   \caption{Quantization error due to off-grid keypoint location. Correct location (blue) represented by on-grid coordinate, here using floor quantization \cite{Zhang2020}. SKRIV ANTAGLIGEN NAGOT BATTRE HAR!!!!!}
   \label{fig:pixel-quantization}
 \end{figure}
+
+\FloatBarrier
 
 % The combination of DARK and HRNet is the method that as of today yields the highest accuracy on both the COCO and MPII dataset

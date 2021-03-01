@@ -3,6 +3,8 @@
 \section{Background - Time series classification}
 Time series are sequences of data ordered in time [H'R KANSKE TA EN FIN DEFINITION FR[N ANDREAS...].
 
+SKA JAG HA DESSA DEFINITIONER? HANVISAR JAG TILL DEM NGNSTANS?
+
 \begin{definition}
   \text{A univariate time series of length n, with ordered indices}
   $$X = \left[x_1, x_2, \hdots, x_n\right]^\intercal$$
@@ -23,7 +25,7 @@ In 2016 Zheng et al. \cite{Zheng2016} presented a neural network model based on 
 \section{Deep learning architectures}
 The last few years the number of proposed neural network based time series classifiers has increased drastically. Below the two most influential architectures for our work are presented.
 
-\subsection{InceptionTime}
+\subsection{InceptionTime} \label{sec:inception-time}
 InceptionTime, presented by Fawaz et al. \cite{IsmailFawaz2020}, is, as the name suggests, inspired by Inception \cite{Szegedy2015} which is an architecture successful in computer vision tasks. It is comprised of several stacked Inception modules consisting of differently sized convolutions as well as pooling layers. To reduce the number of parameters in the network 1$\times$1 convolutions are often used as a dimensionality reduction. One such module can be seen in Figure \ref{fig:inception-module}. The architecture of Fawaz et al. is similar, but with only one temporal dimension instead of two spatial dimensions. As with the computer vision task the dimensionality is reduced, here through a bottleneck of size $m$. The bottleneck is achieved by convolutions with $m$ filters of length 1. The InceptionTime module is shown in Figure \ref{fig:inceptiontime-module}.
 
 Figure \ref{fig:inceptiontime} shows how stacked modules makes up the InceptionTime architecture. Residual connections are used to decrease the risk of vanishing gradients once the network becomes deeper, as suggested by He et al. \cite{He2016}. The InceptionTime modules are followed by a \gls{gap} layer which averages each time series over its time dimension. The classification is performed by fully connected layers with softmax activations.
@@ -49,7 +51,7 @@ Many deep learning based time series classifiers experiences a significant varia
     % \caption{Inception module for \gls{tsc} \cite{IsmailFawaz2020}.}
     \label{fig:inceptiontime-module}
   \end{subfigure}
-  \caption{Inception modules for computer vision (a) \cite{Szegedy2015} with dimensionality reduction ahead of the 3$\times$3 and 5$\times$5 convolutions and InceptionTime module for TSC (b) \cite{IsmailFawaz2020}, here illustrated with a bottleneck size of 1.}
+  \caption{Inception modules for computer vision (a) with dimensionality reduction ahead of the 3$\times$3 and 5$\times$5 convolutions and InceptionTime module for TSC (b), here illustrated with a bottleneck size of 1. Figures from \cite{Szegedy2015} and \cite{IsmailFawaz2020} respectively.}
 \end{figure}
 
 \begin{figure}
@@ -59,8 +61,10 @@ Many deep learning based time series classifiers experiences a significant varia
   \label{fig:inceptiontime}
 \end{figure}
 
-\subsection{Explainable Convolutional Neural Networkfor Multivariate Time Series Classification (XCM)}
-As discussed in Section \ref{sec:explainability} explainability is desirable, but not inherent in most black-box deep learning models. Fauvel et al. \cite{Fauvel2020} propose an architecture, XCM, which allows for tracking which time steps and which inputs are important for the classification decision. By using 2D convolutions with kernels of size $ks$$\times$1, where $ks$ is the kernel size hyperparameter, the convolution is only performed in the time dimension and the input channels are kept separated throughout the feature extraction. Through dimensionality reduction from a 1$\times$1 2D convolution a single feature map for each input is produced. From this the importance of input channels and time steps can be traced using \gls{grad-cam}, described in Section \ref{sec:grad-cam}. In parallel to the channel specific features Fauvel et al. also suggests using 1D convolutions over all channels resulting in a combined feature map along the time dimension. The XCM architecture is depicted in Figure \ref{fig:xcm}.
+\FloatBarrier
+
+\subsection{Explainable Convolutional Neural Network for Multivariate Time Series Classification (XCM)} \label{sec:XCM}
+As discussed in Section \ref{sec:explainability} explainability is desirable, but not inherent in most black-box deep learning models. Fauvel et al. \cite{Fauvel2020} propose an architecture, \gls{xcm}, which allows for tracking which time steps and which inputs are important for the classification decision. By using 2D convolutions with kernels of size $ks$$\times$1, where $ks$ is the kernel size hyperparameter, the convolution is only performed in the time dimension and the input channels are kept separated throughout the feature extraction. Through dimensionality reduction from a 1$\times$1 2D convolution a single feature map for each input is produced. From this the importance of input channels and time steps can be traced using \gls{grad-cam}, described in Section \ref{sec:grad-cam}. In parallel to the channel specific features Fauvel et al. also suggests using 1D convolutions over all channels resulting in a combined feature map along the time dimension. The \gls{xcm} architecture is depicted in Figure \ref{fig:xcm}.
 
 \begin{figure}
   \centering
@@ -68,3 +72,5 @@ As discussed in Section \ref{sec:explainability} explainability is desirable, bu
   \caption{The XCM architecture with $BN$ - Batch Normalization, $D$ - number of input channels, $F$ - number of filters, $T$ - length of time series \cite{Fauvel2020}.}
   \label{fig:xcm}
 \end{figure}
+
+\FloatBarrier

@@ -1,5 +1,28 @@
 % !TEX root=../mt-motion-analysis.tex
 \newtheorem{definition}{Definition}
+
+\newsavebox{\mybox}
+
+\xdef\myspbetween{0.25cm}
+
+% \newenvironment{definition}[1][]
+% {\savebox\mybox{\hbox{Definition \thetheorem}}%
+% \xdef\mdim{\the\dimexpr\wd\mybox+10pt}%
+% \xdef\mybdim{\the\dimexpr\textwidth-\mdim-\myspbetween}%
+% \noindent\begin{minipage}[t]{\mdim}%
+% \begin{olddefinition}[#1]\end{olddefinition}\end{minipage}\hspace{\fill}\begin{minipage}[t]{\mybdim}}
+% {\end{minipage}\medskip}
+
+
+\newtheorem{theorem}{Theorem}
+\newenvironment{myTheorem}[1][]
+{\savebox\mybox{\hbox{Theorem \thetheorem}}%
+\xdef\mdim{\the\dimexpr\wd\mybox+10pt}%
+\xdef\mybdim{\the\dimexpr\textwidth-\mdim-\myspbetween}%
+\noindent\begin{minipage}[t]{\mdim}%
+\begin{theorem}[#1]\end{theorem}\end{minipage}\hspace{\fill}\begin{minipage}[t]{\mybdim}}
+{\end{minipage}\medskip}
+
 \newenvironment{conditions}[1][where:]
   {#1 \begin{tabular}[t]{>{$}l<{$} @{} >{${}}c<{{}$} @{} l}}
   {\end{tabular}\\[\belowdisplayskip]}
