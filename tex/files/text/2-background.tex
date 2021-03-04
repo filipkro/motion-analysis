@@ -29,7 +29,7 @@ $h(\cdot)$ is a, possibly non-linear, activation function. $x_j$, $j \in \{1, \h
  \label{fig:dense}
 \end{figure}
 
-\FloatBarrier
+% \FloatBarrier
 
 \subsubsection{Convolutional layers}
 Convolutional layers have proved successful for feature extraction from for instance time series or images. A reason for this is that they are equivariant to translation, meaning that patterns in a time series will be recognized in the same way no matter at which time steps they occur. The 1D convolution operation can be seen in \eqref{eq:conv}. When applied to for instance images it is performed in two dimensions.
@@ -41,7 +41,7 @@ Convolutional layers have proved successful for feature extraction from for inst
 
 $x$ is the input and $w$ is the kernel or filter which consist of the trainable parameters. As the kernel size is not affected by the input size the convolutional layer can be applied to inputs of different size, which is not possible with for instance the fully connected layer \cite{Goodfellow2016}.
 
-\FloatBarrier
+% \FloatBarrier
 
 \subsubsection{Pooling layers}
 Pooling layers are used to reduce the dimensionality of feature maps. Common types of poolings are the max and the average pooling methods. Traditional max pooling represents nearby numbers by it maximum value while average pooling uses their average. This type of max pooling has proved efficient together with convolutional layers for computer vision tasks. Figure \ref{fig:pooling} illustrates how the pooling works. It can also be performed globally, i.e. on the entire feature map, which can be a way of handling differently sized data. For a \gls{tsc} problem it is for instance possible to use size agnostic convolutional layers as feature extractors followed by a \gls{gap} layer resulting in a fixed size of the data to be classified \cite{Chollet2018}.
@@ -53,7 +53,7 @@ Pooling layers are used to reduce the dimensionality of feature maps. Common typ
   \label{fig:pooling}
 \end{figure}
 
-\FloatBarrier
+% \FloatBarrier
 
 \subsubsection{Activation functions}
 The activation functions in a neural network has two main tasks. The first one is to introduce non-linearity to an otherwise linear model. For a dense layer performed with the function $h(\cdot)$ in \eqref{eq:dense}. A common such function is \gls{relu}, $h(z) = \max\{0,z\}$. Benefits with \gls{relu} is that it in its active region ($z>0$) does not have a suppressing effect on the gradient and it is easily computable. A drawback, however, is that the gradient is zero in its inactive region ($z < 0$) meaning gradient based training methods does not work here. An alternative to avoid this issue is the leaky \gls{relu} given by $h(z) = \max\{0.01 z, z\}$. \gls{relu} and leaky \gls{relu} are shown in Figure \ref{fig:relu} and \ref{fig:leaky-relu} respectively. Activation functions are also used for the output of the network, e.g. to obtain outputs representing probabilities. The sigmoid function, $h(z) = 1/(1+\exp(-z))$, shown in Figure \ref{fig:sigmoid}, can be used for this. The sigmoid function will saturate the output between 0 and 1, however, if the model has several outputs e.g. representing the probabilities of the input belonging to different classes the total probability will not sum to 1. In this case the softmax function, $h(z)_i = \exp(z_i)/\sum_{j=1}^K \exp(z_j)$, can be used instead \cite{Goodfellow2016}. %With such an activation each output will be directly dependent on every other output .
@@ -81,7 +81,7 @@ The activation functions in a neural network has two main tasks. The first one i
   \label{fig:activations}
 \end{figure}
 
-\FloatBarrier
+% \FloatBarrier
 
 \section{Evaluation metrics}
 To be able to evaluate and compare models some evaluation metrics are needed. Table \ref{tab:eval-metrics} shows four common classification metrics and the way they are calculated from the quantities defined in Definition \ref{def:quants}.
@@ -89,10 +89,10 @@ To be able to evaluate and compare models some evaluation metrics are needed. Ta
 
 FIXA FORMATERING P[ DENNA DEFINITON
 \begin{definition}
-  &\text{True positives, {\bf TP}: Correctly classified positive samples} \\
-  &\text{False positives, FP: Incorrectly classified positive samples} \\
-  &\text{True negatives, TN: Correctly classified negative samples} \\
-  &\text{False negatives, FN: Incorrectly classified negative samples}
+  \text{True positives, {\bf TP}: Correctly classified positive samples} \\
+  \text{False positives, FP: Incorrectly classified positive samples} \\
+  \text{True negatives, TN: Correctly classified negative samples} \\
+  \text{False negatives, FN: Incorrectly classified negative samples}
   \label{def:quants}
 \end{definition}
 
@@ -118,7 +118,7 @@ Another way to present the result of a classification task is using the confusio
   \label{fig:conf-example}
 \end{figure}
 
-\FloatBarrier
+% \FloatBarrier
 
 \section{Training of }
 % The training of a network is performed by evaluating a loss function, which describes the desired behavior, on the training data.

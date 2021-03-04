@@ -61,7 +61,7 @@ Many deep learning based time series classifiers experiences a significant varia
   \label{fig:inceptiontime}
 \end{figure}
 
-\FloatBarrier
+% \FloatBarrier
 
 \subsection{Explainable Convolutional Neural Network for Multivariate Time Series Classification (XCM)} \label{sec:XCM}
 As discussed in Section \ref{sec:explainability} explainability is desirable, but not inherent in most black-box deep learning models. Fauvel et al. \cite{Fauvel2020} propose an architecture, \gls{xcm}, which allows for tracking which time steps and which inputs are important for the classification decision. By using 2D convolutions with kernels of size $ks$$\times$1, where $ks$ is the kernel size hyperparameter, the convolution is only performed in the time dimension and the input channels are kept separated throughout the feature extraction. Through dimensionality reduction from a 1$\times$1 2D convolution a single feature map for each input is produced. From this the importance of input channels and time steps can be traced using \gls{grad-cam}, described in Section \ref{sec:grad-cam}. In parallel to the channel specific features Fauvel et al. also suggests using 1D convolutions over all channels resulting in a combined feature map along the time dimension. The \gls{xcm} architecture is depicted in Figure \ref{fig:xcm}.
@@ -73,4 +73,4 @@ As discussed in Section \ref{sec:explainability} explainability is desirable, bu
   \label{fig:xcm}
 \end{figure}
 
-\FloatBarrier
+% \FloatBarrier

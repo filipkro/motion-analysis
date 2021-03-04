@@ -41,6 +41,7 @@ slurm-*
 *.lot
 *.lof
 *.glsdefs
+*.thm
 
 # Distribution / packaging
 .Python

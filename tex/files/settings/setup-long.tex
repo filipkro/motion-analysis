@@ -1,5 +1,6 @@
 % !TEX root=../../mt-motion-analysis.tex
-\usepackage[citestyle=ieee, bibstyle=ieee, style=numeric-comp, sorting=nty, maxbibnames=99]{biblatex}
+\usepackage{cite}
+\usepackage[citestyle=ieee, bibstyle=ieee, style=numeric-comp, sorting=nty, maxbibnames=200]{biblatex}
 
 \usepackage[utf8]{inputenc}
 
@@ -68,8 +69,19 @@
 \usepackage{placeins}
 
 \usepackage{yhmath}
+
+
+\usepackage{etoolbox}
+\usepackage{amsthm}
+\usepackage{enumitem}
 % \usepackage{amsmath}
 
+
+% \usepackage{showframe}
+\usepackage{titlesec}
+\usepackage{apptools}
+\AtAppendix{\titleformat{\chapter}{\LARGE\bfseries}{\appendixname~\thechapter:}{0.333em}{}%
+\titlespacing*{\chapter}{0pt}{-20pt}{40pt}}
 
 \counterwithin{figure}{section}
 \counterwithin{table}{section}
