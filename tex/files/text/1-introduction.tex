@@ -18,7 +18,9 @@ The \gls{acl} can be seen in Figure \ref{fig:acl} and is one of the ligaments co
 \section{Postural Orientation Errors}
 The ability to uphold the alignment of body segments, both in relation to each other and the surroundings, is called postural orientation \cite{Horak2006}. Altered postural orientation, or \glspl{poe}, has been seen to increase the risk of suffering new injuries \cite{Hewett2005}, hence this is an important measure during rehabilitation and before return to sports. 3D motion capture systems are considered to be the "gold standard" for measurement of postural orientation. This is, however, an expensive and time consuming procedure, requiring specific resource in terms of laboratories and experts to perform the measurements. A potential alternative, more suitable for clinical use, is visual assessments of 2D measurements (i.e. videos) \cite{Nae2020}.
 
-There is not one established method for visual assessments of postural orientation errors, but Nae et al. presented a test battery where up to six segment specific \glspl{poe} were assessed for five different functional tasks. Each \gls{poe} was scored on an ordinal scale from 0 to 2 \cite{Nae2017, Nae2020b}. A detailed explanation of the \gls{poe}-task combinations can be found in Appendix \ref{app:poe-task}. This scoring system is the foundation of this thesis, but in this work we only study the femoral valgus-, deviation of trunk-, deviation of pelvis-, and knee medial to foot position-\glspl{poe} for the single leg squat task. The evaluated \glspl{poe} and task are described in Section \ref{ngnstans..} (SKA DETTA BESKRIVAS H'R? ELLER EN EGEN SECTION? ELLER I METHOD?)
+There is not one established method for visual assessments of postural orientation errors, but Nae et al. presented a test battery where up to six segment specific \glspl{poe} were assessed for five different functional tasks. Each \gls{poe} was scored on an ordinal scale from 0 to 2 \cite{Nae2017, Nae2020b}. A detailed explanation of the \gls{poe}-task combinations can be found in Appendix \ref{app:poe-task}. This scoring system is the foundation of this thesis, but in this work we only study the femoral valgus-, deviation of trunk-, deviation of pelvis-, and knee medial to foot position-\glspl{poe} for the single leg squat task. The evaluated \glspl{poe} and task are described in Section \ref{ngnstans..} (SKA DETTA BESKRIVAS H'R? ELLER EN EGEN SECTION? ELLER I METHOD?).
+
+Although visual assessments based on 2D videos are a time and resource efficient way of evaluating \glspl{poe} compared to 3D motion capture systems it is still a time consuming task. Automating such assessment tasks could allow physiotherapists to spend more time with patients and thereby hopefully improve the life quality after a traumatic injury.
 
 
 % \begin{table}
@@ -48,33 +50,26 @@ There is not one established method for visual assessments of postural orientati
 % \end{table}
 
 
-\section{Related / Previous work (typ kombination medicin/ml)}
-https://ieeexplore.ieee.org/document/7592162 lol
-https://pubmed.ncbi.nlm.nih.gov/29204327/ lololol
-https://www.sciencedirect.com/science/article/pii/S2468781218301590?via%3Dihub
+\section{Related work}
+A study by the National Board of Health and Welfare in Sweden from 2019 show that the use of \gls{ai} systems in the Swedish healthcare is still fairly limited. At the date of the report such systems were used for 59 applications, of which 27 were based on some machine learning approach. The learning based methods were most commonly used for diagnosis and decision support mainly based on different types of image analysis \cite{soc2019}. Within the research community the situation is different, here machine learning applied in a medical field is very widespread. Again it is big within medical imaging fields such as radiology and ultrasound, but also EKG, anamnesis, and mental health. The introduction of wearable devices and cheaper IoT devices are deemed to be important factors for the digitalization of healthcare \cite{Topol2019}.
+
+Machine learning has also been used in the field of physiotherapy and rehabilitation. Kianifar et al. estimated joint poses from IMU data using extended Kalman filters. Based on these joint positions they classified the quality of \gls{sls} movements using Support Vector Machines, Linear Multinomial Logistic Regression, and Decision Trees \cite{Kianifar2016}. Liao et al. used combinations of Gaussian Mixture Models and \glspl{dnn} to calculate quality scores for movements during rehabilitation based on 3D joint positions captured with a Microsoft Kinect \cite{Liao2020}.
+
+% https://ieeexplore.ieee.org/document/7592162 lol
+% https://pubmed.ncbi.nlm.nih.gov/29204327/ lololol
+% https://www.sciencedirect.com/science/article/pii/S2468781218301590?via%3Dihub
+
+\section{Focus of this work}
+This work should be seen as a proof of concept showing that these kinds of assessments can be automated, allowing physiotherapists to help patients in a more efficient way. Due to limitations in time and labeled data only four \glspl{poe} for the \gls{sls} task was evaluated. After some initial studies it was decided to use 2D body joint positions, i.e. 3D reconstruction from the videos was not evaluated.
+
+SKRIV LITE MER H'R HOPPAS LAG, TYP OM JAG KOMMER P[ NGT VID RESULTAT ELLER NGT...
+
+\section{Thesis organization}
+After this first chapter, where the background and rationale for this thesis has been presented, some deep learning background is introduced in Chapter \ref{ch:dl}. Chapter \ref{ch:hpe} and \ref{ch:tsc} presents methods for estimating human body joints and classifying time series, both important for this work. The method developed as part of this thesis is provided in Chapter \ref{ch:method}. Finally the results are presented in Chapter \ref{ch:results} and discussed in Chapter \ref{ch:conclusions}.
+
 
 \section{avgr'nsningar eller typ m]l med detta arbete}
 typ om att bara SLS analyseras? och lite s[nt.. kanske att 3d inte utv'rderas? eller att det utv'rderades litgrann??
 
-skriv om att detta 'r ett proof of concept, att bara sls analyseras osv
-
-sen typ report outline
-
-
-introducera poe  (skriv mer om det i section)
 
 skriv om risker med bias fr dataset osv... kansek ska n'mnas i dl-kapitlet?
-
-
-% @article{Monk2016,
-% author = {Monk, AP, Davies, LJ, Hopewell, S, Harris, K, Beard, DJ, and Price, AJ},
-% title = {Surgical versus conservative interventions for treating anterior cruciate ligament injuries},
-% journal = {Cochrane Database of Systematic Reviews},
-% number = {4},
-% year = {2016},
-% publisher = {John Wiley & Sons, Ltd},
-% ISSN = {1465-1858},
-% DOI = {10.1002/14651858.CD011166.pub2},
-% keywords = {*Anterior Cruciate Ligament Injuries; Adult; Anterior Cruciate Ligament Reconstruction [*methods]; Humans; Joint Instability [etiology, rehabilitation, *therapy]; Randomized Controlled Trials as Topic; Young Adult},
-% URL = {https://doi.org//10.1002/14651858.CD011166.pub2}
-% }
