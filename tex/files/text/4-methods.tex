@@ -2,10 +2,31 @@
 %!TeX spellcheck = en-US
 \chapter{Methods} \label{ch:method}
 \section{Overview}
-In this chapter the system for assessing POEs will be presented. This system is naturally divided into two parts where firstly the videos are analyzed. The first subsystem extracts body part coordinates of the subjects. This information is then passed to the second subsystem where it is used to calculate a score according to \cite{Nae2017}. The data is presented in Section \ref{sec:met-data} and the two subsystems are described in Sections \ref{sec:met-loc} and \ref{sec:met-class} respectively.
+In this chapter the system for assessing POEs will be presented. This system is naturally divided into two parts where firstly the videos are analyzed. The first subsystem extracts body part coordinates of the subjects. This information is then passed to the second subsystem where it is used to calculate a score according to \cite{Nae2017}. The data used is presented in Section \ref{sec:met-data} and the two subsystems are described in Sections \ref{sec:met-loc} and \ref{sec:met-class} respectively.
 
 \section{Data}\label{sec:met-data}
-The data available is in the form of videos each containing one subject, recorded from the front, performing three-five repetitions of specific motions. The motions are \textit{Single-leg squat, Forward lunge, Stair descending, Forward lunge, Single leg hop for distance, and Side hop}. Each motion has a number of POE scores associated with them. The motion-POE combinations are shown in Table \ref{tab:met:motion-poes}. In Sections \ref{sec:met-SLS}-\ref{} the motions and POEs evaluated in this project are described.
+The data available is in the form of videos each containing one subject, recorded from the front. As discussed in Chapter \ref{ch:intro} the \gls{sls} task and the femoral valgus, pelvis, trunk, and KMFP \glspl{poe} is evaluated. Each video contains four-five repetitions and for each repetition the \glspl{poe} above have been scored according to Table \ref{tab:poes}. Along with the \gls{poe} scores a certainty score, describing the confidence of the physiotherapist assessing the videos, is provided. This is between 0 (certain) and 2 (uncertain) and when above 0 the uncertainty direction is provided as well. This certainty score is only available for the combined (median) score for all repetitions, i.e. one certainty score per video.
+
+In total there are 103 labeled videos and the number of repetitions per video varies slightly. This variation is due to different factors such as subject only performing four repetitions, that the entire movement was not captured in the video, or that some specific \gls{poe} could not be evaluated from that specific video for some reason.
+
+\begin{table}
+ \centering
+ \caption{Descriptions for the visual assessment of segment specific POEs evaluated in this thesis. Table taken from \cite{Nae2020}.}
+ \label{tab:poes}
+ % \footnotesize
+ % {\renewcommand{\arraystretch}{1.2}
+ % {\tabulinesep=0.8mm
+ \begin{tabu}[t]{c|cc}
+   \gls{poe} &
+   \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Number of\\ subjects\end{tabular}} &
+   \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Number of\\ repetitions\end{tabular}} \\
+   Trunk & 103 & 9
+
+ \end{tabu}
+
+\end{table}
+
+ % performing four-five repetitions of specific motions. The motions are \textit{Single-leg squat, Forward lunge, Stair descending, Forward lunge, Single leg hop for distance, and Side hop}. Each motion has a number of POE scores associated with them. The motion-POE combinations are shown in Table \ref{tab:met:motion-poes}. In Sections \ref{sec:met-SLS}-\ref{} the motions and POEs evaluated in this project are described.
 
 % The videos were recorded with different orientations and frame rates.
 %
@@ -38,17 +59,17 @@ The data available is in the form of videos each containing one subject, recorde
 %  \end{tabular}
 % \end{table}
 
-bara skriva om sls? om det bara 'r sls jag bed;mt.. ocks[ skriva det som avgr'nsningar
+% bara skriva om sls? om det bara 'r sls jag bed;mt.. ocks[ skriva det som avgr'nsningar
 
-\subsection{Single-leg squat, SLS} \label{sec:met-SLS}
-The subject performed a squat standing on one leg to a knee angle of approximately $60\degree$. The exercise was repeated five times and the entire movement was used to assess the POEs \cite{Nae2020}. An illustration is shown in Figure \ref{}.
+% \subsection{Single-leg squat, SLS} \label{sec:met-SLS}
+% The subject performed a squat standing on one leg to a knee angle of approximately $60\degree$. The exercise was repeated five times and the entire movement was used to assess the POEs \cite{Nae2020}. An illustration is shown in Figure \ref{}.
 
-\subsection{Stair descending, SD}
-The subject stepped down from a 30 cm step board. The exercise was repeated five times and POEs were evaluated for the loaded leg during loading phase \cite{Nae2020}. An illustration is shown in Figure \ref{}.
-
-\subsection{Forward Lunge, FL}
-
-Helo I am now mispealing.
+% \subsection{Stair descending, SD}
+% The subject stepped down from a 30 cm step board. The exercise was repeated five times and POEs were evaluated for the loaded leg during loading phase \cite{Nae2020}. An illustration is shown in Figure \ref{}.
+%
+% \subsection{Forward Lunge, FL}
+%
+% Helo I am now mispealing.
 
 
 
@@ -117,10 +138,10 @@ Finally the data is normalized. All coordinates are moved to put the mean positi
 
 After these preprocessing steps a dataset with inputs $\in \mathbb{R}^{N \times T \times F}$ and corresponding labels $\in \mathbb{Z}_3^N$ is created. The inputs consists of $N$ multivariate time series of length $T$ with $F$ channels. These channels are a subset of the extracted $x$- and $y$-coordinates as well as angles and differences between keypoints.
 
-\subsection{Models eller ensembles isch}
-For the modeling we used ensembles of different deep learning based model architectures. The reasoning behind this was based on the results of Fawaz et al. \cite{IsmailFawaz2019ensemble}, suggesting that the output a deep learning model trained on a limited amount of data will vary based on the initial parameter values. By averaging the result over several models this variance will be reduced. Another reason for using an ensemble is, as can be seen in e.g. \cite{Bagnall2015, Lines2016}, that the combined result of many specialized models can be better than that of one more general model. In this work it for instance mean that we can train models with the confusion-entropy loss \eqref{eq:confusion-entropy} to achieve e.g. high precision for just one class in combination with models trained with the \gls{coral} loss \eqref{eq:coral-loss} performing fairly good over all classes.
+\subsection{Models eller ensembles isch, kanske classifiers}
+For the modeling we used ensembles of different deep learning based model architectures. The reasoning behind this was based on the results of Fawaz et al. \cite{IsmailFawaz2019ensemble}, suggesting that the output a deep learning model trained on a limited amount of data will vary based on the initial parameter values. By averaging the result over several models this variance will be reduced. Another reason for using an ensemble is, as can be seen in e.g. \cite{Bagnall2015, Lines2016}, that the combined result of many specialized models can be better than that of one more general model. %In this work it for instance mean that we can train models with the confusion-entropy loss \eqref{eq:confusion-entropy} to achieve e.g. high precision for just one class in combination with models trained with the \gls{coral} loss \eqref{eq:coral-loss} performing fairly good over all classes.
 
-All models used in the ensembles have been modified to handle the padded input data discussed in Section \ref{sec:met-class-preproc}. This is done by adding masking layers setting the padded samples to zero throughout the networks, illustrated in Figure \ref{fig:x-inception}. This reduces the impact of the padded samples to something similar to the padding performed in convolutional layers to keep the size of the feature map intact. The same mask indicates which time steps should be ignored in the \gls{gap} layer.
+All models used have been modified to handle the padded input data discussed in Section \ref{sec:met-class-preproc}. This is done by adding masking layers setting the padded samples to zero throughout the networks, illustrated in Figure \ref{fig:x-inception}. This reduces the impact of the padded samples to something similar to the padding performed in convolutional layers to keep the size of the feature map intact. The same mask indicates which time steps should be ignored in the \gls{gap} layer.
 
 The models eventually used were InceptionTime (Section \ref{sec:inception-time}) with different loss functions as well as an architecture designed by us, inspired by
 \gls{xcm} (Section \ref{sec:XCM}) and InceptionTime. We call this model X-InceptionTime and it is presented below.
@@ -128,7 +149,14 @@ The models eventually used were InceptionTime (Section \ref{sec:inception-time})
 \textbf{skriv om ensemble, vilka losses}
 
 \subsubsection{X-InceptionTime}
-The idea with this model was to combine the explainability of XCM with the inception module from InceptionTime. This was done by separating the inputs and having individual inception modules for each input channel as can be seen in Figure \ref{fig:x-inception}. After the final module (the depth can be seen as a hyperparamtere and needs to be tuned) a bottleneck of size one is applied reducing the dimensionality of each input channel back to $T$$\times$1. The features for the individual inputs are concatenated resulting in a feature map of size $T$$\times$$F$ where each input feature is only affected by that input. This makes it possible to use \gls{grad-cam} to see the importance of each time step for each input. Along with this it is also possible, thanks to the \gls{gap} layer, to get a measure of the importance of each input which can be exploited to chose input features.
+The idea with this model was to combine the explainability of XCM with the inception module from InceptionTime. This was done by separating the inputs and having individual inception modules for each input channel as can be seen in Figure \ref{fig:x-inception}. After the final module (the depth can be seen as a hyperparamtere and needs to be tuned) a bottleneck of size one is applied reducing the dimensionality of each input channel back to $T$$\times$1. The features for the individual inputs are concatenated resulting in a feature map of size $T$$\times$$F$ where each input feature is only affected by that input. This makes it possible to use \gls{grad-cam} to get a measure of the importance of each time step for each input.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{files/figs/x-inception-w-masks.pdf}
+  \caption{The X-InceptionTime architecture developed in this work.}
+  \label{fig:x-inception}
+\end{figure}
 
 The \gls{grad-cam} method is slightly modified and simplified for this model compared to what is presented in Section \ref{sec:grad-cam}, mainly due to the one dimensional data. Consider the final feature map $A$ consisting of the concatenated feature maps from the separate input channels. As mentioned above $A \in \mathbb{R}^{T \times F}$ and the aim is to find importance values for each time step in each input. With the same notations as in \eqref{eq:grad-cam}, i.e. $A_i^k$ corresponds to the activation of input $k$ at time step $i$, the \gls{grad-cam}, $M_c^k$, for class $c$ and input $k$ can be calculated as follows
 
@@ -140,7 +168,9 @@ The \gls{grad-cam} method is slightly modified and simplified for this model com
     \label{eq:grad-cam-x}
 \end{align}
 
- Compared to \eqref{eq:grad-cam} the $ReLU$ activation has been removed. This means that the importance values also contain information about which features suggesting this sample belongs to another class than $c$. The importance value, $\alpha_k^c$, for input $k$ describes how much effect this input has on the classification decision. and is given by applying this method to the output of the \gls{gap} layer, $B$, according to
+ Compared to \eqref{eq:grad-cam} the $ReLU$ activation has been removed. This means that the importance values also contain information about which features suggesting this sample belongs to another class than $c$.
+
+ Along with the effect of the time steps it is also possible, thanks to the \gls{gap} layer, to get a measure of the importance of each input. The importance value, $\alpha_k^c$, for input $k$ describes how much effect this input has on the classification decision. It is given by applying the \gls{grad-cam} method to the output of the \gls{gap} layer, $B$. From the feature map, $A$, this importance weight is calculated according to
 
  \begin{align}
    \begin{split}
@@ -150,20 +180,27 @@ The \gls{grad-cam} method is slightly modified and simplified for this model com
    \end{split}
  \end{align}
 
+This was exploited to chose input features by iteratively training models, evaluating \eqref{eq:feat-select}, and removing the features corresponding to the lowest $W_k$ until the performance of the model drops significantly. This method has its drawback, the most notable that being that input features suitable for this architecture will be found. This model does not consider interaction between different features directly, hence features important through such interactions will probably not be deemed important by this method.
+
+\begin{equation}
+    W_k = \text{mean\_folds}\Big( \text{normalize}(\sum_{i=1}^N |w_{ik}^{c_i}|) \Big),
+    \label{eq:feat-select}
+\end{equation}
+\begin{conditions}
+  \text{mean\_folds}(z)   & = & average of $z$ over all folds \\
+  \text{normalize}(z)     & = & $\frac{z}{\lVert z \rVert_2}$ \\
+  c_i                     & = & argmax($\hat{y}_i$), i.e. the predicted class
+\end{conditions}
+
 \subsubsection{Ensembles}
+The ensembles used consists of 4-8 models whose outputs are linearly combined to form the ensemble output. As discussed above this allows the ensemble to benefit from models optimized to perform well according to different metrics. In Section \ref{sec:met-training} we will present how $k$-fold cross-validation was used for training and validation. This was also used for design of the ensembles. The ensemble design was however performed using a different random seed when generating the folds compared to the one used for the results. This was done to achieve different training-validation combinations in an attempt to avoid bias.
 
 
 coral osv. custom losses osv?
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\textwidth]{files/figs/x-inception-w-masks.pdf}
-  \caption{The X-InceptionTime architecture developed in this work.}
-  \label{fig:x-inception}
-\end{figure}
+\subsection{Training} \label{sec:met-training}
 
-\subsection{Training}
 
-\subsection{Choice of input features}
+% \subsection{Choice of input features}
 
 \subsection{Combined score}
