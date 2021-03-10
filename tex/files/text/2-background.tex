@@ -24,7 +24,7 @@ $h(\cdot)$ is a, possibly non-linear, activation function. $x_j$, $j \in \{1, \h
 
 \begin{figure}
  \centering
- \includegraphics[width=0.5\textwidth]{files/figs/mlp.png}
+ \includegraphics[width=0.5\textwidth]{files/figs/backg/mlp.png}
  \caption{Feedforward neural network with two densely connected layers. Each line corresponds to one trainable parameter. $x_0$ and $z_0$ can be seen as ones added to the inputs introducing the bias terms \cite{Bishop2006}.}
  \label{fig:dense}
 \end{figure}
@@ -48,7 +48,7 @@ Pooling layers are used to reduce the dimensionality of feature maps. Common typ
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.4\textwidth]{files/figs/pooling.png}
+  \includegraphics[width=0.4\textwidth]{files/figs/backg/pooling.png}
   \caption{Illustration of max and average pooling with pooling size 2$\times$2 and stride 2$\times$2. Image from \cite{Wang2018}.}
   \label{fig:pooling}
 \end{figure}
@@ -61,19 +61,19 @@ The activation functions in a neural network has two main tasks. The first one i
 \begin{figure}
   \centering
   \begin{subfigure}[t]{0.3\textwidth}
-    \includegraphics[width=\textwidth]{files/figs/relu.png}
+    \includegraphics[width=\textwidth]{files/figs/backg/relu.png}
     \caption{ReLU}
     \label{fig:relu}
   \end{subfigure}
   ~
   \begin{subfigure}[t]{0.3\textwidth}
-    \includegraphics[width=\textwidth]{files/figs/leaky_relu.png}
+    \includegraphics[width=\textwidth]{files/figs/backg/leaky_relu.png}
     \caption{Leaky ReLU}
     \label{fig:leaky-relu}
   \end{subfigure}
   ~
   \begin{subfigure}[t]{0.3\textwidth}
-    \includegraphics[width=\textwidth]{files/figs/sigmoid.png}
+    \includegraphics[width=\textwidth]{files/figs/backg/sigmoid.png}
     \caption{Sigmoid}
     \label{fig:sigmoid}
   \end{subfigure}
@@ -113,7 +113,7 @@ Another way to present the result of a classification task is using the confusio
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.6\textwidth]{files/figs/conf-example.png}
+  \includegraphics[width=0.6\textwidth]{files/figs/backg/conf-example.png}
   \caption{An example of a confusion matrix. The entries on the diagonal are correctly classified, while the position of an off-diagonal entry shows what kind of error has been made. The true class is given by the row and the predicted class by the column.}
   \label{fig:conf-example}
 \end{figure}
@@ -211,7 +211,7 @@ Li and Lin \cite{Li2007} presented a method for ordinal regression where the com
 \begin{conditions}
  $$\pmb{W}$$               & = & all model parameters except biases of final layer \\
  $$\pmb{b}$$               & = & bias weights of final layer \\
- $$\lambda^{(k)}$$         & = & loss weight for class $k$ \\
+ $$\lambda^{(k)}$$         & = & loss weight for rank $k$ \\
  $$g(\pmb{x}_n, \pmb{W})$$ & = & output of penultimate layer \\
  $$\sigma(z)$$             & = & logistic sigmoid function, $1/(1 + \exp(-z))$ \\
  $$\sigma(g(\pmb{x}_n, \pmb{W}) + b_k)$$ & = & predicted output of binary classifier $k$

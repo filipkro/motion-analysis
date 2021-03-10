@@ -5,20 +5,21 @@
 \section{Datasets} \label{sec:datasets}
 %Some of the widely used datasets today are \gls{mpii} \cite{Andriluka2014}, \gls{coco} \cite{Lin2014}, \gls{aic-hkd} \cite{Wu2017}, and \gls{coco}-wholebody .% The two COCO datasets will now be described in more detail.
 
-In this work models trained on the \gls{coco} dataset are used. \gls{coco} consists of 328k images containing 91 different object types. The images come from Google, Bing, and Flickr image search and are mainly hand annotated through Amazon Mechanical Turk. The interesting part of the dataset for this work is the one with human poses. In total there are 250k instances of people labeled with joint locations \cite{Lin2014}. The joints, 17 per person, in the dataset can be seen in Figure \ref{fig:coco}. Along with the datasets containing body keypoints mentioned above there are also datasets with dense keypoints for specific bodyparts, e.g. OneHand10k \cite{Wang2019}. \gls{coco}-wholebody \cite{Jin2020} is an attempt to combine these two types of datasets by extending \gls{coco} with dense keypoints at hands, feet, and faces. The resulting 133 joints can be seen in Figure \ref{fig:coco-wholebody}.
+% In this work models trained on the \gls{coco} dataset are used. \gls{coco} consists of 328k images containing 91 different object types. The images come from Google, Bing, and Flickr image search and are mainly hand annotated through Amazon Mechanical Turk. The interesting part of the dataset for this work is the one with human poses. In total there are 250k instances of people labeled with joint locations \cite{Lin2014}. The joints, 17 per person, in the dataset can be seen in Figure \ref{fig:coco}. Along with the datasets containing body keypoints mentioned above there are also datasets with dense keypoints for specific bodyparts, e.g. OneHand10k \cite{Wang2019}. \gls{coco}-wholebody \cite{Jin2020} is an attempt to combine these two types of datasets by extending \gls{coco} with dense keypoints at hands, feet, and faces. The resulting 133 joints can be seen in Figure \ref{fig:coco-wholebody}.
+In this work models trained on the \gls{coco} dataset are used. \gls{coco} consists of 328k images containing 91 different object types. The images come from Google, Bing, and Flickr image search and are mainly hand annotated through Amazon Mechanical Turk. The interesting part of the dataset for this work is the one with human poses. In total there are 250k instances of people labeled with joint locations \cite{Lin2014}. The joints, 17 per person, in the dataset can be seen in Figure \ref{fig:coco}. Along with the datasets containing body keypoints mentioned above there are also datasets with dense keypoints for specific bodyparts, such as hands or face. \gls{coco}-wholebody \cite{Jin2020} is an attempt to combine these two types of datasets by extending \gls{coco} with dense keypoints at hands, feet, and faces. The resulting 133 joints can be seen in Figure \ref{fig:coco-wholebody}.
 
 \begin{figure}
  \centering
- \begin{subfigure}[t]{0.4\textwidth}
+ \begin{subfigure}[t]{0.45\textwidth}
    \centering
-  \includegraphics[width=0.6\textwidth]{files/figs/coco.png}
+  \includegraphics[width=0.6\textwidth]{files/figs/hpe/coco.png}
   \caption{Regular \gls{coco}.}
   \label{fig:coco}
  \end{subfigure}
  ~
- \begin{subfigure}[t]{0.4\textwidth}
+ \begin{subfigure}[t]{0.45\textwidth}
    \centering
-  \includegraphics[width=0.6\textwidth]{files/figs/coco-wholebody.png}
+  \includegraphics[width=0.6\textwidth]{files/figs/hpe/coco-wholebody.png}
   \caption{\gls{coco}-wholebody.}
   \label{fig:coco-wholebody}
  \end{subfigure}
@@ -44,7 +45,7 @@ Object detectors usually work by first producing a large number of regions of in
 
 \begin{figure}
  \centering
- \includegraphics[width=\textwidth]{files/figs/hrnet.png}
+ \includegraphics[width=\textwidth]{files/figs/hpe/hrnet.png}
  \caption{Network architecture for HRNet. The top row shows high resolution representations with fewer number of feature maps. Each step downwards reduces the resolution with a factor of two while the number of feature maps are doubled \cite{Wang2020}.}
  \label{fig:hrnet}
 \end{figure}
@@ -96,7 +97,7 @@ The second improvement suggested by Zhang et al. concerns the creation of the tr
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.4\textwidth]{files/figs/quantization.png}
+  \includegraphics[width=0.4\textwidth]{files/figs/hpe/quantization.png}
   \caption{Quantization error due to off-grid keypoint location. Correct location (blue) represented by on-grid coordinate, here using floor quantization \cite{Zhang2020}. SKRIV ANTAGLIGEN NAGOT BATTRE HAR!!!!!}
   \label{fig:pixel-quantization}
 \end{figure}
