@@ -7,9 +7,9 @@ In this chapter the system for assessing POEs will be presented. This system is 
 \section{Data}\label{sec:met-data}
 The data available is in the form of videos each containing one subject, recorded from the front. As discussed in Chapter \ref{ch:intro} the \gls{sls} task and the femoral valgus, pelvis, trunk, and KMFP \glspl{poe} is evaluated. Each video contains four-five repetitions and for each repetition the \glspl{poe} above have been scored according to Table \ref{tab:poes}. Along with the \gls{poe} scores a certainty score, describing the confidence of the physiotherapist assessing the videos, is provided. This is between 0 (certain) and 2 (uncertain) and when above 0 the uncertainty direction is provided as well. This certainty score is only available for the combined (median) score for all repetitions, i.e. one certainty score per video.
 
-In total there are labeled videos from 103 different subjects and for some of the subjects there are videos of the task performed with both right and left leg. The number of labeled repetitions per video and \gls{poe} varies slightly. This variation is due to different factors such as all subjects not performing five repetitions, that the entire movement was not captured in the video (and thereby ignored by us), or that some specific \gls{poe} could not be evaluated from that specific video for some reason. The total amount of data for the different \glspl{poe} is summarized in Table \ref{tab:data}. From this data 22 of the repetition sequences (110 repetitions) where put aside as a test set. This corresponds to about 21\% of the available data. The test set was chosen from the set of unique subjects ensuring no data from the same subject is in both the training and test data.
+In total there are labeled videos from 103 different subjects and for some of the subjects there are videos of the task performed with both right and left leg. The number of labeled repetitions per video and \gls{poe} varies slightly. This variation is due to different factors such as all subjects not performing five repetitions, that the entire movement was not captured in the video (and thereby ignored by us), or that some specific \gls{poe} could not be evaluated from that specific video for some reason. The total amount of data for the different \glspl{poe} is summarized in Table \ref{tab:data}. From this data 22 of the repetition sequences (110 repetitions)  were put aside as a test set. The test set was chosen from the set of repetition sequences ensuring no data from the same sequence was in both the training and test data.
 
-The label distributions can be seen in Figure \ref{fig:label-dist} and it can be noted that for all \glspl{poe} there is a slight imbalance with fewer repetitions classified as Poor. The imbalance for \gls{kmfp} is very clear with about 80\% of the data classified as Good.
+The label distributions can be seen in Figure \ref{fig:label-dist} and it can be noted that for all \glspl{poe} there is a slight imbalance with fewer repetitions classified as Poor. The imbalance for \gls{kmfp} is very clear with about 80\% of the data classified as Good. In the same figure the label distribution  for the test set is shown as well. For the trunk \gls{poe} it is slightly different while similar for the other sets.
 
 \begin{table}
  \centering
@@ -34,32 +34,52 @@ The label distributions can be seen in Figure \ref{fig:label-dist} and it can be
 
 \begin{figure}
   \centering
-  \begin{subfigure}[t]{0.4\textwidth}
-    \includegraphics[width=\textwidth]{files/figs/met/trunk-label-hist.png}
+  \begin{subfigure}[t]{0.24\textwidth}
+    \includegraphics[width=\textwidth]{files/figs/met/trunk-label-hist.eps}
     \caption{}
     \label{fig:trunk-labels}
   \end{subfigure}
-  ~
-  \begin{subfigure}[t]{0.4\textwidth}
-    \includegraphics[width=\textwidth]{files/figs/met/pelvis-label-hist.png}
+  \begin{subfigure}[t]{0.24\textwidth}
+    \includegraphics[width=\textwidth]{files/figs/met/pelvis-label-hist.eps}
     \caption{}
     \label{fig:pelvis-labels}
   \end{subfigure}
-  \begin{subfigure}[t]{0.4\textwidth}
-    \includegraphics[width=\textwidth]{files/figs/met/femval-label-hist.png}
+  \begin{subfigure}[t]{0.24\textwidth}
+    \includegraphics[width=\textwidth]{files/figs/met/femval-label-hist.eps}
     \caption{}
     \label{fig:femval-labels}
   \end{subfigure}
-  ~
-  \begin{subfigure}[t]{0.4\textwidth}
-    \includegraphics[width=\textwidth]{files/figs/met/kmfp-label-hist.png}
+  \begin{subfigure}[t]{0.24\textwidth}
+    \includegraphics[width=\textwidth]{files/figs/met/kmfp-label-hist.eps}
     \caption{}
     \label{fig:kmfp-labels}
   \end{subfigure}
 
-  \caption{Distributions of the labels for the available data.}
+  \begin{subfigure}[t]{0.24\textwidth}
+    \includegraphics[width=\textwidth]{files/figs/met/trunk-test-labels.eps}
+    \caption{}
+    \label{fig:trunk-labels-test}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.24\textwidth}
+    \includegraphics[width=\textwidth]{files/figs/met/pelvis-test-labels.eps}
+    \caption{}
+    \label{fig:pelvis-labels-test}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.24\textwidth}
+    \includegraphics[width=\textwidth]{files/figs/met/femval-test-labels.eps}
+    \caption{}
+    \label{fig:femval-labels-test}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.24\textwidth}
+    \includegraphics[width=\textwidth]{files/figs/met/kmfp-test-labels.eps}
+    \caption{}
+    \label{fig:kmfp-labels-test}
+  \end{subfigure}
+
+  \caption{Distributions of the labels for the available data. (a)-(d) shows distribution over all available data and (e)-(h) shows the distribution in the test set.}
   \label{fig:label-dist}
 \end{figure}
+
 
  % performing four-five repetitions of specific motions. The motions are \textit{Single-leg squat, Forward lunge, Stair descending, Forward lunge, Single leg hop for distance, and Side hop}. Each motion has a number of POE scores associated with them. The motion-POE combinations are shown in Table \ref{tab:met:motion-poes}. In Sections \ref{sec:met-SLS}-\ref{} the motions and POEs evaluated in this project are described.
 
@@ -181,7 +201,7 @@ The models eventually used were InceptionTime (Section \ref{sec:inception-time})
 
 \textbf{skriv om ensemble, vilka losses}
 
-\subsubsection{X-InceptionTime}
+\subsubsection{X-InceptionTime} \label{sec:xinception}
 The idea with this model was to combine the explainability of XCM with the inception module from InceptionTime. This was done by separating the inputs and having individual inception modules for each input channel as can be seen in Figure \ref{fig:x-inception}. After the final module (the depth can be seen as a hyperparamtere and needs to be tuned) a bottleneck of size one is applied reducing the dimensionality of each input channel back to $T$$\times$1. The features for the individual inputs are concatenated resulting in a feature map of size $T$$\times$$F$ where each input feature is only affected by that input. This makes it possible to use \gls{grad-cam} to get a measure of the importance of each time step for each input.
 
 \begin{figure}
@@ -210,22 +230,12 @@ The \gls{grad-cam} method is slightly modified and simplified for this model com
       B^k &= \frac{1}{T}\sum_{i=1}^T A_i^k \\
       w_k^c &= \frac{\partial y_c}{\partial B^k} \\
       \alpha_k^c &= w_k^c B^k.
+      \label{eq:input-importance}
    \end{split}
  \end{align}
 
-This was exploited to chose input features by iteratively training models, evaluating \eqref{eq:feat-select}, and removing the features corresponding to the lowest $W_k$ until the performance of the model drops significantly. This method has its drawback, the most notable that being that input features suitable for this architecture will be found. This model does not consider interaction between different features directly, hence features important through such interactions will probably not be deemed important by this method.
 
-\begin{equation}
-    W_k = \text{mean\_folds}\Big( \text{normalize}(\sum_{i=1}^N |w_{ik}^{c_i}|) \Big),
-    \label{eq:feat-select}
-\end{equation}
-\begin{conditions}
-  \text{mean\_folds}(z)   & = & average of $z$ over all folds \\
-  \text{normalize}(z)     & = & $\frac{z}{\lVert z \rVert_2}$ \\
-  c_i                     & = & argmax($\hat{y}_i$), i.e. the predicted class
-\end{conditions}
-
-\subsubsection{Ensembles}
+\subsubsection{Ensembles} \label{sec:met-ensembles}
 The ensembles used consists of multiple models whose outputs are linearly combined to form the ensemble output. As discussed above this allows the ensemble to benefit from models optimized to perform well according to different metrics. In Section \ref{sec:met-training} we will present how $k$-fold cross-validation was used for training and validation. This was also used for design of the ensembles.
 
 The idea with the ensemble was to combine models performing across all classes with models with high precision for the individual classes. The models with good overall performance was in general using the \gls{coral} activation and loss. The other models were trained with the confusion entropy loss with a target confusion matrix aiming at achieving high precision for one class and ignoring the other predictions. Examples of matrices used to find high precision models are shown in \eqref{eq:confusion-target}. A higher value can be seen as a reward for predictions turning up at that position in the confusion matrix. Eq. \eqref{eq:target-0} is used for class 0 and the ones in the lower right corner in this example means that correct prediction of a 1 will give the same reward as incorrectly predicting it as a 2.
@@ -312,7 +322,7 @@ The ensembles used are presented in Table \ref{tab:ensemble-models}. The suffixe
 
 \begin{table}
  \centering
- \caption{Models forming the ensembles. * indicates data length normalized to 100 samples. No star means that original sample frequency (25Hz) was kept and .}
+ \caption{Models forming the ensembles. * indicates data length normalized to 100 samples. No star means that original sample frequency (25Hz) was kept and the input data was padded to the same length.}
  \label{tab:ensemble-models}
  % \footnotesize
  % {\renewcommand{\arraystretch}{1.2}
@@ -323,9 +333,9 @@ The ensembles used are presented in Table \ref{tab:ensemble-models}. The suffixe
    \hline \hline
 
    InceptionTime-coral*     & & InceptionTime-coral*    & \\
-   InceptionTime-coral      & & X-InceptionTime-coral*  & \\
+   InceptionTime-coral*      & & X-InceptionTime-coral*  & \\
    X-InceptionTime-conf-0*  & & X-InceptionTime-conf-0* & \\
-   InceptionTime-conf-1*    & & X-InceptionTime-conf-1  & \\
+   InceptionTime-conf-1    & & X-InceptionTime-conf-1  & \\
    X-InceptionTime-coral-2  & & X-InceptionTime-conf-2* &
  \end{tabu}
 \end{table}
@@ -335,10 +345,77 @@ The ensembles used are presented in Table \ref{tab:ensemble-models}. The suffixe
 
 % coral osv. custom losses osv?
 
+\subsection{Input selection}
+To select which inputs to use when classifying the different \glspl{poe} the importance weight introduced in \eqref{eq:input-importance} were used.This was done by iteratively training models, evaluating \eqref{eq:feat-select}, and removing the features corresponding to the lowest $W_k$ until the performance of the model dropped significantly. This method has its drawback, the most notable that being that input features suitable for this architecture will be found. This model does not consider interaction between different features directly, hence features important through such interactions will probably not be deemed important by this method. This was somewhat circumvented by validating the reduced input features on other model architectures as well, allowing this methodical way of finding suitable inputs. The inputs used for the different \glspl{poe} are presented in Table \ref{tab:model-inputs}.
+
+\begin{equation}
+    W_k = \text{mean\_folds}\Big( \text{normalize}(\sum_{i=1}^N |w_{ik}^{c_i}|) \Big),
+    \label{eq:feat-select}
+\end{equation}
+\begin{conditions}
+  \text{mean\_folds}(z)   & = & average of $z$ over all folds \\
+  \text{normalize}(z)     & = & $\frac{z}{\lVert z \rVert_2}$ \\
+  c_i                     & = & argmax($\hat{y}_i$), i.e. the predicted class
+\end{conditions}
+
+FIXXXXXXXXX DIIIIIIIIIIIIIIIISSSSSSSSSSSZZZZZZZZZZZZZ
+
+\begin{table}
+  \caption{Inputs to the models classifying the different POEs. If the task was performed with the left leg the video has been mirrored, as described in Section \ref{sec:met-loc}.}
+  \label{tab:model-inputs}
+    \begin{center}
+        \tabulinesep=0.8mm
+        \begin{minipage}[t]{0.25\textwidth}
+          \begin{tabu}[t]{l}
+            \textbf{Trunk} \\ \hline \hline
+            Left shoulder - $x$\\
+            Right shoulder - $x$\\
+            Right shoulder - $y$\\
+            Left hip - $x$\\
+            Left hip - $y$\\
+            Right hip - $x$\\
+            \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Difference: right\\ hip and knee - $x$\end{tabular}}
+          \end{tabu}
+        \end{minipage}%
+        \begin{minipage}[t]{0.25\textwidth}
+          \begin{tabu}[t]{l}
+            \textbf{Pelvis} \\ \hline \hline
+            Right shoulder - $x$\\
+            Right shoulder - $y$\\
+            Right hip - $x$\\
+            Right hip - $y$\\
+            Left hip - $y$\\
+            \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Difference: right\\ hip and knee - $x$\end{tabular}}\\
+            \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Difference: right\\ knee and toes - $x$\end{tabular}}
+          \end{tabu}
+        \end{minipage}%
+        \begin{minipage}[t]{0.25\textwidth}
+          \begin{tabu}[t]{l}
+            \textbf{Femoral Valgus} \\ \hline \hline
+            Right shoulder - $x$\\
+            Right hip - $x$\\
+            Right knee - $y$\\
+            \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Angle: right\\ knee and ankle\end{tabular}}
+          \end{tabu}
+        \end{minipage}%
+        \begin{minipage}[t]{0.25\textwidth}
+          \begin{tabu}[t]{l}
+            \textbf{\gls{kmfp}} \\ \hline \hline
+            Left shoulder - $y$\\
+            Right hip - $y$\\
+            \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Angle: right\\ ankle and toes\end{tabular}}\\
+            \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Difference: right\\ hip and knee - $x$\end{tabular}} \\
+            \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Difference: right\\ knee and ankle - $x$\end{tabular}} \\
+            % \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Difference: right\\ knee and ankle - $x$\end{tabular}}
+          \end{tabu}
+        \end{minipage}%
+    \end{center}
+\end{table}
+
 \subsection{Training} \label{sec:met-training}
-We used 10-fold cross-validation on the training set for the development of the models and ensembles. Like the test set, the folds were created such that no repetitions from the same subject were in both the test and validation set. For all models a batch size of 32, a learning rate of $5 \times 10^{-3}$, and early stopping was used. The learning rate was also reduced by a factor of 0.85 every 50th epoch. The training was performed on Nvidia Tesla T4 and V100 \glspl{gpu}.
+We used 10-fold cross-validation on the training set for the development of the models and ensembles. The amount of data used for training ranges from 74-77 sequences of repetitions and 369-380 repetitions for the different folds and \glspl{poe}. Like the test set, the folds were created such that no repetitions from the same subject were in both the test and validation set. For all models a batch size of 32, a learning rate of $5 \times 10^{-3}$, and early stopping was used. The learning rate was also reduced by a factor of 0.85 every 50th epoch. The training was performed on Nvidia Tesla T4 and V100 \glspl{gpu}.
 
 % \subsection{Choice of input features}
 
 \subsection{Combined score} \label{sec:met-combined}
-The eventual score in the method proposed by Nae et al. \cite{Nae2020b} is the combined assessments of all the repetitions. This score is formed as the median of the repetition scores. We propose to do this by averaging the ensemble outputs instead and chose the class with highest average probability over all repetitions. This means that a repetition classified with some uncertainty will affect the combined score less than a certain one. By evaluating the distributions for the ensemble outputs (Appendix \ref{LOL}) it is also possible to introduce thresholds for both the combined score and the repetition score. For the repetition predictions suitable thresholds and actions were found to be to set the probability to 0 if below 0.15. We also one hot encoded the prediction if the probability for one class was above 0.85.
+The eventual score in the method proposed by Nae et al. \cite{Nae2020b} is the combined assessments of all the repetitions. This score is formed as the median of the repetition scores. We propose to do this by averaging the ensemble outputs instead and chose the class with highest average probability over all repetitions. This means that a repetition classified with some uncertainty will affect the combined score less than a certain one. By evaluating the distributions for the ensemble outputs (Appendix \ref{app:val-hists}) it is also possible to introduce thresholds for both the combined score and the repetition score. For the repetition predictions the probability was set to 0 if the prediction was below 0.2. The combined can be ignored and considered to uncertain below some combined probability. The validation data also suggests that the combined probability should work as an indicator of the certainty of the prediction. It could also be used to introduce a threshold, e.g. ignoring predictions with a probability below 0.4. Such a threshold would be a trade-of between accuracy and number of ignored subjects.
