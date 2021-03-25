@@ -10,34 +10,42 @@ from datetime import datetime
 
 POE_fields = ['_trunk', '_hip', '_femval', '_KMFP',
               '_fem_med_shank', '_foot']
-poe_index = 1
+poe_index = 0
 data_dirs = ('healthy-SLS', 'hipp-SLS', 'marked-SLS', 'musse-SLS',
              'shield-SLS', 'ttb-SLS')
 NAME_PATH = '/home/filipkr/Documents/xjob/motion-analysis/names/lit-names-datasets.npy'
 
 # KPTS = np.array([[6, 0], [12, 0], [14, 0], [16, 0]])
-KPTS = np.array([[5, 0], [6, 0], [11, 1], [12, 1], [20, 0]])
+# KPTS = np.array([[5, 0], [6, 0], [11, 1], [12, 1], [20, 0]])
 # KPTS = np.array([[5, 0], [5, 1], [6, 0], [6, 1], [11, 0], [11, 1],
-#                  [12, 0], [12, 1], [14, 0], [14, 1],
+#                  [12, 0], [12, 1], [14, 0], [14, 1], [16, 0], [16, 1],
 #                  [20, 0], [20, 1]])
 # KPTS = np.array([[11, 1], [12, 0], [12, 1], [14, 0]])
 # KPTS = np.array([[5, 1], [12, 1]])
-# KPTS = np.array([[5, 0], [5, 1], [6, 0], [6, 1], [7, 0], [7, 1],
-#                  [8, 0], [8, 1], [11, 0], [11, 1], [12, 0], [12, 1],
-#                  [14, 0], [14, 1], [16, 0], [16, 1]])
-# KPTS = np.array([[6, 1], [12, 0], [14, 0], [16, 0]])
+KPTS = np.array([[5, 0], [5, 1], [6, 0], [6, 1], [11, 1], [12, 1], [14, 0], [14, 1], [20, 0]])
+KPTS = np.array([[5, 0], [6, 1], [11, 1], [12, 0], [12, 1]])
+KPTS = np.array([[6, 0], [6, 1], [11, 1], [12,0], [12, 1], [14, 0], [16,1]])
+KPTS = np.array([[6, 0], [6, 1], [11,1], [12, 0],[12,1]])
+# KPTS = np.array([[6, 0], [6, 1], [11, 1], [14, 1]])
+
+KPTS = np.array([[5,0],[6, 0], [6, 1],[11,0], [11,1], [12, 0]])
 
 # KPTS = np.array([[]])
 # ANGLES = [[12, 14], [14, 16], [14, 20], [16, 20]]
+ANGLES = [[12, 14],[14,20]]
+ANGLES = [[12, 14], [14,16]]
+ANGLES = [[12, 14]]
 ANGLES = []
 # KPTS = 'all'
 # ANGLES = [[16, 20]]
 # KPTS = np.array([[6, 1], [12, 0], [14, 0]])
 
 # DIFFS = np.array([[[12, 0], [14, 0]], [[14, 0], [20, 0]]])
+# DIFFS = np.array([[[14, 0], [20, 0]]])
+DIFFS = np.array([[[12, 0], [14, 0]], [[14, 0], [16, 0]],[[12,0],[20,0]],
+                  [[14, 0], [20, 0]]])
 DIFFS = np.array([[[14, 0], [20, 0]]])
-# DIFFS = np.array([[[12, 0], [14, 0]], [[14, 0], [16, 0]],
-#                   [[14, 0], [20, 0]]])
+DIFFS = np.array([[[12,0],[14,0]]])
 
 # if len(KPTS) < 1:
 #     KPTS =[[]]
@@ -124,7 +132,7 @@ def main(args):
         lit_name = lit_names[lit_idx]
         coco_data = args.root.split('poses/')[1]
 
-        # lit_name = 'Olga-Tokarczuk'
+        # lit_name = 'Jean-Paul-Sartre'
         print('The lucky laureate is {}!'.format(lit_name))
 
         save_path = args.save_path.split('.')[0] + 'data_' + lit_name + '.npz'
@@ -225,6 +233,7 @@ def main(args):
                                         feats = feats.reshape(
                                             feats.shape[0], -1)
                                     else:
+                                        # print(f'cohort: {cohort}, sub: {subject}, leg: {leg}, rep: {i}')
                                         angles = calc_angle(
                                             motions[i, ...], ANGLES)
                                         # kpts = np.moveaxis(motions[i, :, KPTS, :], 1, 0)
