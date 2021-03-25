@@ -1,8 +1,25 @@
 % !TEX root=../../mt-motion-analysis.tex
 % \newpage
+% Anterior Cruciate Ligament (ACL)
+\tableofcontents
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+Injuries to the \gls{acl} are severe injuries, common among the physically active young to middle aged population. After suffering from such an injury, the patient typically face a lengthy rehabilitation process. Usually, it takes 1-2 years before an injured knee returns to pre-injury performance, if that is ever achieved. The risk of re-injury is high and is increased by early return to sports. One measure which has been suggested as an indicator of the increased risk of re-injury, and hence could work as an indicator of when to return to normal activity, is altered postural orientation. The postural orientation describes the positions of different body parts in relation to each other and the surroundings. Assessment of this is a time consuming task requiring human experts trained to finds such alterations. This thesis propose a method to automate this task by analyzing videos recorded with a regular video camera, e.g. a mobile phone.
+
+The proposed method uses well established deep learning techniques, in this case HRNet with DARK-pose, to extract body part positions from each video frame. Deep learning based models are trained in a supervised fashion to classify the sequences of extracted keypoints. Models trained to perform according to different metrics were combined in ensembles classifying the quality of the postural orientation on an ordinal scale from 0 (Good), via 1 (Fair), to 2 (Poor).
+
+We evaluated the method on four different segment-specific \glspl{poe} when the patient performed a single leg squat. The different POEs were trunk, pelvis, femoral valgus, and \gls{kmfp}. For femoral valgus and trunk a classification accuracy of 82.3\% and 80.0\%, respectively, was achieved. The corresponding number for \gls{kmfp} was 90.3\%, but this data was heavily imbalanced. The pelvis was the most difficult to analyze resulting in an accuracy of 73.3\%.
+
+The most important contribution of this thesis is to provide a foundation and a number of insights of what is needed before introducing a method like this for clinical use.
 
 \chapter*{Acknowledgements}
+\addcontentsline{toc}{chapter}{Acknowledgements}
 The computations were enabled by resources provided by the Swedish National Infrastructure for Computing (SNIC) at Chalmers Centre for Computational Science and Engineering (C3SE) partially funded by the Swedish Research Council through grant agreement no. 2018-05973.
+
+Regarding thank yous I would like to begin by giving a big one to Eva Ageberg and Mark Creaby for your ideas and insights. Secondly I would like to thank Jenny Älmqvist Nae for introducing this field to me, for explaining concepts which were very alien to me six months ago, and for assessing so many videos. Finally I would like to give a big thank you to Andreas Jakobsson for your enthusiasm and ideas throughout the project, for finding so many missing commas in this text, and for being a source of inspiration.
+
+% “And now here is my secret, a very simple secret: It is only with the heart that one can see rightly; what is essential is invisible to the eye.”
+% ― Antoine de Saint-Exupéry, The Little Prince
 
 \newpage
 \etocdepthtag.toc{mtchapter}
@@ -12,6 +29,5 @@ The computations were enabled by resources provided by the Swedish National Infr
 % \setstretch{1}
 \printglossary
 % \setstretch{1}
-\tableofcontents
-\listoffigures
-\listoftables
+% \listoffigures
+% \listoftables

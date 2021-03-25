@@ -46,7 +46,8 @@
 \usepackage{multirow}
 \usepackage{textcomp}               % Fixing warning for gensyb \perthousand
 \usepackage{svg}                    % including svg files
-\usepackage{caption}                % For subfigures
+% \usepackage[font=small,labelfont=bf,stretch=1]{caption}
+\usepackage[font=small,labelfont=bf]{caption}
 \usepackage{subcaption}
 \usepackage{fontspec}
 \usepackage{sectsty}
@@ -76,6 +77,12 @@
 \usepackage{enumitem}
 % \usepackage{amsmath}
 
+\usepackage{float}
+
+
+% \captionsetup[table]{font={stretch=1,}}     %% change 1.2 as you like
+% \captionsetup[figure]{font={stretch=1}}
+
 
 % \usepackage{showframe}
 \usepackage{titlesec}
@@ -83,15 +90,15 @@
 \AtAppendix{\titleformat{\chapter}{\LARGE\bfseries}{\appendixname~\thechapter:}{0.2em}{}%
 % \titlespacing*{\chapter}{0pt}{-5pt}{5pt}
 % \titlespacing*{\section}{0pt}{-5pt}{5pt}
-\titlespacing*{\chapter}{0pt}{-10pt}{0pt}
-\titlespacing*{\section}{0pt}{-10pt}{5pt}
+\titlespacing*{\chapter}{0pt}{0pt}{0pt}
+\titlespacing*{\section}{0pt}{10pt}{10pt}
 \setlength{\floatsep}{0pt}
 \setlength{\intextsep}{0pt}
 \newgeometry{margin=2cm}
 % \setlength{\belowcaptionskip}{-10pt}
 }
-
-
+% \setlength{\beforechapskip}{10pt}
+% \titlespacing*{\chapter}{0pt}{0pt}{0pt}
 
 \counterwithin{figure}{section}
 \counterwithin{table}{section}

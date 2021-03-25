@@ -10,16 +10,26 @@
 \addbibresource{files/bibtex/bib.bib}
 
 % \title{POE assessments of movements using deep learning}
-\title{Assessments of Posterior Orientation Errors after Anterior Cruciate Ligament injuries using deep learning based methods}
+% \title{Assessments of Posterior Orientation Errors after Anterior Cruciate Ligament injuries using deep learning based methods}
+\title{ngn chill title..}
 % \title{Assessment of rehabilitation after Anterior Cruciate Ligament injuries using deep learning based methods}
 \author{Filip Kronström}
 \date{\today}
 
+\usepackage[ms,lth,other]{mccover}
+\maintitle{Assessment of Postural Orientation Errors from videos using ensembles of Deep Neural Networks}
+\authors{Filip Kronström}
+\pubtype{Master's Thesis}
+\datum{March 2021}
+\usepackage{pdfpages}
 
 % \includeonly{files/text/0-pre-content, files/text/3-related-work-tsc}
 \begin{document}
+% \frontcover
+% \backcover
+\includepdf[pages={1,2}]{cover-pages.pdf}
 {\setstretch{0.9}
-\maketitle
+% \maketitle
 \pagenumbering{roman}
 \include{files/text/0-pre-content}
 }
@@ -34,13 +44,16 @@
 \include{files/text/6-results}
 \include{files/text/7-conclusions}
 }
-\addcontentsline{toc}{chapter}{References}
+
 
 % \fontsize{9}{9}
 {\setstretch{0.8}
 % {\footnotesize
-\printbibliography}
+
+\printbibliography
+\addcontentsline{toc}{chapter}{References}}
 % }
 \include{files/text/appendices}
 % \include{files/text/app-2}
+
 \end{document}
