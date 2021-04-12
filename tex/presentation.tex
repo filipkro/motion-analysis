@@ -19,6 +19,7 @@
 
 \usetheme{metropolis}
 \usepackage{appendixnumberbeamer}
+% \usepackage{setspace}
 
 \usepackage{booktabs}
 \usepackage[scale=2]{ccicons}
@@ -26,6 +27,8 @@
 \usepackage{scrextend}
 % \usepackage{setspace}
 \usepackage{pgfplots}
+% \usepackage{multimedia}
+\usepackage{animate}
 \usepgfplotslibrary{dateplot}
 % \addbibresource{files/bibtex/pres_bib.bib}
 
@@ -116,24 +119,39 @@ and severity of hip and groin pain in sub-elite male football: a cross-sectional
 
 \begin{frame}[fragile]{Postural Orientation Errors}
   \begin{columns}[T,onlytextwidth]
-      \column{0.48\textwidth}
+    \centering
+    \column{0.55\textwidth}
+  \begin{columns}[T,onlytextwidth]
+      \column{0.49\textwidth}
 
       \begin{figure}
         \raggedleft
-        \includegraphics[angle=90,height=0.5\textheight]{files/figs/presentation/good-poe.png}
+        \includegraphics[angle=90,height=0.7\textheight]{files/figs/presentation/good-poe.png}
         % \caption{}
         % \label{}
       \end{figure}
 
-      \column{0.48\textwidth}
+      \column{0.49\textwidth}
       \begin{figure}
         \raggedright
-        \includegraphics[angle=90,height=0.5\textheight]{files/figs/presentation/poor-poe.png}
+        \includegraphics[angle=90,height=0.7\textheight]{files/figs/presentation/poor-poe.png}
         % \caption{}
         % \label{}
       \end{figure}
   \end{columns}
-  {\scriptsize\textbf{Figure 3:} Examples of maintained (left) and altered postural orientation (right) during a single leg squat.}
+  \vspace{0.1cm}
+  {\scriptsize\textbf{Figure 3:} Examples of maintained (left) and altered postural orientation (right) during a single leg squat. \newline}
+  \column{0.45\textwidth}
+  \begin{itemize}
+    \item Ability to uphold alignment of body parts.
+    \item Altered PO - seen to increase risk of re-injury.
+    \item No established and feasible method to assess for clinical use.
+    \item Proposed methods where experts assess motions on videos - time consuming\footnotemark.
+  \end{itemize}
+  \end{columns}
+
+  \footnotetext[10]{\hspace Nae et al., Extended Version of a Test Battery for Visual Assessment of Postural Orientation Errors: Face Validity, Internal Consistency, and Reliability. 2020}
+
   % \begin{figure}
   %   \centering
   %   \begin{subfigure}[t]{0.45/textwidth}
@@ -154,10 +172,95 @@ and severity of hip and groin pain in sub-elite male football: a cross-sectional
 
 % \footnotetext[10]{Horak, Postural orientation and equilibrium: what do we need to know about neural control of balance to prevent falls?. 2006}
 \end{frame}
+
+\begin{frame}[fragile]{ngt om avgransningar och de olika poesen}
+  wtf?
+\end{frame}
+
 \section{Methods}
+
+\begin{frame}[fragile]{System overview}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\textwidth]{files/figs/presentation/sys-overview.eps}
+
+      {\scriptsize\textbf{Figure 4}}
+      % \caption{}
+      % \label{}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Body part localization}
+  \begin{columns}[T,onlytextwidth]
+      \column{0.45\textwidth}
+      % \animategraphics[loop,controls={play,stop},height=0.7\textheight]{25}{files/figs/presentation/sls06-pngs/sls06L-imgs-}{0}{539}
+
+      % embedda video pa ngt satt
+
+      \column{0.55\textwidth}
+      \begin{itemize}
+        \item Built upon MMPose framework\footnotemark.
+        \item HRNet\footnotemark with DARK-pose\footnotemark trained on COCO-wholebody dataset used for pose estimation.
+        \item Outputs 133 keypoint coordinates.
+      \end{itemize}
+  \end{columns}
+
+  \footnotetext[11]{MMPose - OpenMMLab, \url{https://github.com/open-mmlab/mmpose}}
+  \footnotetext[12]{Sun et al., Deep high-resolution representation learning for human pose estimation. 2019}
+  \footnotetext[13]{Zhang et al., Distribution-Aware Coordinate Representation for Human Pose Estimation. 2020}
+
+
+  % \movie[height=\textheight,poster]{}{files/figs/presentation/06-SLS-L-25.mp4}
+\end{frame}
 % prata om hur pixel space reduceras till keypoint space,
 %
+
+\begin{frame}[fragile]{Time series classification - Network architectures}
+  \begin{columns}[c,onlytextwidth]
+    \column{0.55\textwidth}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\textwidth]{files/figs/tsc/inception-time-module.png}
+      {\scriptsize\textbf{Figure 5:} InceptionTime module.}
+      % \caption{}
+      % \label{}
+    \end{figure}
+
+  \column{0.4\textwidth}
+  \begin{block}{IncetionTime\footnotemark}
+    Modules with convolutions of different lengths, global average pooling, and densely connected layers for classification.
+  \end{block}
+  \end{columns}
+
+  \begin{columns}[c,onlytextwidth]
+    \column{0.55\textwidth}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\textwidth]{files/figs/met/x-inception-w-masks.pdf}
+      {\scriptsize\textbf{Figure 6:} X-InceptionTime.}
+      % \caption{}
+      % \label{}
+    \end{figure}
+
+  \column{0.4\textwidth}
+  \begin{block}{X-IncetionTime}
+    Like InceptionTime, but input channels are kept separate.
+  \end{block}
+  \end{columns}
+
+\footnotetext[14]{Fawaz et al., nceptionTime: Finding AlexNet for time series classification. 2020}
+\end{frame}
+
+\begin{frame}[fragile]{Time series classification - Ensembles}
+  prata om fem modeller/poe. 2 almanna, med coral ordinal (presentera denna lite), och tre high precision models (presentera den loss function??)
+
+  ngt mer ??
+
+\end{frame}
 \section{Results}
+\begin{frame}[fragile]{Data}
+  beskriv datan, typ video/reps, Antal, training/test split. Cross-val
+\end{frame}
 \section{Conclusions and Future work}
 
 \begin{frame}[fragile]{Metropolis}
@@ -419,9 +522,9 @@ or show \textbf{bold} results.\end{verbatim}
 \end{frame}
 }
 
-\begin{frame}{References}
-  Some references to showcase [allowframebreaks] \cite{knuth92,ConcreteMath,Simpson,Er01,greenwade93}
-\end{frame}
+% \begin{frame}{References}
+%   Some references to showcase [allowframebreaks] \cite{knuth92,ConcreteMath,Simpson,Er01,greenwade93}
+% \end{frame}
 
 \section{Conclusion}
 
