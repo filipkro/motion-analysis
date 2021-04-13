@@ -1,9 +1,13 @@
-\frametitle{Backup slides}
-Sometimes, it is useful to add slides at the end of your presentation to
-  refer to during audience questions.
+\frametitle{Histograms over accuracies and F1 scores - KMFP}
+\vspace{0.2cm}
+  \begin{columns}
+    \column{0.5\textwidth}
+  \includegraphics[width=\textwidth]{files/figs/res/kmfp/acc.eps}
 
-  The best way to do this is to include the \verb|appendixnumberbeamer|
-  package in your preamble and call \verb|\appendix| before your backup slides.
+  \includegraphics[width=\textwidth]{files/figs/res/kmfp/acc-ind.eps}
 
-  \themename will automatically turn off slide numbering and progress bars for
-  slides in the appendix.
+  \column{0.5\textwidth}
+  \includegraphics[width=\textwidth]{files/figs/res/kmfp/f1.eps}
+
+  \includegraphics[width=\textwidth]{files/figs/res/kmfp/f1-ind.eps}
+\end{columns}
