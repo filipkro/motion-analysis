@@ -43,6 +43,11 @@ slurm-*
 *.glsdefs
 *.thm
 *.dvi
+*.nav
+*.snm
+
+sls06-pngs/
+*.mp4
 
 # Distribution / packaging
 .Python
