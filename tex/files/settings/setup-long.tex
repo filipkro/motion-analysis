@@ -136,6 +136,7 @@
 \fancyfoot{}
 \fancyhead[L]{\fontsize{11}{10}\selectfont\leftmark}
 \fancyfoot[R]{\footerfont\thepage}
+% \fancyfoot{\footerfont\thepage}
 \setlength{\headheight}{15.5pt}
 
 
@@ -158,8 +159,9 @@
   at ([xshift=#1,yshift=-#2]current page.north west) {#3};
  \end{tikzpicture}%
 }
-
+% \hyphenation{djupinlärnings-tekniker}
+% \hyphenation{djupinlärnings-modeller}
 % Disable hyphenation
-\pretolerance=10000
+\pretolerance=9000
 \tolerance=2000
 \emergencystretch=50pt
