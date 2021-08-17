@@ -1,5 +1,5 @@
 numpy<1.19.0
 tensorflow==2.3.1
-coral_ordinal
+git+https://github.com/ck37/coral-ordinal/
 flask
 gunicorn
