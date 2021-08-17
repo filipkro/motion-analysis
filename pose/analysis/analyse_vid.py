@@ -163,14 +163,16 @@ def loop(args, rotate, fname, bbox, pose_model, flipped=False,
         # check every nd frame
         if frame % args.skip_rate == 0:
             # test a single image, with a list of bboxes.
+            # print("before")
             pose_results = inference_top_down_pose_model(pose_model, img,
                                                          bbox,
                                                          bbox_thr=args.box_thr,
                                                          format='xyxy',
                                                          dataset=dataset)
+
             t = time.perf_counter()
 
-            print('Frame {:.4f} out of {:.4f} '.format(frame, frames) +
+            print('Frame {:.0f} out of {:.0f} '.format(frame, frames) +
                   'analysed in {:.4f} secs. '.format(t - t1) +
                   'Total time: {:.4f} secs'.format(t - t0))
 
@@ -215,9 +217,13 @@ def loop(args, rotate, fname, bbox, pose_model, flipped=False,
                                   show=False)
 
         if args.show and frame % args.skip_rate == 0:
+            print(f'args show: {args.show}')
+            print(f'rest: {frame % args.skip_rate == 0}')
             cv2.imshow('Image', vis_img)
 
         # if save_out_video:
+        if flipped:  # flip to produce video as original
+            vis_img = cv2.flip(vis_img, 1)
         videoWriter.write(vis_img)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -229,7 +235,8 @@ def loop(args, rotate, fname, bbox, pose_model, flipped=False,
     # if save_out_video:
     videoWriter.release()
     out_file = fname.replace('.mp4', '.npy')
-    np.save(out_file, poses)
+    if args.save_numpy:
+        np.save(out_file, poses)
 
     cv2.destroyAllWindows()
 
@@ -377,7 +384,7 @@ def main():
     parser.add_argument('pose_config', help='Config file for pose')
     parser.add_argument('pose_checkpoint', help='Checkpoint file for pose')
     parser.add_argument('--video-path', type=str, help='Video path')
-    parser.add_argument('--show', type=str2bool, nargs='?', const=True,
+    parser.add_argument('--show', type=str2bool, nargs='?',
                         default=False, help="show results.")
     parser.add_argument('--out-video-root', default='',
                         help='Root of the output video file. '
@@ -409,6 +416,7 @@ def main():
                         default=True,
                         help='if filename has format of marked videos')
     parser.add_argument('--skip_rate', type=int, default=1)
+    parser.add_argument('--save_numpy', type=str2bool, help='Specify whether to save poses as numpy files or just save video and return poses', default=True)
 
     args = parser.parse_args()
 
