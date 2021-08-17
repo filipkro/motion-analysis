@@ -8,8 +8,6 @@ __pycache__/
 
 # custom, such as other repos:
 pose/mmpose
-classification/dl-4-tsc
-classification/tsc
 pose/VideoPose3D
 
 # singularity
