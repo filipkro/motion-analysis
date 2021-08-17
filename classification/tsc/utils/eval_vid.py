@@ -4,7 +4,7 @@ import os
 import tensorflow.keras as keras
 
 import coral_ordinal as coral
-from confusion_utils import ConfusionCrossEntropy\
+from confusion_utils import ConfusionCrossEntropy
 
 
 def main(args, datasets=None, datasets100=None):

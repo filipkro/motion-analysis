@@ -1,8 +1,0 @@
-% !TEX root=../../mt-motion-analysis.tex
-
-\newcommand*\mean[1]{\mathop{\overline{#1}}}
-\newcommand*\italbf[1]{\textbf{\textit{#1}}}
-\usepackage{xparse} 
-\NewDocumentCommand{\mybar}{ O{0.60} O{3pt} m }{%  <---- Set the default values here
-    \mathrlap{\hspace{#2}\overline{\scalebox{#1}[1]{\phantom{\ensuremath{#3}}}}}\ensuremath{#3}
-}
