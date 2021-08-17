@@ -21,4 +21,4 @@ def predict():
     # run_inference(args)
     run_inference()
     print("in pred")
-    return "lol"
+    return "<p>lol</p>"
