@@ -1,0 +1,8 @@
+Average scores for all folds: 
+> Accuracy: 0.7283435374149658 (+- 0.060959519019610824) 
+> Loss: 0.6878428161144257 
+ 
+Confusion matrix all folds: 
+[[ 79.  37.   0.]
+ [ 46. 218.  19.]
+ [  0.  24.  42.]]

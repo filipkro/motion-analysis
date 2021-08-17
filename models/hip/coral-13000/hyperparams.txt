@@ -1,0 +1,1 @@
+{'model': 'masked-inception', 'filters': 128, 'residuals': True, 'bottleneck': True, 'depth': 2, 'kernel_size': 31, 'batch_size': 64, 'epochs': 2000, 'bottleneck_size': 8, 'classes': 3, 'input_shape': (200, 7), 'trainable_params': 183044}

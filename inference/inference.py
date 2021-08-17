@@ -8,11 +8,11 @@ sys.path.append(os.path.join(BASE, 'pose/analysis'))
 sys.path.append(os.path.join(BASE, 'pose/analysis/utils'))
 sys.path.append(os.path.join(BASE, 'classification/tsc/utils'))
 
-for p in sys.path:
-    print(p)
-# print()
-print(os.path.dirname(os.path.realpath(__file__)))
-print(BASE)
+# for p in sys.path:
+#     print(p)
+# # print()
+# print(os.path.dirname(os.path.realpath(__file__)))
+# print(BASE)
 
 from analyse_vid import start as start_detection
 from extract_reps import main as get_datasets

@@ -7,11 +7,12 @@ import coral_ordinal as coral
 from confusion_utils import ConfusionCrossEntropy
 
 
-def main(args, datasets=None, datasets100=None):
+def main(args, datasets=None, datasets100=None, base_path=''):
 
     poes = ['femval', 'trunk', 'hip', 'kmfp']
     for poe in poes:
-        model_path = '/home/filipkr/Documents/xjob/training/ensembles'
+        # model_path = '/home/filipkr/Documents/xjob/training/ensembles'
+        model_path = os.path.join(base_path, f'models/{poe}')
         if datasets is None or datasets100 is None:
             x = np.load(os.path.join(args.root, poe + '.npy'))
             x100 = np.load(os.path.join(args.root, poe + '-100.npy'))
@@ -44,7 +45,7 @@ def main(args, datasets=None, datasets100=None):
             weights = np.array([[1/3, 1.15/3, 1/3], [1/3, 1.15/3, 1/3],
                                 [1/3, 0, 0], [0, 1.15/3, 0],[0, 0, 1/3]])
 
-        model_path = os.path.join(model_path, lit + '10')
+        # model_path = os.path.join(model_path, lit + '10')
         ensembles = [os.path.join(model_path, i) for i in models]
         paths = [os.path.join(root, 'model_fold_1.hdf5') for root in ensembles]
         all_probs = np.zeros((len(models), x.shape[0], 3))
