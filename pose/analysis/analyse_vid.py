@@ -15,10 +15,8 @@ def box_check(img, folder_box, show_box=False, device='cpu'):
     flip = False
     # det_config = '/home/filipkr/Documents/xjob/mmpose/mmdetection/' +\
     #    'configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py'
-    det_config = folder_box +\
-        'configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py'
-    det_model = folder_box +\
-        'checkpoints/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth'
+    det_config = os.path.join(folder_box, 'faster_rcnn_r50_fpn_1x_coco.py')
+    det_model = os.path.join(folder_box, 'faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth')
     det_model = init_detector(det_config, det_model, device=device)
     print('loaded detection model')
     det_results = inference_detector(det_model, img)

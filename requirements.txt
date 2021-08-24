@@ -1,5 +1,12 @@
-numpy<1.19.0
-tensorflow==2.3.1
-coral_ordinal
+numpy
+tensorflow
+git+https://github.com/ck37/coral-ordinal/
 flask
 gunicorn
+xtcocotools==1.5
+torch==1.6.0
+mmpose==0.7.0
+mmcv-full==1.1.5
+mmcv==1.1.6
+mmdet==2.5.0
+torchvision==0.7.0

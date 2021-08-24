@@ -24,10 +24,11 @@ def run_video_detection(args):
     # base_path = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
 
     vid_args = Namespace()
-    vid_args.video_path = args.video
-    vid_args.pose_config = os.path.join(BASE, 'pose/mmpose/configs/top_down/darkpose/coco-wholebody/hrnet_w48_coco_wholebody_384x288_dark.py')
-    vid_args.pose_checkpoint = os.path.join(BASE, 'pose/mmpose/checkpoints/top-down/hrnet_w48_coco_wholebody_384x288_dark-f5726563_20200918.pth')
-    vid_args.folder_box = os.path.join(BASE, 'pose/mmpose/mmdetection/')
+    # vid_args.video_path = args.video
+    vid_args.video_path = os.path.join(BASE, '03SLS1R_MUSSE.mts')
+    vid_args.pose_config = os.path.join(BASE, 'pose/mmpose-files/hrnet_w48_coco_wholebody_384x288_dark.py')
+    vid_args.pose_checkpoint = os.path.join(BASE, 'pose/mmpose-files/hrnet_w48_coco_wholebody_384x288_dark-f5726563_20200918.pth')
+    vid_args.folder_box = os.path.join(BASE, 'pose/mmdet-files')
     vid_args.show = False
     vid_args.out_video_root = args.out
     vid_args.device = 'cpu'
@@ -70,7 +71,7 @@ def main(args):
 if __name__ == '__main__':
     print('starting...')
     parser = ArgumentParser()
-    parser.add_argument('video', help='Video to analyse')
+    # parser.add_argument('video', help='Video to analyse')
     parser.add_argument('--out', help='Directory in which results are saved, Default is ./out', default='out')
     args = parser.parse_args()
     main(args)
