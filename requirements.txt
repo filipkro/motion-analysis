@@ -5,6 +5,7 @@ flask
 gunicorn
 xtcocotools==1.5
 torch==1.6.0
+mmpycocotools==12.0.3
 mmpose==0.7.0
 mmcv-full==1.1.5
 mmcv==1.1.6
