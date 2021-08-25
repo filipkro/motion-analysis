@@ -65,7 +65,7 @@ def main(args):
     poses, fps = run_video_detection(args)
     datasets, datasets100 = extract_reps(poses, fps)
 
-    assess_subject(Namespace(), datasets=datasets, datasets100=datasets100)
+    assess_subject(Namespace(), datasets=datasets, datasets100=datasets100, base_path=BASE)
 
 
 if __name__ == '__main__':

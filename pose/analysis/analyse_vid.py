@@ -1,7 +1,18 @@
 import os
+import sys
 from argparse import ArgumentParser, ArgumentTypeError
 
 import cv2
+
+
+BASE = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
+
+print(BASE)
+print(sys.path)
+sys.path.append(os.path.join(BASE, 'mmpose'))
+sys.path.append(os.path.join(BASE, 'mmpose/mmdetection'))
+print(sys.path)
+
 from mmdet.apis import inference_detector, init_detector, show_result_pyplot
 
 from mmpose.apis import (inference_top_down_pose_model, init_pose_model,
@@ -15,8 +26,16 @@ def box_check(img, folder_box, show_box=False, device='cpu'):
     flip = False
     # det_config = '/home/filipkr/Documents/xjob/mmpose/mmdetection/' +\
     #    'configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py'
-    det_config = os.path.join(folder_box, 'faster_rcnn_r50_fpn_1x_coco.py')
-    det_model = os.path.join(folder_box, 'faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth')
+    print(folder_box)
+    # det_config = os.path.join(folder_box, 'faster_rcnn_r50_fpn_1x_coco.py')
+    # det_model = os.path.join(folder_box, 'faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth')
+    # det_config = folder_box +\
+    #     'configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py'
+    # det_model = folder_box +\
+    #     'checkpoints/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth'
+    det_config = folder_box + '/configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py'
+    det_model = folder_box + '/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth'
+    print(det_config)
     det_model = init_detector(det_config, det_model, device=device)
     print('loaded detection model')
     det_results = inference_detector(det_model, img)
@@ -72,6 +91,8 @@ def re_est_bbox(img, folder_box, flip90, flip180, flip2right, device='cpu'):
         'configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py'
     det_model = folder_box +\
         'checkpoints/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth'
+    det_config = folder_box + '/configs/faster_rcnn/faster_rcnn_r50_fpn_1x_coco.py'
+    det_model = folder_box + '/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth'
     det_model = init_detector(det_config, det_model, device=device)
 
     if flip90:

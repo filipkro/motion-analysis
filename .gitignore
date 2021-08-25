@@ -7,8 +7,6 @@ __pycache__/
 *.so
 
 # custom, such as other repos:
-pose/mmpose
-pose/VideoPose3D
 
 # singularity
 *.sif
