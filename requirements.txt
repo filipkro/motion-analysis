@@ -4,6 +4,4 @@ git+https://github.com/ck37/coral-ordinal/
 flask
 gunicorn
 torch==1.6.0
-mmcv-full==1.1.5
-mmcv==1.1.6
 torchvision==0.7.0
