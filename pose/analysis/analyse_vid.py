@@ -2,7 +2,8 @@ import os
 import sys
 from argparse import ArgumentParser, ArgumentTypeError
 
-import cv2
+# import cv2
+import mmcv
 
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
@@ -67,7 +68,8 @@ def check_pose4_flip180(pose_model, img, rotate, bbox, args, size):
 
     print(bbox)
     if rotate:
-        img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
+        # img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
+        img = mmcv.imrotate(img, 90)
 
     pose = inference_top_down_pose_model(pose_model, img, bbox,
                                          bbox_thr=args.box_thr,
@@ -96,11 +98,14 @@ def re_est_bbox(img, folder_box, flip90, flip180, flip2right, device='cpu'):
     det_model = init_detector(det_config, det_model, device=device)
 
     if flip90:
-        img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
+        # img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
+        img = mmcv.imrotate(img, 90)
     if flip180:
-        img = cv2.rotate(img, cv2.ROTATE_180)
+        # img = cv2.rotate(img, cv2.ROTATE_180)
+        img = mmcv.imrotate(img, 180)
     if flip2right:
-        img = cv2.flip(img, 1)
+        # img = cv2.flip(img, 1)
+        img = mmcv.flip(img)
 
     det_results = inference_detector(det_model, img)
     bbox = np.expand_dims(np.array(det_results[0])[0, :], axis=0)
@@ -131,17 +136,24 @@ def flip_box(bbox, width):
 def loop(args, rotate, fname, bbox, pose_model, flipped=False,
          rotate_180=False, t0=time.perf_counter()):
 
-    cap = cv2.VideoCapture(args.video_path)
+    # cap = cv2.VideoCapture(args.video_path)
+    cap = mmcv.VideoReader(args.video_path)
 
-    fps = int(np.round(cap.get(cv2.CAP_PROP_FPS)))
-    frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    # fps = int(np.round(cap.get(cv2.CAP_PROP_FPS)))
+    fps = cap.fps()
+    # frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    frames = cap.frame_cnt()
 
     if rotate:
-        size = (int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
-                int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)))
+        # size = (int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
+        #         int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)))
+        size = (int(cap.height()),
+                int(cap.width())
     else:
-        size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
-                int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+        # size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
+        #         int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+        size = (int(cap.width()),
+                int(cap.heigth())
 
     print(size)
 

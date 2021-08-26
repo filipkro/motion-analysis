@@ -8,6 +8,10 @@ __pycache__/
 
 # custom, such as other repos:
 
+# large files
+*.mts
+*.hdf5
+*.pth
 # singularity
 *.sif
 
