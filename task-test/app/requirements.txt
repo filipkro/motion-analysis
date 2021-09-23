@@ -1,0 +1,5 @@
+flask
+redis
+rq
+gunicorn
+Flask-RQ2

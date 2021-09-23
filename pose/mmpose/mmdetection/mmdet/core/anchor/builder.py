@@ -1,6 +1,6 @@
 from mmcv.utils import Registry, build_from_cfg
-
-ANCHOR_GENERATORS = Registry('Anchor generator')
+PRIOR_GENERATORS = Registry('Generator for anchors and points')
+ANCHOR_GENERATORS = PRIOR_GENERATORS
 
 
 def build_anchor_generator(cfg, default_args=None):

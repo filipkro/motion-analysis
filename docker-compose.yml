@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  web:
+    restart: always
+    build: .
+    environment:
+      - PYTHONUNBUFFERED=1
+    image: app-rq
+    volumes:
+      - shared-data:/data
+    ports:
+      - 5000:5000
+    command: gunicorn -b :5000 test_server:app
+
+  worker:
+    image: app-rq
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - shared-data:/data
+    depends_on:
+      - redis
+    command: rqworker --name worker --url redis://redis:6379/0
+
+  redis:
+    image: redis
+
+volumes:
+  shared-data:

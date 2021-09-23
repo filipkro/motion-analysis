@@ -25,7 +25,8 @@ def init_detector(config, checkpoint=None, device='cuda:0'):
     Returns:
         nn.Module: The constructed detector.
     """
-    print(config)
+    # print(config)
+    yolox = 'yolox' in config
     # config = '/home/filipkr/Documents/xjob/app-mm/faster_rcnn_r50_fpn_1x_coco.py'
     if isinstance(config, str):
         config = mmcv.Config.fromfile(config)
@@ -33,6 +34,11 @@ def init_detector(config, checkpoint=None, device='cuda:0'):
         raise TypeError('config must be a filename or Config object, '
                         f'but got {type(config)}')
     config.model.pretrained = None
+    if yolox:
+        config.test_cfg = None
+    # print(config)
+    # print('\n\n\n\n\n')
+    # print(config.test_cfg)
     model = build_detector(config.model, test_cfg=config.test_cfg)
     if checkpoint is not None:
         map_loc = 'cpu' if device == 'cpu' else None
@@ -104,10 +110,10 @@ def inference_detector(model, img):
     # build the data pipeline
     test_pipeline = Compose(cfg.data.test.pipeline)
     data = test_pipeline(data)
-    print(data)
+    # print(data)
     data = collate([data], samples_per_gpu=1)
     # data = collate(data['img'], samples_per_gpu=1)
-    print(data)
+    # print(data)
     if next(model.parameters()).is_cuda:
         # scatter to specified GPU
         data = scatter(data, [device])[0]

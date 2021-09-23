@@ -15,7 +15,7 @@ from mmdet.utils import get_root_logger
 class BaseDetector(nn.Module, metaclass=ABCMeta):
     """Base class for detectors."""
 
-    def __init__(self):
+    def __init__(self, init_cfg=None):
         super(BaseDetector, self).__init__()
         self.fp16_enabled = False
 

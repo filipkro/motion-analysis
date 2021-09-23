@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# config files
+configs/*
+
 # custom, such as other repos:
 
 # large files

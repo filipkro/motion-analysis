@@ -1,0 +1,8 @@
+FROM python:3.7.11-slim-bullseye
+RUN apt-get update && apt-get install tar wget gcc make pkg-config -y
+
+WORKDIR /webb-app
+RUN wget http://download.redis.io/redis-stable.tar.gz && tar -xzf redis-stable.tar.gz
+RUN cd redis-stable && make
+
+COPY . .

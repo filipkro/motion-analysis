@@ -1,15 +1,15 @@
-import numpy as np
 from argparse import ArgumentParser, ArgumentTypeError
 import os
-import tensorflow.keras as keras
-
-import coral_ordinal as coral
-from confusion_utils import ConfusionCrossEntropy
 
 
 def main(args, datasets=None, datasets100=None, base_path=''):
+    import tensorflow.keras as keras
+    import numpy as np
+    import coral_ordinal as coral
+    from confusion_utils import ConfusionCrossEntropy
 
     poes = ['femval', 'trunk', 'hip', 'kmfp']
+    results = {}
     for poe in poes:
         # model_path = '/home/filipkr/Documents/xjob/training/ensembles'
         model_path = os.path.join(base_path, f'models/{poe}')
@@ -21,29 +21,30 @@ def main(args, datasets=None, datasets100=None, base_path=''):
             x100 = datasets100[poe]
 
         if poe == 'femval':
-            lit = 'Olga-Tokarczuk'
-            models = ['coral-100-7000', 'xx-coral-100-7000', 'xx-conf-100-7000',
-                      'xx-conf-100-11000', 'xx-conf-9000']
+            # lit = 'Olga-Tokarczuk'
+            models = ['coral-100-7000', 'xx-coral-100-7000',
+                      'xx-conf-100-7000', 'xx-conf-100-11000', 'xx-conf-9000']
             weights = np.array([[1/3, 1.25/3, 1/3], [1/3, 1.25/3, 1/3],
                                 [1/3, 0, 0], [0, 0, 1/3], [0, 1.25/3, 0]])
         elif poe == 'hip':
-            lit = 'Sigrid-Undset'
+            # lit = 'Sigrid-Undset'
             models = ['coral-100-13000', 'coral-13000', 'conf-100-10000',
                       'conf-10001', 'xx-coral-100-10003']
             weights = np.array([[1/4, 1.05/4, 1.5/4], [1/4, 1.05/4, 1.5/4],
                                 [1/2, 0, 0], [0, 1.05/2, 0], [0, 0, 1.5/2]])
         elif poe == 'kmfp':
-            lit = 'Mikhail-Sholokhov'
+            # lit = 'Mikhail-Sholokhov'
             models = ['inception-3010', 'xx-inception-3010', 'xx-conf-3010',
                       'conf-100-13000', 'xx-conf-3025']
-            weights = np.array([[1/3, 1.25*1/3, 1.25/3], [1/3, 1.25*1/3, 1.25/3],
-                                [1/3, 0, 0], [0, 1.25*1/3, 0], [0, 0, 1.25/3]])
+            weights = np.array([[1/3, 1.25*1/3, 1.25/3],
+                                [1/3, 1.25*1/3, 1.25/3], [1/3, 0, 0],
+                                [0, 1.25*1/3, 0], [0, 0, 1.25/3]])
         elif poe == 'trunk':
-            lit = 'Isaac-Bashevis-Singer'
-            models = ['coral-100-11', 'coral-100-10', 'xx-conf-100-11', 'conf-15',
-                      'xx-coral-100-10']
+            # lit = 'Isaac-Bashevis-Singer'
+            models = ['coral-100-11', 'coral-100-10', 'xx-conf-100-11',
+                      'conf-15', 'xx-coral-100-10']
             weights = np.array([[1/3, 1.15/3, 1/3], [1/3, 1.15/3, 1/3],
-                                [1/3, 0, 0], [0, 1.15/3, 0],[0, 0, 1/3]])
+                                [1/3, 0, 0], [0, 1.15/3, 0], [0, 0, 1/3]])
 
         # model_path = os.path.join(model_path, lit + '10')
         ensembles = [os.path.join(model_path, i) for i in models]
@@ -62,32 +63,44 @@ def main(args, datasets=None, datasets100=None, base_path=''):
                                             'ConfusionCrossEntropy':
                                             ConfusionCrossEntropy})
 
-            print(input.shape)
-            print(lit)
-            print(poe)
-            print(model_path)
+            # print(input.shape)
+            # print(lit)
+            # print(poe)
+            # print(model_path)
             result = model.predict(input)
+            del model
             probs = coral.ordinal_softmax(
                 result).numpy() if 'coral' in model_path else result
 
             probs = probs * weights[model_i, ...]
+            print(probs)
 
             all_probs[model_i, ...] = probs
 
         ensemble_probs = np.sum(all_probs, axis=0)
+        print(ensemble_probs)
         # threshold
         ensemble_probs = (ensemble_probs > 0.2) * ensemble_probs
+        print(ensemble_probs)
         # ev fel shape ....
         summed = np.mean(ensemble_probs, axis=0)
+        print('RESULT')
+        print(summed)
+        # print()
         pred_combined = int(np.argmax(np.mean(ensemble_probs, axis=0)))
         # pred = np.argmax(pred_subj, axis=1)
 
+        print('\n')
         print(f'Prediction for POE, {poe}: {pred_combined}')
         print(f'Certainties: {np.mean(ensemble_probs, axis=0)}')
         print(f'Summed-score: {summed}')
 
         print(ensemble_probs)
+        res = {'pred': pred_combined, 'conf': summed,
+               'detailed': ensemble_probs}
+        results[poe] = res
 
+    return results
 
 
 def str2bool(v):

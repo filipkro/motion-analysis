@@ -1,0 +1,3 @@
+FROM app-rq
+
+CMD rqworker --name worker --url $REDIS_URL

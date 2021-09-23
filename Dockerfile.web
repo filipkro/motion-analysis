@@ -1,0 +1,3 @@
+FROM app-rq
+
+CMD gunicorn test_server:app

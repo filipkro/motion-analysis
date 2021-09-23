@@ -1,9 +1,7 @@
 import numpy as np
 from argparse import ArgumentParser, ArgumentTypeError
 import os
-from scipy.interpolate import interp1d
-import scipy
-from split_sequence import split_peaks_pad
+
 
 femval_kpts = np.array([[6, 1], [12, 0], [14, 0]])
 femval_angles = [[14, 16]]
@@ -64,6 +62,8 @@ def normalize_coords_motions(poses):
 
 
 def resample(x, factor, kind='linear'):
+    from scipy.interpolate import interp1d
+
     n = int(np.ceil(x.shape[0] / factor))
     f = interp1d(np.linspace(0, 1, x.shape[0]), x, kind, axis=0)
     return f(np.linspace(0, 1, n))
@@ -99,6 +99,8 @@ def calc_diffs(poses, kpts):
 
 
 def main(args, data, fps):
+    import scipy.signal
+    from split_sequence import split_peaks_pad
 
     pad = 4 * args.rate
 

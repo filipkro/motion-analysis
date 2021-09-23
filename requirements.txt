@@ -1,4 +1,4 @@
-numpy==1.19.5
+#numpy==1.19.5
 tensorflow-cpu==2.4.0
 git+https://github.com/filipkro/coral-ordinal/
 flask
@@ -8,6 +8,12 @@ torch==1.6.0+cpu
 -f https://download.pytorch.org/whl/torch_stable.html
 torchvision==0.7.0+cpu
 mmcv==1.1.6
-mmcv-full==1.1.5
+#mmcv-full==1.1.5
 scipy==1.7.1
 opencv-python==4.5.3.56
+redis
+rq
+Flask-RQ2
+psycopg2-binary==2.9.1
+boto3==1.18.40
+botocore==1.21.40

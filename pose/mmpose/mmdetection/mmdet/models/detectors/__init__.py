@@ -18,13 +18,14 @@ from .faster_rcnn import FasterRCNN
 # from .reppoints_detector import RepPointsDetector
 # from .retinanet import RetinaNet
 from .rpn import RPN
-# from .single_stage import SingleStageDetector
+from .single_stage import SingleStageDetector
 from .two_stage import TwoStageDetector
 # from .yolact import YOLACT
-# from .yolo import YOLOV3
+from .yolo import YOLOV3
+from .yolox import YOLOX
 
 __all__ = ['BaseDetector', 'TwoStageDetector', 'RPN',
-    'FastRCNN', 'FasterRCNN',
+    'FastRCNN', 'FasterRCNN', 'SingleStageDetector', 'YOLOX', 'YOLOV3'
 ]
 
 # __all__ = [

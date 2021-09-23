@@ -2,9 +2,9 @@ import os
 import sys
 from argparse import ArgumentParser, ArgumentTypeError
 
-# import cv2
-from cv2 import rotate, ROTATE_90_CLOCKWISE, ROTATE_180, flip, VideoCapture, CAP_PROP_FPS,CAP_PROP_FRAME_COUNT, CAP_PROP_FRAME_HEIGHT, CAP_PROP_FRAME_WIDTH, VideoWriter_fourcc, VideoWriter, destroyAllWindows
-import mmcv
+import cv2
+# from cv2 import rotate, ROTATE_90_CLOCKWISE, ROTATE_180, flip, VideoCapture, CAP_PROP_FPS,CAP_PROP_FRAME_COUNT, CAP_PROP_FRAME_HEIGHT, CAP_PROP_FRAME_WIDTH, VideoWriter_fourcc, VideoWriter, destroyAllWindows
+# import mmcv
 
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
@@ -15,10 +15,9 @@ sys.path.append(os.path.join(BASE, 'mmpose'))
 sys.path.append(os.path.join(BASE, 'mmpose/mmdetection'))
 print(sys.path)
 
-from mmdet.apis import inference_detector, init_detector, show_result_pyplot
+from mmdet.apis import inference_detector, init_detector, show_result_pyplot # noqa
 
-from mmpose.apis import (inference_top_down_pose_model, init_pose_model,
-                         vis_pose_result)
+from mmpose.apis import (inference_top_down_pose_model, init_pose_model,                       vis_pose_result) # noqa
 
 import time
 import numpy as np
@@ -69,8 +68,8 @@ def check_pose4_flip180(pose_model, img, rotate, bbox, args, size):
 
     print(bbox)
     if rotate:
-        # img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
-        img = rotate(img, ROTATE_90_CLOCKWISE)
+        img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
+        # img = rotate(img, ROTATE_90_CLOCKWISE)
         # img = mmcv.imrotate(img, 90)
 
     pose = inference_top_down_pose_model(pose_model, img, bbox,
@@ -100,16 +99,16 @@ def re_est_bbox(img, folder_box, flip90, flip180, flip2right, device='cpu'):
     det_model = init_detector(det_config, det_model, device=device)
 
     if flip90:
-        # img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
-        img = rotate(img, ROTATE_90_CLOCKWISE)
+        img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
         # img = mmcv.imrotate(img, 90)
+        # img = rotate(img, ROTATE_90_CLOCKWISE)
     if flip180:
-        # img = cv2.rotate(img, cv2.ROTATE_180)
-        img = rotate(img, ROTATE_180)
+        img = cv2.rotate(img, cv2.ROTATE_180)
         # img = mmcv.imrotate(img, 180)
+        # img = rotate(img, ROTATE_180)
     if flip2right:
-        # img = cv2.flip(img, 1)
-        img = flip(img, 1)
+        img = cv2.flip(img, 1)
+        # img = flip(img, 1)
         # img = mmcv.flip(img)
 
     det_results = inference_detector(det_model, img)
@@ -141,29 +140,29 @@ def flip_box(bbox, width):
 def loop(args, rotate, fname, bbox, pose_model, flipped=False,
          rotate_180=False, t0=time.perf_counter()):
 
-    # cap = cv2.VideoCapture(args.video_path)
-    cap = VideoCapture(args.video_path)
+    cap = cv2.VideoCapture(args.video_path)
+    # cap = VideoCapture(args.video_path)
     # cap = mmcv.VideoReader(args.video_path)
 
-    # fps = int(np.round(cap.get(cv2.CAP_PROP_FPS)))
-    fps = int(np.round(cap.get(CAP_PROP_FPS)))
+    fps = int(np.round(cap.get(cv2.CAP_PROP_FPS)))
+    # fps = int(np.round(cap.get(CAP_PROP_FPS)))
     # fps = cap.fps()
-    # frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    frames = int(cap.get(CAP_PROP_FRAME_COUNT))
+    frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    # frames = int(cap.get(CAP_PROP_FRAME_COUNT))
     # frames = cap.frame_cnt()
 
     if rotate:
-        # size = (int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
-        #         int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)))
-        size = (int(cap.get(CAP_PROP_FRAME_HEIGHT)),
-                int(cap.get(CAP_PROP_FRAME_WIDTH)))
+        size = (int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
+                int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)))
+        # size = (int(cap.get(CAP_PROP_FRAME_HEIGHT)),
+        #         int(cap.get(CAP_PROP_FRAME_WIDTH)))
         # size = (int(cap.height()),
         #         int(cap.width())
     else:
-        # size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
-        #         int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
-        size = (int(cap.get(CAP_PROP_FRAME_WIDTH)),
-                int(cap.get(CAP_PROP_FRAME_HEIGHT)))
+        size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
+                int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+        # size = (int(cap.get(CAP_PROP_FRAME_WIDTH)),
+        #         int(cap.get(CAP_PROP_FRAME_HEIGHT)))
         # size = (int(cap.width()),
         #         int(cap.heigth())
 
@@ -175,10 +174,10 @@ def loop(args, rotate, fname, bbox, pose_model, flipped=False,
             bbox = flip_box(bbox, size[0])
 
     m_dim = max(size)
-    # fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    fourcc = VideoWriter_fourcc(*'mp4v')
-    # videoWriter = cv2.VideoWriter(fname, fourcc, fps, size)
-    videoWriter = VideoWriter(fname, fourcc, fps, size)
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    # fourcc = VideoWriter_fourcc(*'mp4v')
+    videoWriter = cv2.VideoWriter(fname, fourcc, fps, size)
+    # videoWriter = VideoWriter(fname, fourcc, fps, size)
     poses = np.zeros((frames,
                       pose_model.cfg.channel_cfg['num_output_channels'], 2))
     dataset = pose_model.cfg.data['test']['type']
@@ -197,14 +196,14 @@ def loop(args, rotate, fname, bbox, pose_model, flipped=False,
         t1 = time.perf_counter()
         flag, img = cap.read()
         if rotate:
-            # img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
-            img = rotate(img, ROTATE_90_CLOCKWISE)
+            img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
+            # img = rotate(img, ROTATE_90_CLOCKWISE)
         if rotate_180:
-            # img = cv2.rotate(img, cv2.ROTATE_180)
-            img = rotate(img, ROTATE_180)
+            img = cv2.rotate(img, cv2.ROTATE_180)
+            # img = rotate(img, ROTATE_180)
         if flipped:
-            # img = cv2.flip(img, 1)
-            img = flip(img, 1)
+            img = cv2.flip(img, 1)
+            # img = flip(img, 1)
         if not flag:
             break
 
@@ -244,8 +243,8 @@ def loop(args, rotate, fname, bbox, pose_model, flipped=False,
                           'with flipped images...')
                     cap.release()
                     videoWriter.release()
-                    # cv2.destroyAllWindows()
-                    destroyAllWindows()
+                    cv2.destroyAllWindows()
+                    # destroyAllWindows()
                     poses, meta, path = loop(args, rotate, fname,
                                              flip_box(bbox, size[0]),
                                              pose_model, flipped=True, t0=t0)
@@ -268,16 +267,16 @@ def loop(args, rotate, fname, bbox, pose_model, flipped=False,
         if args.show and frame % args.skip_rate == 0:
             print(f'args show: {args.show}')
             print(f'rest: {frame % args.skip_rate == 0}')
-            # cv2.imshow('Image', vis_img)
+            cv2.imshow('Image', vis_img)
 
         # if save_out_video:
         if flipped:  # flip to produce video as original
-            # vis_img = cv2.flip(vis_img, 1)
-            vis_img = flip(vis_img, 1)
+            vis_img = cv2.flip(vis_img, 1)
+            # vis_img = flip(vis_img, 1)
         videoWriter.write(vis_img)
 
-        # if cv2.waitKey(1) & 0xFF == ord('q'):
-        #     break
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
         frame += 1
 
@@ -288,8 +287,8 @@ def loop(args, rotate, fname, bbox, pose_model, flipped=False,
     if args.save_numpy:
         np.save(out_file, poses)
 
-    # cv2.destroyAllWindows()
-    destroyAllWindows()
+    cv2.destroyAllWindows()
+    # destroyAllWindows()
 
     name = os.path.basename(args.video_path).split('_')[0]
     # meta[name]
@@ -320,13 +319,13 @@ def loop(args, rotate, fname, bbox, pose_model, flipped=False,
 
 def start(args):
     print(args.video_path)
-    # cap = cv2.VideoCapture(args.video_path)
-    cap = VideoCapture(args.video_path)
+    cap = cv2.VideoCapture(args.video_path)
+    # cap = VideoCapture(args.video_path)
     print('loaded video...')
     print('checking orientation and position')
 
-    # fps = int(np.round(cap.get(cv2.CAP_PROP_FPS)))
-    fps = int(np.round(cap.get(CAP_PROP_FPS)))
+    fps = int(np.round(cap.get(cv2.CAP_PROP_FPS)))
+    # fps = int(np.round(cap.get(CAP_PROP_FPS)))
 
     print('Frame rate: {} fps'.format(fps))
 
@@ -334,7 +333,7 @@ def start(args):
 
     print(args.only_box)
     if args.only_box:
-        # cv2.waitKey(0)
+        cv2.waitKey(0)
         return
 
     if args.out_video_root == '':
@@ -392,15 +391,15 @@ def start(args):
         img, args.folder_box, device=args.device, show_box=args.show_box)
 
     if rotate:
-        # size = (int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
-        #         int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)))
-        size = (int(cap.get(CAP_PROP_FRAME_HEIGHT)),
-                int(cap.get(CAP_PROP_FRAME_WIDTH)))
+        size = (int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
+                int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)))
+        # size = (int(cap.get(CAP_PROP_FRAME_HEIGHT)),
+        #         int(cap.get(CAP_PROP_FRAME_WIDTH)))
     else:
-        # size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
-        #         int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
-        size = (int(cap.get(CAP_PROP_FRAME_WIDTH)),
-                int(cap.get(CAP_PROP_FRAME_HEIGHT)))
+        size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
+                int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+        # size = (int(cap.get(CAP_PROP_FRAME_WIDTH)),
+        #         int(cap.get(CAP_PROP_FRAME_HEIGHT)))
 
     cap.release()
 
