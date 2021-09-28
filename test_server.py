@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, send_file
 import redis
 from rq import Queue
 # import sys
@@ -10,6 +10,7 @@ import boto3
 from configparser import ConfigParser
 from botocore.exceptions import NoCredentialsError
 from dateutil import tz
+from numpy import argmax
 
 import inference_rq as inference_rq # noqa
 
@@ -39,19 +40,93 @@ app.config['MAX_CONTENT_LENGTH'] = 64 * 1024 * 1024
 app.secret_key = "secret key"
 
 
+@app.route('/get_video', methods=['GET'])
+def get_video():
+    # id = request.form['id']
+    # attempt = request.form['attempt']
+    id = '950203'
+    attempt = 1
+
+    s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
+                      aws_secret_access_key=SECRET_KEY)
+
+    prefix = f'users/{id}/ATTEMPT{attempt}/vid'
+
+    s3_file = s3.list_objects(Bucket='poe-uploads',
+                              Prefix=prefix)['Contents'][0]['Key']
+
+    file = 'vid.' + s3_file.split('.')[-1]
+
+    downloaded = download_from_aws(file, 'poe-uploads', s3_file)
+
+    if downloaded:
+        return send_file(file, download_name='vid.' + s3_file.split('.')[-1], mimetype='video/MP2T')
+        # return "file sent ?"
+
+    return 'File could not be downloaded from S3'
+
+
 @app.route('/get_latest', methods=['GET'])
 def get_latest():
     id = request.form['id']
 
     if not check_user_exist(id):
-        return "User does not exist in database"
+        return "User not in database"
 
     attempt = get_attempt_nbr(id) - 1
-
     if check_ongoing(id, attempt):
         return "Assessment not finished"
     if not check_result_available(id, attempt):
-        return "No assessment for user"
+        return "No assessment for this attempt"
+
+    res = get_results(id, attempt)
+    if type(res) == dict:
+        return json.dumps(res)
+    else:
+        return res
+
+
+@app.route('/get_all', methods=['GET'])
+def get_all_results():
+    id = request.form['id']
+
+    if not check_user_exist(id):
+        return "User not in database"
+
+    last_attempt = get_attempt_nbr(id) - 1
+    results = {}
+
+    for attempt in range(1, last_attempt):
+        if check_ongoing(id, attempt) or \
+                not check_result_available(id, attempt):
+
+            results[f'attempt{attempt}'] = 'Not available'
+        else:
+            results[f'attempt{attempt}'] = get_results(id, attempt)
+
+    return json.dumps(results)
+
+
+@app.route('/get_repetition_result', methods=['GET'])
+def get_repetition():
+    id = request.form['id']
+    attempt = request.form['attempt']
+
+    if not check_user_exist(id):
+        return "User not in database"
+    if check_ongoing(id, attempt):
+        return "Assessment not finished"
+    if not check_result_available(id, attempt):
+        return "No assessment for this attempt"
+
+    res = get_results(id, attempt, with_reps=True)
+    if type(res) == dict:
+        return json.dumps(res)
+    else:
+        return res
+
+
+def get_results(id, attempt, with_reps=False):
 
     file = 'result.pkl'
     downloaded = download_from_aws(file, 'poe-uploads',
@@ -66,18 +141,24 @@ def get_latest():
 
         pred = {}
         conf = {}
+        reps = {}
         for poe in results:
             pred[poe] = results[poe]['pred']
             conf[poe] = tuple(results[poe]['conf'])
+            if with_reps:
+                individual = results[poe]['detailed']
+                reps[poe] = {}
+                for i, rep in enumerate(individual):
+                    reps[poe][f'rep{i}'] = int(argmax(rep))
+                    reps[poe][f'rep{i}confs'] = tuple(rep)
 
         vid = f'users/{id}/ATTEMPT{attempt}/vid.mts'
-        utc = get_time_modified(vid)
+        utc = get_modified_time(vid)
 
-        res = {'recorded': str(utc), 'pred': pred, 'conf': conf}
-
-        return json.dumps(res)
-
-        # return [f'Result for video uploaded {utc}', json.dumps(res)]
+        if with_reps:
+            return {'time': str(utc), 'pred': pred, 'conf': conf, 'reps': reps}
+        else:
+            return {'time': str(utc), 'pred': pred, 'conf': conf}
 
     return "Something went wrong when trying to fetch result from S3"
 
@@ -89,12 +170,25 @@ def upload_video():
     leg = request.form['leg']
 
     if not check_user_exist(id):
-        return "User not added to database, aborting..."
+        return "User not in database"
 
     attempt = get_attempt_nbr(id)
 
     frame_splits = request.form.getlist('frames')
     print(id)
+
+    meta = {'leg': leg, 'frames': tuple(frame_splits)}
+
+    meta_name = 'meta'
+    f = open(meta_name, 'w')
+    json.dump(meta, f)
+    f.close()
+
+    s3_path = f'users/{id}/ATTEMPT{attempt}/meta.json'
+    uploaded = upload_to_aws(meta_name, 'poe-uploads', s3_path)
+
+    if not uploaded:
+        return "Could not save meta data to S3"
 
     # assert False
     if 'file' not in request.files:
@@ -154,8 +248,7 @@ def create_user():
 
     # config = ConfigParser()
     # config['user'] = request.form
-    params = {'id': id, 'leg': leg, 'weight': weight,
-                        'length': length}
+    params = {'id': id, 'leg': leg, 'weight': weight, 'length': length}
 
     f = open('user_params', 'w')
     json.dump(params, f)
@@ -184,8 +277,7 @@ def file_on_aws(file):
     s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
                       aws_secret_access_key=SECRET_KEY)
 
-    return 'Contents' in s3.list_objects(Bucket='poe-uploads',
-                                         Prefix=file)
+    return 'Contents' in s3.list_objects(Bucket='poe-uploads', Prefix=file)
 
 
 def check_user_exist(id):
@@ -200,7 +292,7 @@ def check_result_available(id, attempt):
     return file_on_aws(f'users/{id}/ATTEMPT{attempt}/results.pkl')
 
 
-def get_time_modified(file):
+def get_modified_time(file):
     s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
                       aws_secret_access_key=SECRET_KEY)
 
@@ -261,5 +353,6 @@ def predict(vid='03SLS1R_MUSSE.mts', id='', leg='R', attempt=1):
 if __name__ == '__main__':
     # app.run(host='0.0.0.0')
     # app.run()
+    # get_results('950203', 1, with_reps=True)
 
-    print(check_user_exist('950203/vid.mts'))
+    print(check_user_exist('950203/ATTEMPT1/vid'))
