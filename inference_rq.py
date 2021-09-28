@@ -151,13 +151,25 @@ def pipe(vid, id, leg, attempt):
         poses, fps = run_video_detection(local_vid_path, id, leg)
         os.remove(local_vid_path)
 
+        all_data = {'poses': poses, 'fps': fps}
+        import pickle  # noqa
+        f = open('poses.pkl', 'wb')
+        pickle.dump(all_data, f)
+        f.close()
+        uploaded = upload_to_aws('poses.pkl', 'poe-uploads',
+                                 os.path.join(s3_base, 'poses.pkl'))
+        if not uploaded:
+            return "issue connecting S3 when uploading data, aborting..."
+        os.remove('poses.pkl')
+
         datasets, datasets100 = extract_reps(poses, fps)
 
-        upload_to_aws('/app/debug.jpg', 'poe-uploads',
-                      os.path.join(s3_base, 'debug.jpg'))
+        uploaded = upload_to_aws('/app/debug.jpg', 'poe-uploads',
+                                 os.path.join(s3_base, 'debug.jpg'))
+        if not uploaded:
+            return "issue connecting S3 when uploading data, aborting..."
         os.remove('/app/debug.jpg')
 
-        import pickle  # noqa
         fp = '/app/data.pkl'
         fp100 = '/app/data_100.pkl'
         f = open(fp, 'wb')
@@ -167,9 +179,14 @@ def pipe(vid, id, leg, attempt):
         pickle.dump(datasets100, f)
         f.close()
 
-        upload_to_aws(fp, 'poe-uploads', os.path.join(s3_base, 'data.pkl'))
-        upload_to_aws(fp100, 'poe-uploads', os.path.join(s3_base,
-                                                         'data_100.pkl'))
+        uploaded = upload_to_aws(fp, 'poe-uploads', os.path.join(s3_base,
+                                                                 'data.pkl'))
+        if not uploaded:
+            return "issue connecting S3 when uploading data, aborting..."
+        uploaded = upload_to_aws(fp100, 'poe-uploads',
+                                 os.path.join(s3_base, 'data_100.pkl'))
+        if not uploaded:
+            return "issue connecting S3 when uploading data, aborting..."
 
         os.remove(fp)
         os.remove(fp100)
