@@ -124,6 +124,13 @@ def main(args, data, fps):
         print('data shape: {}'.format(data.shape))
         print('motion shape: {}'.format(motions.shape))
 
+    for i in range(motions.shape[0]):
+        # print(motions[i, :, 0, 0])
+        max_idx = np.where(motions[i, :, 0, 0] < -900)[0]
+        max_idx = max_idx[0] if len(max_idx) > 0 else 200
+        motions[i, :max_idx, ...] = normalize_coords_motions(
+            motions[i, :max_idx, ...])
+
     datasets = {'femval': [], 'trunk': [], 'hip': [], 'kmfp': []}
     poes = ['femval', 'trunk', 'hip', 'kmfp']
     for KPTS, ANGLES, DIFFS, poe in zip(all_kpts, all_angles, all_diffs, poes):
