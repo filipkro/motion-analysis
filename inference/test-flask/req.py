@@ -15,25 +15,37 @@ file = {'file': open('/home/filipkr/Documents/xjob/vids/real/Videos/SHIELD/shiel
 file = {'file': open('/home/filipkr/Documents/xjob/app-mm/03SLS1R_MUSSE.mts', 'rb')}
 # file = {'file': open('/home/filipkr/Documents/xjob/vids/real/Videos/Hip-pain/hipp-SLS/10SLS1R.mp4', 'rb')}
 # url = 'http://0.0.0.0:5000/'
-url = 'http://0.0.0.0:5000/upload'
-url = 'http://0.0.0.0:5000/get_latest'
+url_base = 'https://poe-analysis.herokuapp.com/'
+url_base = 'http://0.0.0.0:5000/'
+url_end = 'upload'
+# url_end = 'get_latest'
+# url_end = 'get_repetition_result'
+# url_end = 'get_video'
+url = url_base + url_end
 # url = 'http://0.0.0.0:5000/create_user'
 # url = "https://poe-analysis.herokuapp.com/upload"
 
 # response = requests.post(url, files={"form_field_name": file})
+
+# DATA TO UPLOAD TO SERVER
 data = {'id': '950203', 'frames': [1,4,20,600], 'leg': leg, 'weight': '75',
-        'length': '185'}
-header = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-# response  = requests.post(url, data=data)
-# response = requests.post(url, files = {'file': file})
-# response = requests.post(url, data=data, files=file)#, headers=header)
-response = requests.get(url, data=data)
-# print(response.json())
-# resp = requests.post("http://127.0.0.1:5000/predict")
-#resp = requests.post("https://poe-analysis.herokuapp.com/predict")
+        'length': '185', 'attempt': 1}
+
+# POST or GET requests
+response = requests.post(url, data=data, files=file)
+# response = requests.get(url, data=data)
+print(response)
 if response.ok:
     print("Upload completed successfully!")
-    print(response.text)
+    print(type(response.content))
+    with open(response.headers['Content-Disposition'].split('=')[-1], 'wb') as f:
+        f.write(response.content)
+
+    # print(response.encoding)
+    # print()
+    # print(response.apparent_encoding)
+
+    # print(response.file)
 else:
     print("Something went wrong!")
 
