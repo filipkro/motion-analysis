@@ -11,6 +11,8 @@ from configparser import ConfigParser
 from botocore.exceptions import NoCredentialsError
 from dateutil import tz
 from numpy import argmax
+import re
+import datetime
 
 import inference_rq as inference_rq # noqa
 
@@ -42,15 +44,39 @@ app.secret_key = "secret key"
 
 @app.route('/get_video', methods=['GET'])
 def get_video():
-    # id = request.form['id']
-    # attempt = request.form['attempt']
-    id = '950203'
-    attempt = 1
+    id = request.form.get('id')
+    attempt = request.form.get('attempt')
+    # print(request.)
+    if id is None:
+        print('args')
+        id = request.args.get('id')
+    if id is None:
+        print('values')
+        id = request.values.get('id')
+    if id is None:
+        return "No id provided"
+    if attempt is None:
+        print('args')
+        attempt = request.args.get('attempt')
+    if attempt is None:
+        print('values')
+        attempt = request.values.get('attempt')
+    if attempt is None:
+        return "No attempt provided"
+
+    # id = '950203'
+    # attempt = 1
+
+    if not check_user_exist(id):
+        return "User not in database"
+
+    prefix = f'users/{id}/ATTEMPT{attempt}/vid'
+
+    if not file_on_aws(prefix):
+        return "Attempt not in database"
 
     s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
                       aws_secret_access_key=SECRET_KEY)
-
-    prefix = f'users/{id}/ATTEMPT{attempt}/vid'
 
     s3_file = s3.list_objects(Bucket='poe-uploads',
                               Prefix=prefix)['Contents'][0]['Key']
@@ -60,15 +86,68 @@ def get_video():
     downloaded = download_from_aws(file, 'poe-uploads', s3_file)
 
     if downloaded:
-        return send_file(file, download_name='vid.' + s3_file.split('.')[-1], mimetype='video/MP2T')
+        return send_file(file, download_name='vid.' + s3_file.split('.')[-1],
+                         mimetype='video/MP2T')
         # return "file sent ?"
 
     return 'File could not be downloaded from S3'
 
 
-@app.route('/get_latest', methods=['GET'])
+@app.route('/get_user', methods=['POST', 'GET'])
+def get_user():
+    id = request.form.get('id')
+    # print(request.)
+    if id is None:
+        print('args')
+        id = request.args.get('id')
+    if id is None:
+        print('values')
+        id = request.values.get('id')
+    if id is None:
+        return "No id provided"
+    print(request.form)
+    print(request.args)
+    print(request.args.get('id'))
+    print(request.values)
+    print(request.values.get('id'))
+    # attempt = request.form['attempt']
+    # id = '950203'
+    # attempt = 1
+
+    print(f'get user with ID: {id}')
+
+    if not check_user_exist(id):
+        print('user not in database')
+        return "User not in database"
+
+    s3_file = f'users/{id}/user_params.json'
+
+    file = 'user_params.json'
+
+    downloaded = download_from_aws(file, 'poe-uploads', s3_file)
+
+    if downloaded:
+        f = open(file, 'r')
+        data = json.load(f)
+        f.close()
+        return str(data)
+        # return "file sent ?"
+
+    return 'File could not be downloaded from S3'
+
+
+@app.route('/get_latest', methods=['POST', 'GET'])
 def get_latest():
-    id = request.form['id']
+    id = request.form.get('id')
+    # print(request.)
+    if id is None:
+        print('args')
+        id = request.args.get('id')
+    if id is None:
+        print('values')
+        id = request.values.get('id')
+    if id is None:
+        return "No id provided"
 
     if not check_user_exist(id):
         return "User not in database"
@@ -88,7 +167,16 @@ def get_latest():
 
 @app.route('/get_all', methods=['GET'])
 def get_all_results():
-    id = request.form['id']
+    id = request.form.get('id')
+    # print(request.)
+    if id is None:
+        print('args')
+        id = request.args.get('id')
+    if id is None:
+        print('values')
+        id = request.values.get('id')
+    if id is None:
+        return "No id provided"
 
     if not check_user_exist(id):
         return "User not in database"
@@ -109,8 +197,25 @@ def get_all_results():
 
 @app.route('/get_repetition_result', methods=['GET'])
 def get_repetition():
-    id = request.form['id']
-    attempt = request.form['attempt']
+    id = request.form.get('id')
+    attempt = request.form.get('attempt')
+    # print(request.)
+    if id is None:
+        print('args')
+        id = request.args.get('id')
+    if id is None:
+        print('values')
+        id = request.values.get('id')
+    if id is None:
+        return "No id provided"
+    if attempt is None:
+        print('args')
+        attempt = request.args.get('attempt')
+    if attempt is None:
+        print('values')
+        attempt = request.values.get('attempt')
+    if attempt is None:
+        return "No attempt provided"
 
     if not check_user_exist(id):
         return "User not in database"
@@ -166,8 +271,25 @@ def get_results(id, attempt, with_reps=False):
 @app.route('/upload', methods=['POST'])
 def upload_video():
 
-    id = request.form['id']
-    leg = request.form['leg']
+    id = request.form.get('id')
+    leg = request.form.get('leg')
+    # print(request.)
+    if id is None:
+        print('args')
+        id = request.args.get('id')
+    if id is None:
+        print('values')
+        id = request.values.get('id')
+    if id is None:
+        return "No id provided"
+    if leg is None:
+        print('args')
+        leg = request.args.get('leg')
+    if leg is None:
+        print('values')
+        leg = request.values.get('leg')
+    if leg is None:
+        return "No leg provided"
 
     if not check_user_exist(id):
         return "User not in database"
@@ -261,6 +383,22 @@ def create_user():
         return "User successfully created"
     else:
         return "Something went wrong when saving to S3, plz view logs"
+
+
+def fix_id(id):
+    id = re.sub('[^0-9]', '', str(id))
+    current = datetime.date.today().year
+    if not (id[0] == '1' or id[0] == '2'):
+        if len(id) == 6 or len(id) == 10:
+            year = int(id[:2])
+            id = '20' + id if year < current % 100 else '19' + id
+        else:
+            return id, 'Wrong id'
+    if len(id) == 8:
+        id = id + 'XXXX'
+        return id, 'Wrong id, add four digits'
+
+    return id, ''
 
 
 def get_attempt_nbr(id):
