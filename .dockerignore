@@ -4,5 +4,8 @@ __pycache__
 
 # models not used?
 
+*.mp4
+*.mts
+
 pose/mmpose-files/hrnet_w48_coco_wholebody_384x288_dark*
 pose/mmdet-files/yolo*
