@@ -62,6 +62,31 @@ def get_video():
     return 'File could not be downloaded from S3'
 
 
+@app.route('/delete_user', methods=['POST'])
+def delete_user():
+    id = backend_utils.get_variable_from_req(request, 'id')
+    if id is None:
+        return "No id provided"
+
+    s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
+                      aws_secret_access_key=SECRET_KEY)
+
+    files = s3.list_objects(Bucket='poe-uploads',
+                              Prefix=f'users/{id}')['Contents']
+    keys = [{'Key': key['Key']} for key in files]
+    keys.append({'Key': f'users/{id}'})
+    keys = {'Objects': keys}
+
+    deleted = s3.delete_objects(Bucket='poe-uploads', Delete=keys)
+
+    if deleted:
+        print(f'Successfully deleted user {id}')
+        return 'Delete successful'
+    else:
+        print(f'Could not delete user {id}')
+        return 'Delete unsuccessful'
+
+
 @app.route('/get_user', methods=['POST', 'GET'])
 def get_user():
     id = backend_utils.get_variable_from_req(request, 'id')
@@ -90,7 +115,7 @@ def get_user():
     return 'File could not be downloaded from S3'
 
 
-@app.route('/get_latest', methods=['POST', 'GET'])
+@app.route('/get_latest', methods=['GET'])
 def get_latest():
 
     id = backend_utils.get_variable_from_req(request, 'id')
@@ -104,13 +129,29 @@ def get_latest():
     if backend_utils.check_ongoing(id, attempt):
         return "Assessment not finished"
     if not backend_utils.check_result_available(id, attempt):
-        return "No assessment for this attempt"
+        return "Attempt not in database"
 
     res = backend_utils.get_results(id, attempt)
     if type(res) == dict:
         return json.dumps(res)
     else:
         return res
+
+
+@app.route('/ongoing', methods=['GET'])
+def get_ongoing():
+    id = backend_utils.get_variable_from_req(request, 'id')
+    if id is None:
+        return "No id provided"
+
+    if not backend_utils.check_user_exist(id):
+        return "User not in database"
+
+    attempt = backend_utils.get_attempt_nbr(id) - 1
+    if backend_utils.check_ongoing(id, attempt):
+        return "Ongoing"
+    else:
+        return "Finished"
 
 
 @app.route('/get_all', methods=['GET'])
@@ -123,7 +164,7 @@ def get_all_results():
     if not backend_utils.check_user_exist(id):
         return "User not in database"
 
-    last_attempt = backend_utils.get_attempt_nbr(id) - 1
+    last_attempt = backend_utils.get_attempt_nbr(id)
     results = {}
 
     for attempt in range(1, last_attempt):
@@ -153,7 +194,7 @@ def get_repetition():
     if backend_utils.check_ongoing(id, attempt):
         return "Assessment not finished"
     if not backend_utils.check_result_available(id, attempt):
-        return "No assessment for this attempt"
+        return "Attempt not in database"
 
     res = backend_utils.get_results(id, attempt, with_reps=True)
     if type(res) == dict:
@@ -217,7 +258,7 @@ def upload_video():
             return f"{filename} uploaded,\n{backend_utils.predict(vid=new_name, id=id, leg=leg, attempt=attempt)}"
         else:
             print("not uploaded to aws correctly")
-            return "not uploaded to aws correctly"
+            return "File could not be uploaded to S3"
 
 
 @app.route("/")
@@ -229,8 +270,15 @@ def hello_world():
 def create_user():
     id = request.form['id']
     leg = request.form['leg']
-    weight = request.form['weight']
-    length = request.form['length']
+    # weight = request.form['weight']
+    # length = request.form['length']
+    # id = request.form.'id')
+    # leg = request.form.get('leg')
+    weight = request.form.get('weight')
+    length = request.form.get('length')
+
+    # if id is None:
+    #     return
 
     if backend_utils.check_user_exist(id):
         # overwrite previous information??

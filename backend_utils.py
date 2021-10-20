@@ -74,7 +74,7 @@ def get_results(id, attempt, with_reps=False):
         else:
             return {'time': str(utc), 'pred': pred, 'conf': conf}
 
-    return "Something went wrong when trying to fetch result from S3"
+    return "File could not be downloaded from S3"
 
 
 def fix_id(id):
@@ -132,7 +132,7 @@ def get_modified_time(file):
     return utc.astimezone(to_zone)
 
 
-def upload_to_aws(local_file, bucket, s3_file):
+def upload_to_aws(local_file, s3_file):
     s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
                       aws_secret_access_key=SECRET_KEY)
 
@@ -149,7 +149,7 @@ def upload_to_aws(local_file, bucket, s3_file):
         return False
 
 
-def download_from_aws(local_file, bucket, s3_file):
+def download_from_aws(local_file, s3_file):
     s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
                       aws_secret_access_key=SECRET_KEY)
 
