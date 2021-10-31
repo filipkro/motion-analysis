@@ -1,0 +1,259 @@
+% !TEX root=../../mt-motion-analysis.tex
+\chapter{Background - Deep learning} \label{ch:dl}
+
+% \section{Machine learning - ELLER BARA DL??} \label{sec:ML}
+A supervised machine learning problem can be described as finding a mapping between some input and output data, e.g. an image and a category, based on labeled input-output combinations. The idea with such methods is that a mapping found for the available data also should represent unseen data of the same type, i.e. it should generalize. To be able to get a measure of this generalization the available data is commonly divided into two parts, training data and test data. The training data is used to find the mapping and the test data is used to evaluate how well it performs on unseen data \cite{Bishop2006}.
+
+This chapter gives a brief introduction to a special type of machine learning called deep learning, which forms the basis of this work. The evaluation metrics used are also presented along with the problem of explainability in deep learning and a method to achieve ordinal classification.
+
+\section{Evaluation metrics}
+To be able to evaluate and compare models some evaluation metrics are needed. Table~\ref{tab:eval-metrics} shows four common classification metrics and the way they are calculated from the quantities defined in Definition \ref{def:quants}.
+
+\begin{minipage}[t]{0.2\textwidth}
+    \strut\vspace*{-\baselineskip}\begin{definition}
+        \label{def:quants}
+    \end{definition}
+\end{minipage}\hspace{0.02}\begin{minipage}[t]{0.7\textwidth}
+  \textbf{TP, True positives:} Correctly classified positive samples \\
+  \textbf{FP, False positives:} Incorrectly classified positive samples \\
+  \textbf{TN, True negatives:} Correctly classified negative samples \\
+  \textbf{FN, False negatives:} Incorrectly classified negative samples \\
+\end{minipage}
+
+\begin{table}
+ \centering
+ \caption{Evaluation metrics using quantities in Definition \ref{def:quants}.}
+ \label{tab:eval-metrics}
+ {\tabulinesep=1.2mm
+ \begin{tabu}{c|c}
+   Precision  & $\frac{\text{TP}}{\text{TP} + \text{FP}}$ \\ \hdashline
+   Recall     & $\frac{\text{TP}}{\text{TP} + \text{FN}}$ \\ \hdashline
+   F1 score   & $2 \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}$ \\ \hdashline
+   Accuracy   & $\frac{\text{TP} + \text{TN}}{\text{TP} + \text{FP} + \text{TN} + \text{FN}}$
+ \end{tabu}}
+\end{table}
+
+As can be seen in Table~\ref{tab:eval-metrics}, the F1 score is the harmonic mean of the precision and the recall. For problems with imbalanced data this might give a better idea of the actual performance compared to the accuracy. Precision, recall, and F1 are for binary classifications. When used in a multiclass setting they are computed in a one-vs-all fashion for all classes and then combined in some way. In this work they are macro averaged, i.e. calculated as the average of all scores. The macro F1 is calculated from the individual F1 scores according to
+
+\begin{equation}
+    F1_{mac} = \frac{1}{N} \sum_{i=1}^NF1_i.
+\end{equation}
+
+Another way to present the result of a classification task is using the confusion matrix. This is a matrix where the columns corresponds to the predicted classes and the rows to the correct classes. Hence, this metric shows what kind of errors the model makes. An example of a confusion matrix is shown in Figure \ref{fig:conf-example}. All entries on the main diagonal are correctly classified; in this example it can, for instance, be seen how 43 1s are predicted as 0s.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.6\textwidth]{files/figs/backg/conf-example.eps}
+  \caption{An example of a confusion matrix. The entries on the diagonal are correctly classified, while the position of an off-diagonal entry shows what kind of error has been made. The true class is given by the row and the predicted class by the column.}
+  \label{fig:conf-example}
+\end{figure}
+
+\section{Historical background of deep learning} \label{sec:dl-history}
+In 1943, McCulloch and Pitts \cite{McCulloch1943} presented a mathematical model of a neuron which at the time had limited capabilities (e.g. it did not learn), but lay the foundations for much of what today is considered to be deep learning. Ivakhnenko and Lapa \cite{Ivakhnenko1965} introduced what would later be called deep learning with the first multi-layered network in 1965. The first convolutional network was introduced by Fukushima in 1980 \cite{Fukushima1980}.
+A few years later, in 1989, LeCun et al. \cite{LeCun1989} showed it possible to train such networks with backpropagation and illustrated their effectiveness for computer vision problems. In 2009 Raina et al. \cite{Raina2009} suggested that \glspl{dnn} could efficiently be trained on \glspl{gpu}. Krizhevsky et al. \cite{Krizhevsky2012} used this when they with AlexNet proved it possible to train deeper networks which also greatly outperformed models of the time at computer vision tasks. Since then deep learning based methods has been adopted in various fields, such as computer vision, natural language processing, and even autonomous vehicles \cite{NazmusSaadat2020}.
+
+\section{Deep Neural Networks}
+\glspl{dnn} are combinations of linear and non-linear functions trained to approximate some other, potentially very complicated, function. The output of the network is formed as $f(x) = f_n \circ f_{n-1} \circ \hdots \circ f_1 \circ f_0(x)$ resulting in the layer terminology since the output from one function is passed as input to the subsequent one \cite{Goodfellow2016}.
+
+Below the building blocks used in our work are briefly explained.
+
+\subsubsection{Dense layer}
+The dense, or fully connected, layer is the basic model for a feedforward network. The outputs of such a layer is formed as linear combinations of the inputs and bias terms. Usually a non-linear activation function is applied to this to be able to capture more general behaviors, resulting in the output
+
+\begin{equation}
+ y_i = h\Big( \sum_{j=1}^D w_{ij}x_j + b_i \Big)
+ \label{eq:dense}
+\end{equation}
+
+where $h(\cdot)$ is a, possibly non-linear, activation function. $x_j$, $j \in \{1, \hdots, D\}$ are the inputs to the layer, $w_{ij}$ and $b_i$ are the weights and biases learned during training \cite{Bishop2006}. A network with two dense layers is shown in Figure \ref{fig:dense}.
+
+\begin{figure}
+ \centering
+ \includegraphics[width=0.5\textwidth]{files/figs/backg/mlp.png}
+ \caption{Feedforward neural network with two densely connected layers. Each line corresponds to one trainable parameter. Here, $x_0$ and $z_0$ can be seen as ones added to the inputs introducing the bias terms \cite{Bishop2006}.}
+ \label{fig:dense}
+\end{figure}
+
+% \FloatBarrier
+
+\subsubsection{Convolutional layers}
+Convolutional layers have proved successful for feature extraction from for instance time series or images. A reason for this is that they are equivariant to translation, meaning that patterns in a time series will be recognized in the same way no matter at which time steps they occur. The 1D convolution operation can be expressed as \eqref{eq:conv}.
+
+\begin{equation}
+ (x * w)(t) = \sum_{a=-\infty}^\infty x(a)w(t-a)
+ \label{eq:conv}
+\end{equation}
+
+where $x$ is the input and $w$ is the kernel or filter which consist of the trainable parameters. As the kernel size is not affected by the input size the convolutional layer can be applied to inputs of different size, which is not possible with, for instance, the fully connected layer. When applied to images the convolution is performed in two dimensions. \cite{Goodfellow2016}.
+
+% \FloatBarrier
+
+\subsubsection{Pooling layers}
+Pooling layers are used to reduce the dimensionality of feature maps. Common types of poolings are the max and the average pooling methods. Traditional max pooling represents nearby numbers by it maximum value while average pooling uses their average. This type of max pooling has proved efficient together with convolutional layers for computer vision tasks. Figure \ref{fig:pooling} illustrates how the pooling works. It can also be performed globally, i.e. on the entire feature map, which can be a way of handling differently sized data. For a \gls{tsc} problem, it is for instance possible to use size agnostic convolutional layers as feature extractors followed by a \gls{gap} layer resulting in a fixed size of the data to be classified \cite{Chollet2018}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.4\textwidth]{files/figs/backg/pooling.png}
+  \caption{Illustration of max and average pooling with pooling size 2$\times$2 and stride 2$\times$2. Image from \cite{Wang2018}.}
+  \label{fig:pooling}
+\end{figure}
+
+% \FloatBarrier
+
+\subsubsection{Activation functions}
+The activation functions in a neural network has two main tasks. The first one is to introduce non-linearity to an otherwise linear model. The function $h(\cdot)$ in \eqref{eq:dense} is an example of such an activation function. A common such function is \gls{relu}, $h(z) = \max\{0,z\}$. Benefits with \gls{relu} is that it in its active region ($z>0$) does not have a suppressing effect on the gradient and it is easily computable. A drawback, however, is that the gradient is zero in its inactive region ($z < 0$) meaning gradient based training methods does not work here. An alternative to avoid this issue is the Leaky-\gls{relu} given by $h(z) = \max\{0.01 z, z\}$.
+\gls{relu} and Leaky-\gls{relu} are shown in Figure \ref{fig:relu} and \ref{fig:leaky-relu}, respectively. Activation functions are also used for the output of the network, e.g. to obtain outputs representing probabilities. The sigmoid function, $h(z) = 1/(1+\exp(-z))$, shown in Figure \ref{fig:sigmoid}, can be used for this.
+The sigmoid function will saturate the output between 0 and 1. However, if the model has several outputs, e.g., representing the probabilities of the input belonging to different classes, the total probability will not sum to 1. In this case the softmax function, $h(z)_i = \exp(z_i)/\sum_{j=1}^K \exp(z_j)$, can be used instead \cite{Goodfellow2016}. %With such an activation each output will be directly dependent on every other output .
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[t]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{files/figs/backg/relu.png}
+    \caption{ReLU}
+    \label{fig:relu}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[t]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{files/figs/backg/leaky_relu.png}
+    \caption{Leaky-ReLU}
+    \label{fig:leaky-relu}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[t]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{files/figs/backg/sigmoid.png}
+    \caption{Sigmoid}
+    \label{fig:sigmoid}
+  \end{subfigure}
+  \caption{Different activation functions, note that the slope of leaky ReLU for negative numbers is exaggerated for visualization purposes. }
+  \label{fig:activations}
+\end{figure}
+
+
+
+\section{Training}
+% The training of a network is performed by evaluating a loss function, which describes the desired behavior, on the training data.
+
+During training of a network a loss function, $\mathcal{L}$, which describes the desired behavior, is evaluated on the training data. To improve the performance of the model its parameters are changed to minimize this loss. In deep learning problems, this optimization is usually performed with some gradient descent inspired method,
+
+\begin{equation}
+ \pmb{W}_{k+1} = \pmb{W}_k - \alpha \pmb{D},
+ \label{eq:grad-desc}
+\end{equation}
+
+where $\pmb{W}_k$ denotes model parameters at iteration $k$, $\alpha$ the learning rate or step size, and $\pmb{D}$ the parameter update direction, e.g. $\frac{\partial \mathcal{L}}{\partial \pmb{W}}$ or a weighted average of earlier gradients.This means that the parameters are updated in the direction which reduces the loss the most. With a large training data set, the computation of the gradient quickly becomes expensive. A remedy for this has been to use stochastic or mini-batch gradient descent methods. Such algorithms use one or a few data points from the training set to estimate the gradient for each parameter update. Algorithms common today often use momentum, where previous gradients affect the parameter update direction, and adaptive learning rates (step size of parameter update), allowing different learning rate for different parameters \cite{Goodfellow2016}. One example of such a method is the Adam optimizer \cite{Kingma2015}.
+
+The gradients of the loss with respect to the model parameters are calculated using the back-propagation algorithm \cite{Rumelhart1987} which recursively uses the chain rule,
+
+\begin{equation}
+ \frac{dz}{dx} = \frac{dz}{dy}\frac{dy}{dx},
+ \label{eq:chain}
+\end{equation}
+
+to propagate the loss gradient through the network. For a network where $f_0, f_1, \hdots, f_n$ denotes the outputs of the $n+1$ layers, with corresponding layer parameters $\pmb{w}_0, \pmb{w}_1, \hdots, \pmb{w}_n$ and loss function $\mathcal{L}$, the gradient is calculated by first performing a forward pass of input $\pmb{x}$. This allows for computation of the the gradient w.r.t. the output of the final layer, $f_n$, either analytically or using automatic differentiation. As both the structure and the parameters of the layers are known this can be used to calculate the gradient w.r.t. the parameters in that layer, $\pmb{w}_n$, as well as the output of the previous layer, $f_{n-1}$. By applying
+
+\begin{equation}
+  \frac{\partial \mathcal{L}}{\partial f_k} & = \frac{\partial \mathcal{L}}{\partial f_{k+1}} \frac{\partial f_{k+1}}{\partial f_k} \label{eq:bp-layer}
+\end{equation}
+
+recursively, the gradient is propagated through the network and from this
+
+\begin{equation}
+  \frac{\partial \mathcal{L}}{\partial \pmb{w}_k} & = \frac{\partial \mathcal{L}}{\partial f_{k}} \frac{\partial f_{k}}{\partial \pmb{w}_k}
+  \label{eq:bp-params}
+\end{equation}
+
+gives the gradients needed for the optimization.
+
+% \begin{subequations} \label{eq:backprop}
+%  \begin{align}
+%   \frac{\partial \mathcal{L}}{\partial f_k} & = \frac{\partial \mathcal{L}}{\partial f_{k+1}} \frac{\partial f_{k+1}}{\partial f_k} \label{eq:bp-layer} \\
+%   \frac{\partial \mathcal{L}}{\partial \pmb{w}_k} & = \frac{\partial \mathcal{L}}{\partial f_{k}} \frac{\partial f_{k}}{\partial \pmb{w}_k}    \label{eq:bp-params}
+%  \end{align}
+% \end{subequations}
+
+\subsubsection{Loss functions}
+For a classification problem with $K$ mutually exclusive classes the categorical cross-entropy is commonly used. With this loss the labels are one-hot encoded meaning that each label is represented by $K$ binary variables, i.e. $y_n \in \mathbb{Z}_2^K$. Each variable represents a class and $y_n^{(k)} = 1$ for the $k$ corresponding to the class of the label and 0 otherwise. The final layer of the model has $K$ outputs with softmax activation. The loss to be minimized is \cite{Bishop2006}
+
+\begin{equation}
+ \mathcal{L}(\pmb{x}, \pmb{W}) = - \sum_{n=1}^N \sum_{k=1}^K \lambda^{(k)} y_i^{(k)} \log \hat{y}_n^{(k)}(x_n, \pmb{W})
+ \label{eq:cat-cross-entr}
+\end{equation}
+where $y_n^{(k)}$ denotes the correct binary label of class $k$ for data point $n$ in the training set, $\hat{y}_n^{(k)}$ the corresponding prediction from the model, and $\lambda^{(k)}$ weight for class.
+% \begin{conditions}
+%     $$y_n^{(k)}$$       & = & the correct binary label of class $k$ for data point $n$ in the training set \\
+%     $$\hat{y}_n^{(k)}$$ & = & the corresponding prediction from the model \\
+%     $$\lambda^{(k)}$$   & = & weight for class $k$.
+% \end{conditions}
+
+The categorical cross-entropy will aim to maximize the predicted probability for the correct class. However, incorrect probabilities have no direct effect on the loss. To be able to affect what kind of errors the model makes in its predictions a modification of this loss can be used. This modified loss, here referred to as confusion-entropy, introduces a matrix, $U$, which can be seen as a target confusion matrix distribution. Entries in $U$ rewards predictions at the corresponding positions in the confusion matrix, including possibly incorrect classifications. The confusion-entropy loss is \cite{Abbass2018}
+
+\begin{equation}
+    \mathcal{L}(\pmb{x}, \pmb{W}, U) = - \sum_{i=1}^K \sum_{j=1}^K u_{ij} \log \sum_{n=1}^N y_n^{(i)} \hat{y}_n^{(j)}(x_n, \pmb{W}).
+    \label{eq:confusion-entropy}
+\end{equation}
+
+
+\section{Explainability} \label{sec:explainability}
+Much of the recent progress in the deep learning space is inherently incomprehensible for us humans, due to its black-box nature and the size of the models \cite{Du2018}. However, explainability is important at many stages of the development of an AI-system. When the systems performance is at sub-human levels, it simplifies for human experts to improve it. When the system achieves similar results to those of human experts, it can help enforce trust to the system. Finally, in a scenario where the AI outperforms humans, it can help us get a better understanding of the problem \cite{Selvaraju2016}. With these methods playing a bigger role in fields such as healthcare the importance of explainable decisions also grows from a legal and ethical perspective \cite{Amann2020}.
+
+\subsubsection{Gradient-weighted Class Activation Mapping (Grad-CAM)} \label{sec:grad-cam}
+Although most deep learning models are not interpretable, there are post-hoc methods which tries to explain decisions. Selvaraju et al. \cite{Selvaraju2016} suggested one such method, called \gls{grad-cam}, where an activation map is calculated which shows what parts of the data is important for the decisions. This method is typically applied to the final convolutional layer ahead of, e.g., \gls{gap} layer. Let $y_c$ be the output corresponding to class $c$ and $A$ be the feature map, of height $H$, width $W$, and with $F$ filters, from which the activation should be calculated. The \gls{grad-cam} activation, $M_{GC}$, is then calculated as
+
+% Considering a neural network with convolutional layers as feature extractors followed by \gls{gap} and dense layers for classification  is based on the final part of the network.
+
+\begin{align}
+ \begin{split}
+  w_k^c &= \frac{1}{H \times W} \sum_{i=1}^H \sum_{j=1}^W \frac{\partial y_c}{\partial A_{ij}^k} \\
+  M_{GC} &= ReLU \big ( \sum_{k=1}^F w_k^c A^k \big).
+  \label{eq:grad-cam}
+ \end{split}
+\end{align}
+
+With time series inputs, the resulting activation map, $M_{GC} \in \mathbb{R}^{H \times W}$, gives importance values for each time step if the network does not alter the time dimension of the data.% If the input is a time series this means that by designing the network to not alter the time dimension an importance value is obtained for each time step.
+
+\section{Consistent Rank Logits (CORAL)}
+Categorical data with a natural ordering are considered to be ordinal, examples of such data are the response to some medical treatment (e.g. poor, fair, good) \cite{Agresti2007} or the age of a person \cite{Cao2019}.
+
+When classifying ordinal data, it is desirable to exploit the fact that the categories are ordered \cite{Agresti2007}. An ordinal classification problem, or ordinal regression as it is also referred to, can be formulated as assigning labels, $y \in \mathcal{Y} = \{\mathcal{C}_0, \mathcal{C}_1, \hdots, \mathcal{C}_{K-1} \}$, to inputs $\pmb{x}$, where the classes $\mathcal{C}_0 \prec \mathcal{C}_1 \prec \hdots \prec \mathcal{C}_{K-1}$ according to some ordering relation \cite{Cao2019}.
+
+Li and Lin \cite{Li2007} presented a method for ordinal regression where the combined result of $K-1$ binary classifiers for $K$ classes were used. Each classifier checked whether the rank of the sample class was larger than rank $r_k \in \{r_1, \hdots r_{K-1}\}$. Niu et al. \cite{Niu2016} developed this further using a multi-output \gls{cnn} as $K-1$ binary classifiers, called OR-CNN. The classifiers share all weights except the ones in the output layer. This method achieved \gls{sota} performance on datasets where age was estimated based on facial images. However, consistency was not guaranteed in the predictions, e.g. sometimes simultaneously predicting an age under 20 and over 30.
+Cao et al. \cite{Cao2019} addressed this issue with \gls{coral} which is an architecture-agnostic method that can extend any neural network based classifier. Similarly to OR-CNN, \gls{coral} uses $K-1$ binary classifiers, here however sharing all weights parameters apart from the biases in the output layer. Instead of representing the labels as one-hot encodings they are now formed as $K-1$ binary labels, i.e. $y_n \in \mathbb{Z}_2^{K-1}$, where $y_n^{(k)} = 1$ if the rank of the class is greater than $r_k$ and 0 otherwise. The loss function to minimize is
+
+\begin{equation}
+ \mathcal{L}(\pmb{x}, \pmb{W}, \pmb{b}) = - \sum_{n=1}^N \sum_{k=1}^{K-1} \lambda^{(k)} [\log(\sigma(g(\pmb{x}_n, \pmb{W}) + b_k))y_n^{(k)} + \log(1 - \sigma(g(\pmb{x}_n, \pmb{W}) + b_k))(1 - y_n^{(k)})],
+ \label{eq:coral-loss}
+\end{equation}
+
+where $\pmb{W}$ denotes all model parameters except biases of final layer, $\pmb{b}$ the bias weights of final layer, $\lambda^{(k)}$ the loss weight for rank $k$, $g(\pmb{x}_n, \pmb{W})$ the output of penultimate layer, $\sigma(z)$ the logistic sigmoid function, and $\sigma(g(\pmb{x}_n, \pmb{W}) + b_k)$ predicted output of the binary classifier.
+
+% \begin{conditions}
+%  $$\pmb{W}$$               & = & all model parameters except biases of final layer \\
+%  $$\pmb{b}$$               & = & bias weights of final layer \\
+%  $$\lambda^{(k)}$$         & = & loss weight for rank $k$ \\
+%  $$g(\pmb{x}_n, \pmb{W})$$ & = & output of penultimate layer \\
+%  $$\sigma(z)$$             & = & logistic sigmoid function, $1/(1 + \exp(-z))$ \\
+%  $$\sigma(g(\pmb{x}_n, \pmb{W}) + b_k)$$ & = & predicted output of binary classifier $k$
+% \end{conditions}
+
+It can be shown that
+
+\begin{equation}
+ b_1 \geq b_2 \geq \hdots \geq b_{K-1}.
+\end{equation}
+
+The proof can be found in \cite{Cao2019} and from this and the shared weights it follows that
+
+\begin{equation}
+ \widehat{P} \big( y_n > r_1 \big) \geq \widehat{P} \big( y_n > r_2 \big) \geq \hdots \geq \widehat{P} \big( y_n > r_{K-1} \big)
+\end{equation}
+
+since the only thing that differs between the predictions is the bias. The probabilities for the individual classes are computed from this as
+
+\begin{equation}
+ \begin{alignedat}{2}
+  &\widehat{P}\big(\mathcal{C}_0 \big) &&= 1 - \widehat{P}\big(y_n > r_1\big) \\
+  &\widehat{P}\big(\mathcal{C}_1 \big) &&= \widehat{P}\big(y_n > r_1\big) - \widehat{P}\big(y_n > r_2\big) \\
+  & &&\vdots \\
+  &\widehat{P}\big(\mathcal{C}_{K-1} \big) &&= \widehat{P}\big(y_n > r_{K-1}\big).
+ \end{alignedat}
+\end{equation}

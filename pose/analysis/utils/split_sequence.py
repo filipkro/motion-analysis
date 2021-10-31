@@ -81,11 +81,11 @@ def split_peaks(poses, joint=13, debug=False):
             plt.plot(ts[:, joint, 1])
             plt.show()
             plt.plot(ts[:, joint, 1])
-        print('first if: {0}, {1} and {2}, {3}'.format(peaks[-i - 1],
-                                                       int(min_len / 2),
-                                                       peaks[-i - 1],
-                                                       len(ts) -
-                                                       int(min_len / 2)))
+            print('first if: {0}, {1} and {2}, {3}'.format(peaks[-i - 1],
+                                                           int(min_len / 2),
+                                                           peaks[-i - 1],
+                                                           len(ts) -
+                                                           int(min_len / 2)))
         if peaks[-i - 1] <= int(min_len / 2):
             pose_seqs[i, ...] = ts[:min_len, ...]
         elif peaks[-i - 1] <= (len(ts) - int(min_len / 2)):

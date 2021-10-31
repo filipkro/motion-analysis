@@ -1,0 +1,999 @@
+@inproceedings{Wang2017,
+ abstract = {We propose a simple but strong baseline for time series classification from scratch with deep neural networks. Our proposed baseline models are pure end-to-end without any heavy preprocessing on the raw data or feature crafting. The proposed Fully Convolutional Network (FCN) achieves premium performance to other state-of-the-art approaches and our exploration of the very deep neural networks with the ResNet structure is also competitive. The global average pooling in our convolutional model enables the exploitation of the Class Activation Map (CAM) to find out the contributing region in the raw data for the specific labels. Our models provides a simple choice for the real world application and a good starting point for the future research. An overall analysis is provided to discuss the generalization capability of our models, learned features, network structures and the classification semantics.},
+ archivePrefix = {arXiv},
+ arxivId = {1611.06455},
+ author = {Wang, Zhiguang and Yan, Weizhong and Oates, Tim},
+ booktitle = {Proceedings of the International Joint Conference on Neural Networks},
+ doi = {10.1109/IJCNN.2017.7966039},
+ eprint = {1611.06455},
+ isbn = {9781509061815},
+ month = {jun},
+ pages = {1578--1585},
+ publisher = {Institute of Electrical and Electronics Engineers Inc.},
+ title = {{Time series classification from scratch with deep neural networks: A strong baseline}},
+ volume = {2017-May},
+ year = {2017}
+}
+@article{IsmailFawaz2019,
+ abstract = {Time Series Classification (TSC) is an important and challenging problem in data mining. With the increase of time series data availability, hundreds of TSC algorithms have been proposed. Among these methods, only a few have considered Deep Neural Networks (DNNs) to perform this task. This is surprising as deep learning has seen very successful applications in the last years. DNNs have indeed revolutionized the field of computer vision especially with the advent of novel deeper architectures such as Residual and Convolutional Neural Networks. Apart from images, sequential data such as text and audio can also be processed with DNNs to reach state-of-the-art performance for document classification and speech recognition. In this article, we study the current state-of-the-art performance of deep learning algorithms for TSC by presenting an empirical study of the most recent DNN architectures for TSC. We give an overview of the most successful deep learning applications in various time series domains under a unified taxonomy of DNNs for TSC. We also provide an open source deep learning framework to the TSC community where we implemented each of the compared approaches and evaluated them on a univariate TSC benchmark (the UCR/UEA archive) and 12 multivariate time series datasets. By training 8730 deep learning models on 97 time series datasets, we propose the most exhaustive study of DNNs for TSC to date.},
+ archivePrefix = {arXiv},
+ arxivId = {1809.04356},
+ author = {{Ismail Fawaz}, Hassan and Forestier, Germain and Weber, Jonathan and Idoumghar, Lhassane and Muller, Pierre Alain},
+ doi = {10.1007/s10618-019-00619-1},
+ eprint = {1809.04356},
+ issn = {1573756X},
+ journal = {Data Mining and Knowledge Discovery},
+ keywords = {Classification,Deep learning,Review,Time series},
+ month = {jul},
+ number = {4},
+ pages = {917--963},
+ publisher = {Springer New York LLC},
+ title = {{Deep learning for time series classification: a review}},
+ volume = {33},
+ year = {2019}
+}
+@inproceedings{Zhang2020,
+ abstract = {While being the de facto standard coordinate representation in human pose estimation, heatmap is never systematically investigated in the literature, to our best knowledge. This work fills this gap by studying the coordinate representation with a particular focus on the heatmap. Interestingly, we found that the process of decoding the predicted heatmaps into the final joint coordinates in the original image space is surprisingly significant for human pose estimation performance, which nevertheless was not recognised before. In light of the discovered importance, we further probe the design limitations of the standard coordinate decoding method widely used by existing methods, and propose a more principled distribution-aware decoding method. Meanwhile, we improve the standard coordinate encoding process (i.e. transforming ground-truth coordinates to heatmaps) by generating accurate heatmap distributions for unbiased model training. Taking the two together, we formulate a novel Distribution-Aware coordinate Representation of Keypoint (DARK) method. Serving as a model-agnostic plug-in, DARK significantly improves the performance of a variety of state-of-the-art human pose estimation models. Extensive experiments show that DARK yields the best results on two common benchmarks, MPII and COCO, consistently validating the usefulness and effectiveness of our novel coordinate representation idea.},
+ archivePrefix = {arXiv},
+ arxivId = {1910.06278},
+ author = {Zhang, Feng and Zhu, Xiatian and Dai, Hanbin and Ye, Mao and Zhu, Ce},
+ doi = {10.1109/cvpr42600.2020.00712},
+ eprint = {1910.06278},
+ month = {aug},
+ pages = {7091--7100},
+ publisher = {Institute of Electrical and Electronics Engineers (IEEE)},
+ title = {{Distribution-Aware Coordinate Representation for Human Pose Estimation}},
+ year = {2020}
+}
+
+@misc{mmpose,
+title = {{MMP}ose - {O}pen{MML}ab {P}ose {E}stimation {T}oolbox and {B}enchmark},
+url = {https://github.com/open-mmlab/mmpose}}
+
+@misc{tsfresh,
+title = {tsfresh},
+url = {https://tsfresh.readthedocs.io}}
+
+@inproceedings{Lin2014,
+abstract = {We present a new dataset with the goal of advancing the state-of-the-art in object recognition by placing the question of object recognition in the context of the broader question of scene understanding. This is achieved by gathering images of complex everyday scenes containing common objects in their natural context. Objects are labeled using per-instance segmentations to aid in precise object localization. Our dataset contains photos of 91 objects types that would be easily recognizable by a 4 year old. With a total of 2.5 million labeled instances in 328k images, the creation of our dataset drew upon extensive crowd worker involvement via novel user interfaces for category detection, instance spotting and instance segmentation. We present a detailed statistical analysis of the dataset in comparison to PASCAL, ImageNet, and SUN. Finally, we provide baseline performance analysis for bounding box and segmentation detection results using a Deformable Parts Model. {\textcopyright} 2014 Springer International Publishing.},
+archivePrefix = {arXiv},
+arxivId = {1405.0312},
+author = {Lin, Tsung Yi and Maire, Michael and Belongie, Serge and Hays, James and Perona, Pietro and Ramanan, Deva and Doll{\'{a}}r, Piotr and Zitnick, C. Lawrence},
+booktitle = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
+doi = {10.1007/978-3-319-10602-1_48},
+eprint = {1405.0312},
+issn = {16113349},
+month = {may},
+number = {PART 5},
+pages = {740--755},
+publisher = {Springer Verlag},
+title = {{Microsoft COCO: Common objects in context}},
+volume = {8693 LNCS},
+year = {2014}
+}
+
+@article{IsmailFawaz2020,
+ abstract = {This paper brings deep learning at the forefront of research into time series classification (TSC). TSC is the area of machine learning tasked with the categorization (or labelling) of time series. The last few decades of work in this area have led to significant progress in the accuracy of classifiers, with the state of the art now represented by the HIVE-COTE algorithm. While extremely accurate, HIVE-COTE cannot be applied to many real-world datasets because of its high training time complexity in O(N2{\textperiodcentered} T4) for a dataset with N time series of length T. For example, it takes HIVE-COTE more than 8 days to learn from a small dataset with N= 1500 time series of short length T= 46. Meanwhile deep learning has received enormous attention because of its high accuracy and scalability. Recent approaches to deep learning for TSC have been scalable, but less accurate than HIVE-COTE. We introduce InceptionTime—an ensemble of deep Convolutional Neural Network models, inspired by the Inception-v4 architecture. Our experiments show that InceptionTime is on par with HIVE-COTE in terms of accuracy while being much more scalable: not only can it learn from 1500 time series in one hour but it can also learn from 8M time series in 13 h, a quantity of data that is fully out of reach of HIVE-COTE.},
+ archivePrefix = {arXiv},
+ arxivId = {1909.04939},
+ author = {{Ismail Fawaz}, Hassan and Lucas, Benjamin and Forestier, Germain and Pelletier, Charlotte and Schmidt, Daniel F. and Weber, Jonathan and Webb, Geoffrey I. and Idoumghar, Lhassane and Muller, Pierre Alain and Petitjean, Fran{\c{c}}ois},
+ doi = {10.1007/s10618-020-00710-y},
+ eprint = {1909.04939},
+ issn = {1573756X},
+ journal = {Data Mining and Knowledge Discovery},
+ keywords = {Deep learning,Inception,Scalable model,Time series classification},
+ month = {nov},
+ number = {6},
+ pages = {1936--1962},
+ publisher = {Springer},
+ title = {{InceptionTime: Finding AlexNet for time series classification}},
+ volume = {34},
+ year = {2020}
+}
+
+@article{Fauvel2020,
+abstract = {We present XCM, an eXplainable Convolutional neural network for Multivariate time series classification. XCM is a new compact convolutional neural network which extracts information relative to the observed variables and time directly from the input data. Thus, XCM architecture enables a good generalization ability on both small and large datasets, while allowing the full exploitation of a faithful post-hoc model-specific explainability method (Gradient-weighted Class Activation Mapping) by precisely identifying the observed variables and timestamps of the input data that are important for predictions. Our evaluation firstly shows that XCM outperforms the state-of-the-art multivariate time series classifiers on both the large and small public UEA datasets. Furthermore, following the illustration of the performance and explainability of XCM on a synthetic dataset, we present how XCM can outperform the current most accurate state-of-the-art algorithm on a real-world application while enhancing explainability by providing faithful and more informative explanations.},
+archivePrefix = {arXiv},
+arxivId = {2009.04796},
+author = {Fauvel, Kevin and Lin, Tao and Masson, V{\'{e}}ronique and Fromont, {\'{E}}lisa and Termier, Alexandre},
+eprint = {2009.04796},
+month = {sep},
+title = {{XCM: An Explainable Convolutional Neural Network for Multivariate Time Series Classification}},
+year = {2020}
+}
+
+@article{Nae2017,
+ abstract = {STUDY DESIGN: Cross-sectional study. BACKGROUND: Visual rating of postural orientation during functional tasks may be a valuable tool to track rehabilitation progress following anterior cruciate ligament (ACL) injury. A valid test battery assessing postural orientation as a separate construct is lacking. OBJECTIVES: To evaluate measurement properties of a test battery to assess postural orientation in patients with ACL injury. METHODS: The content validity of functional tasks was assessed by expert focus group discussions. Fifty-one patients (45{\%} women) with ACL injury performed 9 functional tasks of varying difficulty. Interpretability, internal consistency, interrater reliability, and measurement error were assessed for segment-specific postural orientation errors (POEs), within-task POEs, and total POE score. Postural orientation errors were scored on video on an ordinal scale from 0 (no POEs) to 3 (major POEs). RESULTS: Stair ascent, deep squat, and crossover hop for distance were excluded in focus group discussions. Postural orientation errors in some tasks were excluded due to floor effects. The minisquat and drop jump were excluded due to poor internal consistency ($\alpha$≤.184). Interrater reliability values for segment-specific POEs and within-task POEs yielded fair to almost perfect agreement ($\kappa$ = 0.429-0.875) and almost perfect agreement for total POE score (intraclass correlation coefficient = 0.842), without systematic differences between raters. The smallest detectable changes were 0.7 and 5 points for groups and individuals, respectively. CONCLUSION: The final test battery (single-leg mini-squat, stair descent, forward lunge, singleleg hop for distance) of 4 POEs (foot pronation, medial knee-to-foot position, hip joint POEs, and trunk segment POEs) demonstrated good measurement properties in people with ACL injury.},
+ author = {Nae, Jenny and Creaby, Mark W. and Nilsson, Gustav and Crossley, Kay M. and Ageberg, Eva},
+ doi = {10.2519/jospt.2017.7270},
+ issn = {0190-6011},
+ journal = {Journal of Orthopaedic {\&} Sports Physical Therapy},
+ keywords = {Lower extremity,Outcome assessment (health care),Performance-based measures,Postural control,Reproducibility of results},
+ month = {oct},
+ number = {11},
+ pages = {1--42},
+ publisher = {Movement Science Media},
+ title = {{Measurement Properties of a Test Battery to Assess Postural Orientation During Functional Tasks in Patients Undergoing ACL Injury Rehabilitation}},
+ volume = {47},
+ year = {2017}
+}
+
+@inproceedings{Sun2019,
+ abstract = {In this paper, we are interested in the human pose estimation problem with a focus on learning reliable high-resolution representations. Most existing methods recover high-resolution representations from low-resolution representations produced by a high-to-low resolution network. Instead, our proposed network maintains high-resolution representations through the whole process. We start from a high-resolution subnetwork as the first stage, gradually add high-to-low resolution subnetworks one by one to form more stages, and connect the mutli-resolution subnetworks in parallel. We conduct repeated multi-scale fusions such that each of the high-to-low resolution representations receives information from other parallel representations over and over, leading to rich high-resolution representations. As a result, the predicted keypoint heatmap is potentially more accurate and spatially more precise. We empirically demonstrate the effectiveness of our network through the superior pose estimation results over two benchmark datasets: The COCO keypoint detection dataset and the MPII Human Pose dataset. In addition, we show the superiority of our network in pose tracking on the PoseTrack dataset. The code and models have been publicly available at https://github.com/leoxiaobin/deep-high-resolution-net.pytorch.},
+ archivePrefix = {arXiv},
+ arxivId = {1902.09212},
+ author = {Sun, Ke and Xiao, Bin and Liu, Dong and Wang, Jingdong},
+ booktitle = {Proceedings of the IEEE Computer Society Conference on Computer Vision and Pattern Recognition},
+ doi = {10.1109/CVPR.2019.00584},
+ eprint = {1902.09212},
+ isbn = {9781728132938},
+ issn = {10636919},
+ keywords = {And Body Pose,Face,Gesture},
+ month = {jun},
+ pages = {5686--5696},
+ publisher = {IEEE Computer Society},
+ title = {{Deep high-resolution representation learning for human pose estimation}},
+ volume = {2019-June},
+ year = {2019},
+}
+
+@phdthesis{Nae2020,
+ title = {Is seeing just believing? Measurement properties of visual assessment of Postural Orientation Errors (POEs) in people with anterior cruciate ligament injury},
+ abstract = {Rupture of the anterior cruciate ligament (ACL) is a common knee injury among young physically active populations. The injury results in impaired physical functions, such as joint instability, limitations in daily activities and sport-specific activities, and worse movement quality, e.g., altered postural orientation. Postural orientation is defined as the ability to maintain alignment between body segments, and undesirable postural orientation is suggested to be a risk factor for subsequent injury. The “gold standard” for measuring postural orientation is with three-dimensional motion analysis. However, there is a need for a systematic feasible approach to evaluate postural orientation in the clinical setting, such as with visual assessment. Therefore, the primary aim of this thesis was to develop and evaluate clinically feasible measures of postural orientation in participants with or without lower extremity injury. Secondary aims were to evaluate sex differences in postural orientation and the association between postural orientation and other measures of physical function and self-reported outcomes, in men and women undergoing rehabilitation after ACL reconstruction.One systematic review with meta-analysis was conducted to summarize measurement properties of visual assessment of postural orientation in healthy populations, and populations with lower extremity injury (paper I). Evaluation of measurement properties (i.e., face validity, interpretability, internal consistency, inter-rater reliability, and measurement error) of a test battery for visual assessment of postural orientation errors (POEs) in patients with ACL injury were reported in two cross-sectional studies (papers II–III). Sex differences in POE scores (i.e., total POE score, POE subscales activity of daily living (ADL) and sport, and segment-specific POEs across tasks) were investigated in one cross-sectional study (paper IV). In the same paper, the association between POE scores and hop performance and Patient-Reported Outcome Measures (PROMs) were evaluated, in men and women with ACL reconstruction, separately.This thesis shows that visual assessment of the segment-specific POE knee medial-to-foot position (KMFP) is associated with two-dimensional and three-dimensional kinematic variables, and shows moderate to almost perfect reliability for the KMFP in healthy populations. For other segment-specific POEs or for patients with lower extremity injury there were not enough studies to permit any synthesis. The evaluation of measurement properties (face validity, interpretability, and internal consistency) of visual assessment of POEs during a variety of functional tasks in patients with ACL injury, resulted in the final test battery of 5 functional tasks (single-leg mini squat, stair descending, forward lunge, singe-leg hop for distance, and side-hop) and 6 segment-specific POEs (foot pronation, KMFP, femur medial to shank, femoral valgus, deviation of pelvis in any plane, and deviation of trunk in any plane). Women demonstrated worse POE scores compared with men and worse POE scores were associated with worse hop performance in women (especially the POE subscale ADL), but not in men.The results from this thesis indicate that visual assessment of the segment-specific POE KMFP is valid and reliable in healthy populations. However, there is limited evidence of measurement properties for visual assessment of other segment-specific POEs, and in patients with lower extremity injuries. The test battery for visual assessment of POEs showed no floor or ceiling effects, high internal consistency, and good inter-rater reliability in patients with ACL injury. This indicates that visual assessment of POEs can be used in patients with ACL injury, both in research and in clinical practice. Furthermore, the results suggest that postural orientation should be evaluated separately for men and women, and that the POE subscale ADL could be used to help clinicians to decide when it is time to progress to jumping exercises during rehabilitation of ACL injuries.},
+ keywords = {knee injury, Lower extremity, Anterior Cruciate Ligament, orientation/spatial, Postural orientation, Performance-based measures, Reproducibility of results, Hop performance, Patient reported outcome measures},
+ author = {{Älmqvist Nae}, Jenny},
+ year = {2020},
+ month = {jun},
+ language = {English},
+ isbn = {978-91-7619-940-4},
+ series = {Lund University, Faculty of Medicine Doctoral Dissertation Series},
+ publisher = {Lund University, Faculty of Medicine},
+ number = {2020:78},
+ school = {Department of Health Sciences}
+}
+
+
+@book{Goodfellow2016,
+ title={Deep Learning},
+ author={Ian Goodfellow and Yoshua Bengio and Aaron Courville},
+ publisher={MIT Press},
+ note={\url{http://www.deeplearningbook.org}},
+ year={2016}
+}
+
+@article{Chen2020,
+ abstract = {Vision-based monocular human pose estimation, as one of the most fundamental and challenging problems in computer vision, aims to obtain posture of the human body from input images or video sequences. The recent developments of deep learning techniques have been brought significant progress and remarkable breakthroughs in the field of human pose estimation. This survey extensively reviews the recent deep learning-based 2D and 3D human pose estimation methods published since 2014. This paper summarizes the challenges, main frameworks, benchmark datasets, evaluation metrics, performance comparison, and discusses some promising future research directions.},
+ archivePrefix = {arXiv},
+ arxivId = {2006.01423},
+ author = {Chen, Yucheng and Tian, Yingli and He, Mingyi},
+ doi = {10.1016/j.cviu.2019.102897},
+ eprint = {2006.01423},
+ file = {:home/filipkr/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Chen, Tian, He - 2020 - Monocular Human Pose Estimation A Survey of Deep Learning-based Methods.pdf:pdf},
+ journal = {Computer Vision and Image Understanding},
+ keywords = {Deep learning,Human pose estimation,Survey},
+ month = {jun},
+ publisher = {Academic Press Inc.},
+ title = {{Monocular Human Pose Estimation: A Survey of Deep Learning-based Methods}},
+ volume = {192},
+ year = {2020}
+}
+
+@inproceedings{Krizhevsky2012,
+author    = {Alex Krizhevsky and
+  Ilya Sutskever and
+  Geoffrey E. Hinton},
+editor    = {Peter L. Bartlett and
+Fernando C. N. Pereira and
+Christopher J. C. Burges and
+L{\'{e}}on Bottou and
+Kilian Q. Weinberger},
+title     = {ImageNet Classification with Deep Convolutional Neural Networks},
+pages     = {1106--1114},
+year      = {2012},
+timestamp = {Fri, 06 Mar 2020 16:56:56 +0100},
+biburl    = {https://dblp.org/rec/conf/nips/KrizhevskySH12.bib},
+bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{Jin2020,
+ abstract = {This paper investigates the task of 2D human whole-body pose estimation, which aims to localize dense landmarks on the entire human body including face, hands, body, and feet. As existing datasets do not have whole-body annotations, previous methods have to assemble different deep models trained independently on different datasets of the human face, hand, and body, struggling with dataset biases and large model complexity. To fill in this blank, we introduce COCO-WholeBody which extends COCO dataset with whole-body annotations. To our best knowledge, it is the first benchmark that has manual annotations on the entire human body, including 133 dense landmarks with 68 on the face, 42 on hands and 23 on the body and feet. A single-network model, named ZoomNet, is devised to take into account the hierarchical structure of the full human body to solve the scale variation of different body parts of the same person. ZoomNet is able to significantly outperform existing methods on the proposed COCO-WholeBody dataset. Extensive experiments show that COCO-WholeBody not only can be used to train deep models from scratch for whole-body pose estimation but also can serve as a powerful pre-training dataset for many different tasks such as facial landmark detection and hand keypoint estimation. The dataset is publicly available at https://github.com/jin-s13/COCO-WholeBody.},
+ archivePrefix = {arXiv},
+ arxivId = {2007.11858},
+ author = {Jin, Sheng and Xu, Lumin and Xu, Jin and Wang, Can and Liu, Wentao and Qian, Chen and Ouyang, Wanli and Luo, Ping},
+ eprint = {2007.11858},
+ file = {:home/filipkr/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Jin et al. - 2020 - Whole-Body Human Pose Estimation in the Wild.pdf:pdf},
+ journal = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
+ month = {jul},
+ pages = {196--214},
+ publisher = {Springer Science and Business Media Deutschland GmbH},
+ title = {{Whole-Body Human Pose Estimation in the Wild}},
+ volume = {12354 LNCS},
+ year = {2020}
+}
+
+
+@article{Wang2019,
+ abstract = {We present a cascaded convolutional neural network for 2D hand pose estimation from single in-the-wild RGB images. Inspired by the commonly used silhouette information in the generative pose estimation approaches, we build the cascaded network with two stages, including mask prediction stage as well as pose estimation stage. We find that the two stages network architecture for end-to-end training could benefit from each other for detecting the hand mask and 2D pose. To further improve the hand pose detection accuracy, we contribute a new RGB hand dataset named OneHand10K, which contains 10K RGB images. Each image contains one single hand. We manually obtain the segmented mask and labeled keypoints for guided learning. We hope that this dataset will be a benchmark and encourage more people to conduct research on this challenging topic. Experiments on the validation dataset have demonstrated the superior performance of the proposed cascaded convolutional neural network.},
+ author = {Wang, Yangang and Peng, Cong and Liu, Yebin},
+ doi = {10.1109/TCSVT.2018.2879980},
+ issn = {15582205},
+ journal = {IEEE Transactions on Circuits and Systems for Video Technology},
+ month = {nov},
+ number = {11},
+ pages = {3258--3268},
+ publisher = {Institute of Electrical and Electronics Engineers Inc.},
+ title = {{Mask-Pose Cascaded CNN for 2D Hand Pose Estimation from Single Color Image}},
+ volume = {29},
+ year = {2019}
+}
+
+@article{Fischler1973,
+ abstract = {The primary problem dealt with in this paper is the following. Given some description of a visual object, find that object in an actual photograph. Part of the solution to this problem is the specification of a descriptive scheme, and a metric on which to base the decision of “goodness” of matching or detection. We offer a combined descriptive scheme and decision metric which is general, intuitively satisfying, and which has led to promising experimental results. We also present an algorithm which takes the above descriptions, together with a matrix representing the intensities of the actual photograph, and then finds the described object in the matrix. The algorithm uses a procedure similar to dynamic programming in order to cut down on the vast amount of computation otherwise necessary. One desirable feature of the approach is its generality. A new programming system does not need to be written for every new description; instead, one just specifies descriptions in terms of a certain set of primitives and parameters. There are many areas of application: scene analysis and description, map matching for navigation and guidance, optical tracking, stereo compilation, and image change detection. In fact, the ability to describe, match, and register scenes is basic for almost any image processing task. Copyright {\textcopyright} 1973 by The Institute of Electrical and Electronics Engineers, Inc.},
+ author = {Fischler, Martin A. and Elschlager, Robert A.},
+ doi = {10.1109/T-C.1973.223602},
+ issn = {00189340},
+ journal = {IEEE Transactions on Computers},
+ keywords = {Dynamic programming,heuristic optimization,picture description,picture matching,picture processing,representation},
+ number = {1},
+ pages = {67--92},
+ title = {{The Representation and Matching of Pictorial Structures Representation}},
+ volume = {C-22},
+ year = {1973}
+}
+
+@article{LeCun1989,
+ abstract = {The ability of learning networks to generalize can be greatly enhanced by providing constraints from the task domain. This paper demonstrates how such constraints can be integrated into a backpropagation network through the architecture of the network. This approach has been successfully applied to the recognition of handwritten zip code digits provided by the U.S. Postal Service. A single network learns the entire recognition operation, going from the normalized image of the character to the final classification.},
+ author = {LeCun, Y. and Boser, B. and Denker, J. S. and Henderson, D. and Howard, R. E. and Hubbard, W. and Jackel, L. D.},
+ doi = {10.1162/neco.1989.1.4.541},
+ issn = {0899-7667},
+ journal = {Neural Computation},
+ month = {dec},
+ number = {4},
+ pages = {541--551},
+ publisher = {MIT Press - Journals},
+ title = {{Backpropagation Applied to Handwritten Zip Code Recognition}},
+ volume = {1},
+ year = {1989}
+}
+
+@article{LeCun1998,
+abstract = {Multilayer neural networks trained with the back-propagation algorithm constitute the best example of a successful gradient-based learning technique. Given an appropriate network architecture, gradient-based learning algorithms can be used to synthesize a complex decision surface that can classify high-dimensional patterns, such as handwritten characters, with minimal preprocessing. This paper reviews various methods applied to handwritten character recognition and compares them on a standard handwritten digit recognition task. Convolutional neural networks, which are specifically designed to deal with the variability of two dimensional (2-D) shapes, are shown to outperform all other techniques. Real-life document recognition systems are composed of multiple modules including field extraction, segmentation, recognition, and language modeling. A new learning paradigm, called graph transformer networks (GTN's), allows such multimodule systems to be trained globally using gradient-based methods so as to minimize an overall performance measure. Two systems for online handwriting recognition are described. Experiments demonstrate the advantage of global training, and the flexibility of graph transformer networks. A graph transformer network for reading a bank check is also described. It uses convolutional neural network character recognizers combined with global training techniques to provide record accuracy on business and personal checks. It is deployed commercially and reads several million checks per day. {\textcopyright} 1998 IEEE.},
+author = {LeCun, Yann and Bottou, L{\'{e}}on and Bengio, Yoshua and Haffner, Patrick},
+doi = {10.1109/5.726791},
+issn = {00189219},
+journal = {Proceedings of the IEEE},
+keywords = {Convolutional neural networks,Document recognition,Finite state transducers,Gradient-based learning,Graph transformer networks,Machine learning,Neural networks,Optical character recognition (OCR)},
+number = {11},
+pages = {2278--2323},
+title = {{Gradient-based learning applied to document recognition}},
+volume = {86},
+year = {1998}
+}
+
+@INPROCEEDINGS{Toshev2014,
+ author={A. {Toshev} and C. {Szegedy}},
+ booktitle={2014 IEEE Conference on Computer Vision and Pattern Recognition},
+ title={DeepPose: Human Pose Estimation via Deep Neural Networks},
+ year={2014},
+ volume={},
+ number={},
+ pages={1653-1660},
+ doi={10.1109/CVPR.2014.214}}
+
+@article{Cheng2019,
+ abstract = {Bottom-up human pose estimation methods have difficulties in predicting the correct pose for small persons due to challenges in scale variation. In this paper, we present HigherHRNet: a novel bottom-up human pose estimation method for learning scale-aware representations using high-resolution feature pyramids. Equipped with multi-resolution supervision for training and multi-resolution aggregation for inference, the proposed approach is able to solve the scale variation challenge in bottom-up multi-person pose estimation and localize keypoints more precisely, especially for small person. The feature pyramid in HigherHRNet consists of feature map outputs from HRNet and upsampled higher-resolution outputs through a transposed convolution. HigherHRNet outperforms the previous best bottom-up method by 2.5{\%} AP for medium person on COCO test-dev, showing its effectiveness in handling scale variation. Furthermore, HigherHRNet achieves new state-of-the-art result on COCO test-dev (70.5{\%} AP) without using refinement or other post-processing techniques, surpassing all existing bottom-up methods. HigherHRNet even surpasses all top-down methods on CrowdPose test (67.6{\%} AP), suggesting its robustness in crowded scene. The code and models are available at https://github.com/HRNet/Higher-HRNet-Human-Pose-Estimation.},
+ archivePrefix = {arXiv},
+ arxivId = {1908.10357},
+ author = {Cheng, Bowen and Xiao, Bin and Wang, Jingdong and Shi, Honghui and Huang, Thomas S. and Zhang, Lei},
+ eprint = {1908.10357},
+ journal = {Proceedings of the IEEE Computer Society Conference on Computer Vision and Pattern Recognition},
+ month = {aug},
+ pages = {5385--5394},
+ publisher = {IEEE Computer Society},
+ title = {{HigherHRNet: Scale-Aware Representation Learning for Bottom-Up Human Pose Estimation}},
+ year = {2019}
+}
+
+@inproceedings{He2016,
+ abstract = {Deeper neural networks are more difficult to train. We present a residual learning framework to ease the training of networks that are substantially deeper than those used previously. We explicitly reformulate the layers as learning residual functions with reference to the layer inputs, instead of learning unreferenced functions. We provide comprehensive empirical evidence showing that these residual networks are easier to optimize, and can gain accuracy from considerably increased depth. On the ImageNet dataset we evaluate residual nets with a depth of up to 152 layers - 8× deeper than VGG nets [40] but still having lower complexity. An ensemble of these residual nets achieves 3.57{\%} error on the ImageNet test set. This result won the 1st place on the ILSVRC 2015 classification task. We also present analysis on CIFAR-10 with 100 and 1000 layers. The depth of representations is of central importance for many visual recognition tasks. Solely due to our extremely deep representations, we obtain a 28{\%} relative improvement on the COCO object detection dataset. Deep residual nets are foundations of our submissions to ILSVRC {\&} COCO 2015 competitions1, where we also won the 1st places on the tasks of ImageNet detection, ImageNet localization, COCO detection, and COCO segmentation.},
+ archivePrefix = {arXiv},
+ arxivId = {1512.03385},
+ author = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+ booktitle = {Proceedings of the IEEE Computer Society Conference on Computer Vision and Pattern Recognition},
+ doi = {10.1109/CVPR.2016.90},
+ eprint = {1512.03385},
+ isbn = {9781467388504},
+ issn = {10636919},
+ month = {dec},
+ pages = {770--778},
+ publisher = {IEEE Computer Society},
+ title = {{Deep residual learning for image recognition}},
+ volume = {2016-December},
+ year = {2016}
+}
+
+@inproceedings{Simonyan2015,
+ abstract = {In this work we investigate the effect of the convolutional network depth on its accuracy in the large-scale image recognition setting. Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution filters, which shows that a significant improvement on the prior-art configurations can be achieved by pushing the depth to 16–19 weight layers. These findings were the basis of our ImageNet Challenge 2014 submission, where our team secured the first and the second places in the localisation and classification tracks respectively. We also show that our representations generalise well to other datasets, where they achieve state-of-the-art results. We have made our two best-performing ConvNet models publicly available to facilitate further research on the use of deep visual representations in computer vision.},
+ archivePrefix = {arXiv},
+ arxivId = {1409.1556},
+ author = {Simonyan, Karen and Zisserman, Andrew},
+ booktitle = {3rd International Conference on Learning Representations, ICLR 2015 - Conference Track Proceedings},
+ eprint = {1409.1556},
+ month = {sep},
+ publisher = {International Conference on Learning Representations, ICLR},
+ title = {{Very deep convolutional networks for large-scale image recognition}},
+ year = {2015}
+}
+
+@ARTICLE{Wang2020,
+ author={J. {Wang} and K. {Sun} and T. {Cheng} and B. {Jiang} and C. {Deng} and Y. {Zhao} and D. {Liu} and Y. {Mu} and M. {Tan} and X. {Wang} and W. {Liu} and B. {Xiao}},
+ journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+ title={Deep High-Resolution Representation Learning for Visual Recognition},
+ year={2020},
+ volume={},
+ number={},
+ pages={1-1},
+ doi={10.1109/TPAMI.2020.2983686}}
+
+@misc{UCRArchive,
+ title={The UCR Time Series Classification Archive},
+ author={ Chen, Yanping and Keogh, Eamonn and Hu, Bing and Begum, Nurjahan and Bagnall, Anthony and Mueen, Abdullah and Batista, Gustavo},
+ year={2015},
+ month={July},
+ note = {\url{www.cs.ucr.edu/~eamonn/time_series_data/}}
+}
+
+@article{Dau2018,
+ abstract = {The UCR Time Series Archive - introduced in 2002, has become an important resource in the time series data mining community, with at least one thousand published papers making use of at least one data set from the archive. The original incarnation of the archive had sixteen data sets but since that time, it has gone through periodic expansions. The last expansion took place in the summer of 2015 when the archive grew from 45 to 85 data sets. This paper introduces and will focus on the new data expansion from 85 to 128 data sets. Beyond expanding this valuable resource, this paper offers pragmatic advice to anyone who may wish to evaluate a new algorithm on the archive. Finally, this paper makes a novel and yet actionable claim: of the hundreds of papers that show an improvement over the standard baseline (1-nearest neighbor classification), a large fraction may be mis-attributing the reasons for their improvement. Moreover, they may have been able to achieve the same improvement with a much simpler modification, requiring just a single line of code.},
+ archivePrefix = {arXiv},
+ arxivId = {1810.07758},
+ author = {Dau, Hoang Anh and Bagnall, Anthony and Kamgar, Kaveh and Yeh, Chin-Chia Michael and Zhu, Yan and Gharghabi, Shaghayegh and Ratanamahatana, Chotirat Ann and Keogh, Eamonn},
+ eprint = {1810.07758},
+ journal = {IEEE/CAA Journal of Automatica Sinica},
+ keywords = {Index Terms-Data mining,UCR time series archive,time series classification},
+ mendeley-groups = {xjob},
+ month = {oct},
+ number = {6},
+ pages = {1293--1305},
+ publisher = {Institute of Electrical and Electronics Engineers Inc.},
+ title = {{The UCR Time Series Archive}},
+ volume = {6},
+ year = {2018}
+}
+
+@article{Bagnall2017,
+ abstract = {In the last 5 years there have been a large number of new time series classification algorithms proposed in the literature. These algorithms have been evaluated on subsets of the 47 data sets in the University of California, Riverside time series classification archive. The archive has recently been expanded to 85 data sets, over half of which have been donated by researchers at the University of East Anglia. Aspects of previous evaluations have made comparisons between algorithms difficult. For example, several different programming languages have been used, experiments involved a single train/test split and some used normalised data whilst others did not. The relaunch of the archive provides a timely opportunity to thoroughly evaluate algorithms on a larger number of datasets. We have implemented 18 recently proposed algorithms in a common Java framework and compared them against two standard benchmark classifiers (and each other) by performing 100 resampling experiments on each of the 85 datasets. We use these results to test several hypotheses relating to whether the algorithms are significantly more accurate than the benchmarks and each other. Our results indicate that only nine of these algorithms are significantly more accurate than both benchmarks and that one classifier, the collective of transformation ensembles, is significantly more accurate than all of the others. All of our experiments and results are reproducible: we release all of our code, results and experimental details and we hope these experiments form the basis for more robust testing of new algorithms in the future.},
+ author = {Bagnall, Anthony and Lines, Jason and Bostrom, Aaron and Large, James and Keogh, Eamonn},
+ doi = {10.1007/s10618-016-0483-9},
+ issn = {1573756X},
+ journal = {Data Mining and Knowledge Discovery},
+ keywords = {Elastic distance measures,Shapelets,Time series classification,Time series similarity},
+ mendeley-groups = {xjob},
+ month = {may},
+ number = {3},
+ pages = {606--660},
+ publisher = {Springer New York LLC},
+ title = {{The great time series classification bake off: a review and experimental evaluation of recent algorithmic advances}},
+ volume = {31},
+ year = {2017}
+}
+
+@article{Lines2015,
+ abstract = {Several alternative distance measures for comparing time series have recently been proposed and evaluated on time series classification (TSC) problems. These include variants of dynamic time warping (DTW), such as weighted and derivative DTW, and edit distance-based measures, including longest common subsequence, edit distance with real penalty, time warp with edit, and move–split–merge. These measures have the common characteristic that they operate in the time domain and compensate for potential localised misalignment through some elastic adjustment. Our aim is to experimentally test two hypotheses related to these distance measures. Firstly, we test whether there is any significant difference in accuracy for TSC problems between nearest neighbour classifiers using these distance measures. Secondly, we test whether combining these elastic distance measures through simple ensemble schemes gives significantly better accuracy. We test these hypotheses by carrying out one of the largest experimental studies ever conducted into time series classification. Our first key finding is that there is no significant difference between the elastic distance measures in terms of classification accuracy on our data sets. Our second finding, and the major contribution of this work, is to define an ensemble classifier that significantly outperforms the individual classifiers. We also demonstrate that the ensemble is more accurate than approaches not based in the time domain. Nearly all TSC papers in the data mining literature cite DTW (with warping window set through cross validation) as the benchmark for comparison. We believe that our ensemble is the first ever classifier to significantly outperform DTW and as such raises the bar for future work in this area.},
+ author = {Lines, Jason and Bagnall, Anthony},
+ doi = {10.1007/s10618-014-0361-2},
+ issn = {13845810},
+ journal = {Data Mining and Knowledge Discovery},
+ keywords = {Elastic distance measures,Ensembles,Time series classification},
+ month = {apr},
+ number = {3},
+ pages = {565--592},
+ publisher = {Kluwer Academic Publishers},
+ title = {{Time series classification with ensembles of elastic distance measures}},
+ volume = {29},
+ year = {2015}
+}
+
+@ARTICLE{Bagnall2015,
+ author={A. {Bagnall} and J. {Lines} and J. {Hills} and A. {Bostrom}},
+ journal={IEEE Transactions on Knowledge and Data Engineering},
+ title={Time-Series Classification with COTE: The Collective of Transformation-Based Ensembles},
+ year={2015},
+ volume={27},
+ number={9},
+ pages={2522-2535},
+ doi={10.1109/TKDE.2015.2416723}}
+
+@INPROCEEDINGS{Lines2016,
+ author={J. {Lines} and S. {Taylor} and A. {Bagnall}},
+ booktitle={2016 IEEE 16th International Conference on Data Mining (ICDM)},
+ title={HIVE-COTE: The Hierarchical Vote Collective of Transformation-Based Ensembles for Time Series Classification},
+ year={2016},
+ volume={},
+ number={},
+ pages={1041-1046},
+ doi={10.1109/ICDM.2016.0133}}
+
+@INPROCEEDINGS{Wang2017,
+ author={Z. {Wang} and W. {Yan} and T. {Oates}},
+ booktitle={2017 International Joint Conference on Neural Networks (IJCNN)},
+ title={Time series classification from scratch with deep neural networks: A strong baseline},
+ year={2017},
+ volume={},
+ number={},
+ pages={1578-1585},
+ doi={10.1109/IJCNN.2017.7966039}}
+
+@article{Zheng2016,
+ abstract = {Time series classification is related to many different domains, such as health informatics, finance, and bioinformatics. Due to its broad applications, researchers have developed many algorithms for this kind of tasks, e.g., multivariate time series classification. Among the classification algorithms, k-nearest neighbor (k-NN) classification (particularly 1-NN) combined with dynamic time warping (DTW) achieves the state of the art performance. The deficiency is that when the data set grows large, the time consumption of 1-NN with DTWwill be very expensive. In contrast to 1-NN with DTW, it is more efficient but less effective for feature-based classification methods since their performance usually depends on the quality of hand-crafted features. In this paper, we aim to improve the performance of traditional feature-based approaches through the feature learning techniques. Specifically, we propose a novel deep learning framework, multi-channels deep convolutional neural networks (MC-DCNN), for multivariate time series classification. This model first learns features from individual univariate time series in each channel, and combines information from all channels as feature representation at the final layer. Then, the learnt features are applied into a multilayer perceptron (MLP) for classification. Finally, the extensive experiments on real-world data sets show that our model is not only more efficient than the state of the art but also competitive in accuracy. This study implies that feature learning is worth to be investigated for the problem of time series classification.},
+ author = {Zheng, Yi and Liu, Qi and Chen, Enhong and Ge, Yong and Zhao, J. Leon},
+ doi = {10.1007/s11704-015-4478-2},
+ issn = {20952236},
+ journal = {Frontiers of Computer Science},
+ keywords = {convolutional neural networks,deep learning,feature learning,time series classification},
+ month = {feb},
+ number = {1},
+ pages = {96--112},
+ publisher = {Higher Education Press},
+ title = {{Exploiting multi-channels deep convolutional neural networks for multivariate time series classification}},
+ volume = {10},
+ year = {2016}
+}
+
+@inproceedings{Szegedy2015,
+ abstract = {We propose a deep convolutional neural network architecture codenamed Inception that achieves the new state of the art for classification and detection in the ImageNet Large-Scale Visual Recognition Challenge 2014 (ILSVRC14). The main hallmark of this architecture is the improved utilization of the computing resources inside the network. By a carefully crafted design, we increased the depth and width of the network while keeping the computational budget constant. To optimize quality, the architectural decisions were based on the Hebbian principle and the intuition of multi-scale processing. One particular incarnation used in our submission for ILSVRC14 is called GoogLeNet, a 22 layers deep network, the quality of which is assessed in the context of classification and detection.},
+ archivePrefix = {arXiv},
+ arxivId = {1409.4842},
+ author = {Szegedy, Christian and Liu, Wei and Jia, Yangqing and Sermanet, Pierre and Reed, Scott and Anguelov, Dragomir and Erhan, Dumitru and Vanhoucke, Vincent and Rabinovich, Andrew},
+ booktitle = {Proceedings of the IEEE Computer Society Conference on Computer Vision and Pattern Recognition},
+ doi = {10.1109/CVPR.2015.7298594},
+ eprint = {1409.4842},
+ isbn = {9781467369640},
+ issn = {10636919},
+ month = {oct},
+ pages = {1--9},
+ publisher = {IEEE Computer Society},
+ title = {{Going deeper with convolutions}},
+ volume = {07-12-June-2015},
+ year = {2015}
+}
+
+@INPROCEEDINGS{IsmailFawaz2019ensemble,
+ author={H. {Ismail Fawaz} and G. {Forestier} and J. {Weber} and L. {Idoumghar} and P. {Muller}},
+ booktitle={2019 International Joint Conference on Neural Networks (IJCNN)},
+ title={Deep Neural Network Ensembles for Time Series Classification},
+ year={2019},
+ volume={},
+ number={},
+ pages={1-6},
+ doi={10.1109/IJCNN.2019.8852316}}
+
+@article{Du2018,
+ abstract = {Interpretable machine learning tackles the important problem that humans cannot understand the behaviors of complex machine learning models and how these models arrive at a particular decision. Although many approaches have been proposed, a comprehensive understanding of the achievements and challenges is still lacking. We provide a survey covering existing techniques to increase the interpretability of machine learning models. We also discuss crucial issues that the community should consider in future work such as designing user-friendly explanations and developing comprehensive evaluation metrics to further push forward the area of interpretable machine learning.},
+ archivePrefix = {arXiv},
+ arxivId = {1808.00033},
+ author = {Du, Mengnan and Liu, Ninghao and Hu, Xia},
+ eprint = {1808.00033},
+ journal = {arXiv},
+ month = {jul},
+ publisher = {arXiv},
+ title = {{Techniques for Interpretable Machine Learning}},
+ year = {2018}
+}
+
+@article{Cao2019,
+ abstract = {In many real-world prediction tasks, class labels include information about the relative ordering between labels, which is not captured by commonly-used loss functions such as multi-category cross-entropy. Recently, the deep learning community adopted ordinal regression frameworks to take such ordering information into account. Neural networks were equipped with ordinal regression capabilities by transforming ordinal targets into binary classification subtasks. However, this method suffers from inconsistencies among the different binary classifiers. To resolve these inconsistencies, we propose the COnsistent RAnk Logits (CORAL) framework with strong theoretical guarantees for rank-monotonicity and consistent confidence scores. Moreover, the proposed method is architecture-agnostic and can extend arbitrary state-of-the-art deep neural network classifiers for ordinal regression tasks. The empirical evaluation of the proposed rank-consistent method on a range of face-image datasets for age prediction shows a substantial reduction of the prediction error compared to the reference ordinal regression network.},
+ archivePrefix = {arXiv},
+ arxivId = {1901.07884},
+ author = {Cao, Wenzhi and Mirjalili, Vahid and Raschka, Sebastian},
+ doi = {10.1016/j.patrec.2020.11.008},
+ eprint = {1901.07884},
+ journal = {Pattern Recognition Letters},
+ keywords = {Age prediction,Biometrics,Convolutional neural networks,Deep learning,Machine learning,Ordinal regression},
+ month = {jan},
+ pages = {325--331},
+ publisher = {Elsevier B.V.},
+ title = {{Rank consistent ordinal regression for neural networks with application to age estimation}},
+ volume = {140},
+ year = {2019}
+}
+
+@ARTICLE{Gutierrez2016,
+ author={P. A. {Gutiérrez} and M. {Pérez-Ortiz} and J. {Sánchez-Monedero} and F. {Fernández-Navarro} and C. {Hervás-Martínez}},
+ journal={IEEE Transactions on Knowledge and Data Engineering},
+ title={Ordinal Regression Methods: Survey and Experimental Study},
+ year={2016},
+ volume={28},
+ number={1},
+ pages={127-146},
+ doi={10.1109/TKDE.2015.2457911}}
+
+@book{Agresti2007,
+ title     = {An Introduction to Categorical Data Analysis (2nd ed.)},
+ author    = {Agresti, Alan},
+ year      = {2007},
+ publisher = {Wiley},
+ address   = {Hoboken, New Jersey}
+}
+
+@inproceedings{Li2007,
+ author = {Li, Ling and Lin, Hsuan-tien},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {B. Schölkopf and J. Platt and T. Hoffman},
+ pages = {865--872},
+ publisher = {MIT Press},
+ title = {Ordinal Regression by Extended Binary Classification},
+ volume = {19},
+ year = {2007}
+}
+
+@INPROCEEDINGS{Niu2016,
+ author={Niu, Zhenxing and Zhou, Mo and Wang, Le and Gao, Xinbo and Hua, Gang},
+ booktitle={2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+ title={Ordinal Regression with Multiple Output CNN for Age Estimation},
+ year={2016},
+ volume={},
+ number={},
+ pages={4920-4928},
+ doi={10.1109/CVPR.2016.532}}
+
+ @article{Amann2020,
+abstract = {Background: Explainability is one of the most heavily debated topics when it comes to the application of artificial intelligence (AI) in healthcare. Even though AI-driven systems have been shown to outperform humans in certain analytical tasks, the lack of explainability continues to spark criticism. Yet, explainability is not a purely technological issue, instead it invokes a host of medical, legal, ethical, and societal questions that require thorough exploration. This paper provides a comprehensive assessment of the role of explainability in medical AI and makes an ethical evaluation of what explainability means for the adoption of AI-driven tools into clinical practice. Methods: Taking AI-based clinical decision support systems as a case in point, we adopted a multidisciplinary approach to analyze the relevance of explainability for medical AI from the technological, legal, medical, and patient perspectives. Drawing on the findings of this conceptual analysis, we then conducted an ethical assessment using the “Principles of Biomedical Ethics” by Beauchamp and Childress (autonomy, beneficence, nonmaleficence, and justice) as an analytical framework to determine the need for explainability in medical AI. Results: Each of the domains highlights a different set of core considerations and values that are relevant for understanding the role of explainability in clinical practice. From the technological point of view, explainability has to be considered both in terms how it can be achieved and what is beneficial from a development perspective. When looking at the legal perspective we identified informed consent, certification and approval as medical devices, and liability as core touchpoints for explainability. Both the medical and patient perspectives emphasize the importance of considering the interplay between human actors and medical AI. We conclude that omitting explainability in clinical decision support systems poses a threat to core ethical values in medicine and may have detrimental consequences for individual and public health. Conclusions: To ensure that medical AI lives up to its promises, there is a need to sensitize developers, healthcare professionals, and legislators to the challenges and limitations of opaque algorithms in medical AI and to foster multidisciplinary collaboration moving forward.},
+author = {Amann, Julia and Blasimme, Alessandro and Vayena, Effy and Frey, Dietmar and Madai, Vince I.},
+doi = {10.1186/s12911-020-01332-6},
+issn = {14726947},
+journal = {BMC Medical Informatics and Decision Making},
+keywords = {Artificial intelligence,Clinical decision support,Explainability,Interpretability,Machine learning},
+month = {dec},
+number = {1},
+pages = {310},
+pmid = {33256715},
+publisher = {BioMed Central Ltd},
+title = {{Explainability for artificial intelligence in healthcare: a multidisciplinary perspective}},
+volume = {20},
+year = {2020}
+}
+
+@article{Selvaraju2016,
+abstract = {We propose a technique for producing "visual explanations" for decisions from a large class of CNN-based models, making them more transparent. Our approach - Gradient-weighted Class Activation Mapping (Grad-CAM), uses the gradients of any target concept, flowing into the final convolutional layer to produce a coarse localization map highlighting important regions in the image for predicting the concept. Grad-CAM is applicable to a wide variety of CNN model-families: (1) CNNs with fully-connected layers, (2) CNNs used for structured outputs, (3) CNNs used in tasks with multimodal inputs or reinforcement learning, without any architectural changes or re-training. We combine Grad-CAM with fine-grained visualizations to create a high-resolution class-discriminative visualization and apply it to off-the-shelf image classification, captioning, and visual question answering (VQA) models, including ResNet-based architectures. In the context of image classification models, our visualizations (a) lend insights into their failure modes, (b) are robust to adversarial images, (c) outperform previous methods on localization, (d) are more faithful to the underlying model and (e) help achieve generalization by identifying dataset bias. For captioning and VQA, we show that even non-attention based models can localize inputs. We devise a way to identify important neurons through Grad-CAM and combine it with neuron names to provide textual explanations for model decisions. Finally, we design and conduct human studies to measure if Grad-CAM helps users establish appropriate trust in predictions from models and show that Grad-CAM helps untrained users successfully discern a 'stronger' nodel from a 'weaker' one even when both make identical predictions. Our code is available at https://github.com/ramprs/grad-cam/, along with a demo at http://gradcam.cloudcv.org, and a video at youtu.be/COjUB9Izk6E.},
+archivePrefix = {arXiv},
+arxivId = {1610.02391},
+author = {Selvaraju, Ramprasaath R. and Cogswell, Michael and Das, Abhishek and Vedantam, Ramakrishna and Parikh, Devi and Batra, Dhruv},
+doi = {10.1007/s11263-019-01228-7},
+eprint = {1610.02391},
+journal = {International Journal of Computer Vision},
+keywords = {Explanations,Grad-CAM,Interpretability,Transparency,Visual explanations,Visualizations},
+month = {oct},
+number = {2},
+pages = {336--359},
+publisher = {Springer},
+title = {{Grad-CAM: Visual Explanations from Deep Networks via Gradient-based Localization}},
+volume = {128},
+year = {2016}
+}
+
+@article{McCulloch1943,
+abstract = {Because of the "all-or-none" character of nervous activity, neural events and the relations among them can be treated by means of propositional logic. It is found that the behavior of every net can be described in these terms, with the addition of more complicated logical means for nets containing circles; and that for any logical expression satisfying certain conditions, one can find a net behaving in the fashion it describes. It is shown that many particular choices among possible neurophysiological assumptions are equivalent, in the sense that for every net behaving under one assumption, there exists another net which behaves under the other and gives the same results, although perhaps not in the same time. Various applications of the calculus are discussed. {\textcopyright} 1943 The University of Chicago Press.},
+author = {McCulloch, Warren S. and Pitts, Walter},
+doi = {10.1007/BF02478259},
+issn = {00074985},
+journal = {The Bulletin of Mathematical Biophysics},
+keywords = {Cell Biology,Life Sciences,Mathematical and Computational Biology,general},
+month = {dec},
+number = {4},
+pages = {115--133},
+publisher = {Kluwer Academic Publishers},
+title = {{A logical calculus of the ideas immanent in nervous activity}},
+volume = {5},
+year = {1943}
+}
+
+@book{Ivakhnenko1965,
+ title     = {Cybernetic Predicting Devices},
+ author    = {Ivakhnenko, A. G. and Lapa, V. G.},
+ year      = {1965},
+ publisher = {CCM Information Corpo-ration},
+ address   = {}
+}
+
+@article{Fukushima1980,
+abstract = {A neural network model for a mechanism of visual pattern recognition is proposed in this paper. The network is self-organized by "learning without a teacher", and acquires an ability to recognize stimulus patterns based on the geometrical similarity (Gestalt) of their shapes without affected by their positions. This network is given a nickname "neocognitron". After completion of self-organization, the network has a structure similar to the hierarchy model of the visual nervous system proposed by Hubel and Wiesel. The network consits of an input layer (photoreceptor array) followed by a cascade connection of a number of modular structures, each of which is composed of two layers of cells connected in a cascade. The first layer of each module consists of "S-cells", which show characteristics similar to simple cells or lower order hypercomplex cells, and the second layer consists of "C-cells" similar to complex cells or higher order hypercomplex cells. The afferent synapses to each S-cell have plasticity and are modifiable. The network has an ability of unsupervised learning: We do not need any "teacher" during the process of self-organization, and it is only needed to present a set of stimulus patterns repeatedly to the input layer of the network. The network has been simulated on a digital computer. After repetitive presentation of a set of stimulus patterns, each stimulus pattern has become to elicit an output only from one of the C-cell of the last layer, and conversely, this C-cell has become selectively responsive only to that stimulus pattern. That is, none of the C-cells of the last layer responds to more than one stimulus pattern. The response of the C-cells of the last layer is not affected by the pattern's position at all. Neither is it affected by a small change in shape nor in size of the stimulus pattern. {\textcopyright} 1980 Springer-Verlag.},
+author = {Fukushima, Kunihiko},
+doi = {10.1007/BF00344251},
+issn = {03401200},
+journal = {Biological Cybernetics},
+keywords = {Bioinformatics,Complex Systems,Computer Appl. in Life Sciences,Neurobiology,Neurosciences},
+month = {apr},
+number = {4},
+pages = {193--202},
+pmid = {7370364},
+publisher = {Springer-Verlag},
+title = {{Neocognitron: A self-organizing neural network model for a mechanism of pattern recognition unaffected by shift in position}},
+volume = {36},
+year = {1980}
+}
+
+@inproceedings{Newell2016,
+ abstract = {This work introduces a novel convolutional network architecture for the task of human pose estimation. Features are processed across all scales and consolidated to best capture the various spatial relationships associated with the body. We show how repeated bottom-up, top-down processing used in conjunction with intermediate supervision is critical to improving the performance of the network. We refer to the architecture as a “stacked hourglass” network based on the successive steps of pooling and upsampling that are done to produce a final set of predictions. State-of-the-art results are achieved on the FLIC and MPII benchmarks outcompeting all recent methods.},
+ archivePrefix = {arXiv},
+ arxivId = {1603.06937},
+ author = {Newell, Alejandro and Yang, Kaiyu and Deng, Jia},
+ booktitle = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
+ doi = {10.1007/978-3-319-46484-8_29},
+ eprint = {1603.06937},
+ isbn = {9783319464831},
+ issn = {16113349},
+ pages = {483--499},
+ publisher = {Springer Verlag},
+ title = {{Stacked hourglass networks for human pose estimation}},
+ volume = {9912 LNCS},
+ year = {2016}
+}
+
+@inproceedings{Raina2009,
+author = {Raina, Rajat and Madhavan, Anand and Ng, Andrew Y.},
+title = {Large-Scale Deep Unsupervised Learning Using Graphics Processors},
+year = {2009},
+isbn = {9781605585161},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+doi = {10.1145/1553374.1553486},
+abstract = {The promise of unsupervised learning methods lies in their potential to use vast amounts of unlabeled data to learn complex, highly nonlinear models with millions of free parameters. We consider two well-known unsupervised learning models, deep belief networks (DBNs) and sparse coding, that have recently been applied to a flurry of machine learning applications (Hinton & Salakhutdinov, 2006; Raina et al., 2007). Unfortunately, current learning algorithms for both models are too slow for large-scale applications, forcing researchers to focus on smaller-scale models, or to use fewer training examples.In this paper, we suggest massively parallel methods to help resolve these problems. We argue that modern graphics processors far surpass the computational capabilities of multicore CPUs, and have the potential to revolutionize the applicability of deep unsupervised learning methods. We develop general principles for massively parallelizing unsupervised learning tasks using graphics processors. We show that these principles can be applied to successfully scaling up learning algorithms for both DBNs and sparse coding. Our implementation of DBN learning is up to 70 times faster than a dual-core CPU implementation for large models. For example, we are able to reduce the time required to learn a four-layer DBN with 100 million free parameters from several weeks to around a single day. For sparse coding, we develop a simple, inherently parallel algorithm, that leads to a 5 to 15-fold speedup over previous methods.},
+booktitle = {Proceedings of the 26th Annual International Conference on Machine Learning},
+pages = {873–880},
+numpages = {8},
+location = {Montreal, Quebec, Canada},
+series = {ICML '09}
+}
+
+@incollection{NazmusSaadat2020,
+abstract = {The aim of this chapter is to introduce newcomers to deep learning, deep learning platforms, algorithms, applications, and open-source datasets. This chapter will give you a broad overview of the term deep learning, in context to deep learning machine learning, and Artificial Intelligence (AI) is also introduced. In Introduction, there is a brief overview of the research achievements of deep learning. After Introduction, a brief history of deep learning has been also discussed. The history started from a famous scientist called Allen Turing (1951) to 2020. In the start of a chapter after Introduction, there are some commonly used terminologies, which are used in deep learning. The main focus is on the most recent applications, the most commonly used algorithms, modern platforms, and relevant open-source databases or datasets available online. While discussing the most recent applications and platforms of deep learning, their scope in future is also discussed. Future research directions are discussed in applications and platforms. The natural language processing and auto-pilot vehicles were considered the state-of-the-art application, and these applications still need a good portion of further research. Any reader from undergraduate and postgraduate students, data scientist, and researchers would be benefitted from this.},
+author = {{Nazmus Saadat}, Md and Shuaib, Muhammad},
+booktitle = {Advances and Applications in Deep Learning},
+doi = {10.5772/intechopen.92271},
+keywords = {artificial intelligence,deep learning,machine learning,neural networks},
+month = {dec},
+publisher = {IntechOpen},
+title = {{Advancements in Deep Learning Theory and Applications: Perspective in 2020 and beyond}},
+year = {2020}
+}
+
+@Book{Bishop2006,
+  author = {Christopher M. Bishop},
+  title = {Pattern Recognition and Machine Learning},
+  publisher = {Springer},
+  year = {2006},
+}
+
+@Book{Abbass2018,
+  author = {Abbass, Hussein A. and Scholz, Jason and Reid, Darryn J.},
+  title = {Foundations of Trusted Autonomy},
+  publisher = {Springer},
+  year = {2018},
+  doi = {10.1007/978-3-319-64816-3}
+}
+
+@Book{Chollet2018,
+  author = {Chollet, Fran\c{c}ois},
+  title = {Deep Learning with Python},
+  publisher = {Manning},
+  year = {2018}
+}
+
+@inproceedings{Kingma2015,
+abstract = {We introduce Adam, an algorithm for first-order gradient-based optimization of stochastic objective functions, based on adaptive estimates of lower-order moments. The method is straightforward to implement, is computationally efficient, has little memory requirements, is invariant to diagonal rescaling of the gradients, and is well suited for problems that are large in terms of data and/or parameters. The method is also appropriate for non-stationary objectives and problems with very noisy and/or sparse gradients. The hyper-parameters have intuitive interpretations and typically require little tuning. Some connections to related algorithms, on which Adam was inspired, are discussed. We also analyze the theoretical convergence properties of the algorithm and provide a regret bound on the convergence rate that is comparable to the best known results under the online convex optimization framework. Empirical results demonstrate that Adam works well in practice and compares favorably to other stochastic optimization methods. Finally, we discuss AdaMax, a variant of Adam based on the infinity norm.},
+archivePrefix = {arXiv},
+arxivId = {1412.6980},
+author = {Kingma, Diederik P. and Ba, Jimmy Lei},
+booktitle = {3rd International Conference on Learning Representations, ICLR 2015 - Conference Track Proceedings},
+eprint = {1412.6980},
+month = {dec},
+publisher = {International Conference on Learning Representations, ICLR},
+title = {{Adam: A method for stochastic optimization}},
+year = {2015}
+}
+
+@INBOOK{Rumelhart1987,
+  author={D. E. {Rumelhart} and J. L. {McClelland}},
+  booktitle={Parallel Distributed Processing: Explorations in the Microstructure of Cognition: Foundations},
+  title={Learning Internal Representations by Error Propagation},
+  year={1987},
+  volume={},
+  number={},
+  pages={318-362},
+  doi={}}
+
+  @ARTICLE{Wang2018,
+  AUTHOR={Wang, Shui-Hua and Tang, Chaosheng and Sun, Junding and Yang, Jingyuan and Huang, Chenxi and Phillips, Preetha and Zhang, Yu-Dong},
+  TITLE={Multiple Sclerosis Identification by 14-Layer Convolutional Neural Network With Batch Normalization, Dropout, and Stochastic Pooling},
+  JOURNAL={Frontiers in Neuroscience},
+  VOLUME={12},
+  PAGES={818},
+  YEAR={2018},
+  DOI={10.3389/fnins.2018.00818},
+  ISSN={1662-453X},
+  }
+
+  @article{Ren2017,
+abstract = {State-of-the-art object detection networks depend on region proposal algorithms to hypothesize object locations. Advances like SPPnet [1] and Fast R-CNN [2] have reduced the running time of these detection networks, exposing region proposal computation as a bottleneck. In this work, we introduce a Region Proposal Network (RPN) that shares full-image convolutional features with the detection network, thus enabling nearly cost-free region proposals. An RPN is a fully convolutional network that simultaneously predicts object bounds and objectness scores at each position. The RPN is trained end-to-end to generate high-quality region proposals, which are used by Fast R-CNN for detection. We further merge RPN and Fast R-CNN into a single network by sharing their convolutional features - using the recently popular terminology of neural networks with 'attention' mechanisms, the RPN component tells the unified network where to look. For the very deep VGG-16 model [3], our detection system has a frame rate of 5 fps (including all steps) on a GPU, while achieving state-of-the-art object detection accuracy on PASCAL VOC 2007, 2012, and MS COCO datasets with only 300 proposals per image. In ILSVRC and COCO 2015 competitions, Faster R-CNN and RPN are the foundations of the 1st-place winning entries in several tracks. Code has been made publicly available.},
+archivePrefix = {arXiv},
+arxivId = {1506.01497},
+author = {Ren, Shaoqing and He, Kaiming and Girshick, Ross and Sun, Jian},
+doi = {10.1109/TPAMI.2016.2577031},
+eprint = {1506.01497},
+issn = {01628828},
+journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+keywords = {Object detection,convolutional neural network,region proposal},
+month = {jun},
+number = {6},
+pages = {1137--1149},
+pmid = {27295650},
+publisher = {IEEE Computer Society},
+title = {{Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks}},
+volume = {39},
+year = {2017}
+}
+
+@article{Thorborg2017,
+author = {Thorborg, K. and Rathleff, M. S. and Petersen, P. and Branci, S. and Hölmich, P.},
+title = {Prevalence and severity of hip and groin pain in sub-elite male football: a cross-sectional cohort study of 695 players},
+journal = {Scandinavian Journal of Medicine \& Science in Sports},
+volume = {27},
+number = {1},
+pages = {107-114},
+keywords = {football, hip, groin, pain, prevalence, HAGOS},
+doi = {10.1111/sms.12623},
+abstract = {The purpose of this study was twofold: (a) to investigate the prevalence of hip and groin pain in sub-elite male adult football in Denmark and (b) to explore the association between prevalence and duration of hip and groin pain in the previous season with the Copenhagen Hip and Groin Outcome Score (HAGOS) in the beginning of the new season. In total 695 respondents from 40 teams (Division 1–4) were included. Players completed in the beginning of the new season (July–Sept 2011) a self-reported paper questionnaire on hip and/or groin pain during the previous season and HAGOS. In total 49\% (95\% CI: 45–52\%) reported hip and/or groin pain during the previous season. Of these, 31\% (95\% CI: 26–36\%) reported pain for >6 weeks. Players with the longest duration of pain during the previous season had the lowest HAGOS scores, when assessed at the beginning of the new season, P < 0.001. This study documents that half of sub-elite male adult football players report pain in the hip and/or groin during a football season. The football players with the longest duration of pain in previous season displayed the lowest HAGOS scores in the beginning of the new season.},
+year = {2017}
+}
+
+@article{Moses2012,
+author = {Moses, Bassam and Orchard, John and Orchard, Jessica},
+title = {Systematic Review: Annual Incidence of ACL Injury and Surgery in Various Populations},
+journal = {Research in Sports Medicine},
+volume = {20},
+number = {3-4},
+pages = {157-179},
+year  = {2012},
+publisher = {Taylor & Francis},
+doi = {10.1080/15438627.2012.680633},
+    note ={PMID: 22742074}
+}
+
+@article{Monk2016,
+author = {Monk, A. Paul and Davies, Loretta J. and Hopewell, Sally and Harris, Kristina and Beard, David J. and Price, Andrew J.},
+title = {Surgical versus conservative interventions for treating anterior cruciate ligament injuries},
+journal = {Cochrane Database of Systematic Reviews},
+volume = {},
+number = {4},
+pages = {},
+ISSN = {1465-1858},
+year  = {2016},
+publisher = {John Wiley & Sons, Ltd},
+doi = {10.1002/14651858.CD011166.pub2}
+}
+
+@article{Krause2018,
+author = {Krause, Matthias and Freudenthaler, Fabian and Frosch, Karl-Heinz and Achtnich, Andrea and Petersen, Wolf and Akoto, Ralph},
+title = {{Operative Versus Conservative Treatment of Anterior Cruciate Ligament Rupture}},
+journal = {Dtsch Arztebl International},
+volume = {115},
+number = {51-52},
+pages = {855-862},
+doi = {10.3238/arztebl.2018.0855},
+year = {2018}
+}
+
+@article{Wu2016,
+  title={Depression and psychiatric disease associated with outcomes after anterior cruciate ligament reconstruction},
+  author={Wu, Hao-Hua and Liu, Max and Dines, Joshua S. and Kelly, John D. and Garcia, Grant H.},
+  journal={World Journal of Orthopedics},
+  year={2016},
+  volume={7},
+  pages={709 - 717},
+  doi = {10.5312/wjo.v7.i11.709}
+}
+
+@article{Ageberg2002,
+title = {Consequences of a ligament injury on neuromuscular function and relevance to rehabilitation — using the anterior cruciate ligament-injured knee as model},
+journal = {Journal of Electromyography and Kinesiology},
+volume = {12},
+number = {3},
+pages = {205-212},
+year = {2002},
+note = {Sensory Function of Ligaments},
+issn = {1050-6411},
+doi = {10.1016/S1050-6411(02)00022-6},
+author = {Eva Ageberg}
+}
+
+@article{Lohmander2007,
+author = {Lohmander, L. Stefan and Englund, P. Martin and Dahl, Ludvig L. and Roos, Ewa M.},
+title = {The Long-term Consequence of Anterior Cruciate Ligament and Meniscus Injuries: Osteoarthritis},
+journal = {The American Journal of Sports Medicine},
+volume = {35},
+number = {10},
+pages = {1756-1769},
+year = {2007},
+doi = {10.1177/0363546507307396}
+}
+
+@article{Crichlow2006,
+  title={Depression in orthopaedic trauma patients. Prevalence and severity.},
+  author={R. Crichlow and P. Andres and S. Morrison and S. Haley and M. Vrahas},
+  journal={The Journal of bone and joint surgery. American volume},
+  year={2006},
+  volume={88 9},
+  pages={1927-33}
+}
+
+@article{Paterno2012,
+author = {Paterno, Mark and Rauh, Mitchell and Schmitt, Laura and Ford, Kevin and Hewett, Timothy},
+year = {2012},
+month = {03},
+pages = {116-21},
+title = {Incidence of Contralateral and Ipsilateral Anterior Cruciate Ligament (ACL) Injury After Primary ACL Reconstruction and Return to Sport},
+volume = {22},
+journal = {Clinical journal of sport medicine : official journal of the Canadian Academy of Sport Medicine},
+doi = {10.1097/JSM.0b013e318246ef9e}
+}
+
+@article{Horak2006,
+    author = {Horak, Fay B.},
+    title = "{Postural orientation and equilibrium: what do we need to know about neural control of balance to prevent falls?}",
+    journal = {Age and Ageing},
+    volume = {35},
+    number = {suppl_2},
+    pages = {ii7-ii11},
+    year = {2006},
+    month = {09},
+    issn = {0002-0729},
+    doi = {10.1093/ageing/afl077}
+}
+
+@article{Hewett2005,
+author = {Hewett, Timothy E. and Myer, Gregory D. and Ford, Kevin R. and Heidt Jr., Robert S. , and Colosimo, Angelo J. and McLean, Scott G. and van den Bogert, Antonie J. and Paterno, Mark V. and Succop, Paul},
+title ={Biomechanical Measures of Neuromuscular Control and Valgus Loading of the Knee Predict Anterior Cruciate Ligament Injury Risk in Female Athletes: A Prospective Study},
+journal = {The American Journal of Sports Medicine},
+volume = {33},
+number = {4},
+pages = {492-501},
+year = {2005},
+doi = {10.1177/0363546504269591}
+}
+
+@article{Nae2020b,
+    author = {Nae, Jenny and Creaby, Mark W and Ageberg, Eva},
+    title = {Extended Version of a Test Battery for Visual Assessment of Postural Orientation Errors: Face Validity, Internal Consistency, and Reliability},
+    journal = {Physical Therapy},
+    volume = {100},
+    number = {9},
+    pages = {1542-1556},
+    year = {2020},
+    month = {05},
+    issn = {1538-6724},
+    doi = {10.1093/ptj/pzaa092}
+}
+
+@online{MayoACL,
+  author = {Mayo Clinic},
+  title = {ACL injury},
+  year = 2019,
+  url = {https://www.mayoclinic.org/diseases-conditions/acl-injury/symptoms-causes/syc-20350738},
+  urldate = {2021-03-05}
+}
+
+@misc{Duthon2006,
+author = {Duthon, V. B. and Barea, C. and Abrassart, S. and Fasel, J. H. and Fritschy, D. and Menetrey, J.},
+booktitle = {Knee Surgery, Sports Traumatology, Arthroscopy},
+doi = {10.1007/s00167-005-0679-9},
+issn = {09422056},
+month = {mar},
+number = {3},
+pages = {204--213},
+pmid = {16235056},
+publisher = {Springer},
+title = {{Anatomy of the anterior cruciate ligament}},
+volume = {14},
+year = {2006}
+}
+
+@article{Dai2014,
+title = {Anterior cruciate ligament injuries in soccer: Loading mechanisms, risk factors, and prevention programs},
+journal = {Journal of Sport and Health Science},
+volume = {3},
+number = {4},
+pages = {299-306},
+year = {2014},
+issn = {2095-2546},
+doi = {10.1016/j.jshs.2014.06.002},
+author = {Boyi Dai and Dewei Mao and William E. Garrett and Bing Yu}
+}
+
+@article{Wetters2016,
+title = {Mechanism of Injury and Risk Factors for Anterior Cruciate Ligament Injury},
+journal = {Operative Techniques in Sports Medicine},
+volume = {24},
+number = {1},
+pages = {2-6},
+year = {2016},
+note = {Anterior Cruciate Ligament Injury and Reconstruction: From Perioperative Management to Rehabilitation and Return-to-Play},
+issn = {1060-1872},
+doi = {10.1053/j.otsm.2015.09.001},
+author = {Nathan Wetters and Alexander E. Weber and Thomas H. Wuerz and David L. Schub and Bert R. Mandelbaum}
+}
+
+@Report{soc2019,
+  Title           = {Digitala vårdtjänster och artificiell intelligens i hälso- och sjukvården},
+  Author          = {Socialstyrelsen},
+  Date            = {2019-10-31},
+  Institution     = {Office of the United Nations High Commissioner for Human Rights},
+  Year            = {2019},
+  Number          = {2019-10-6431},
+  url             = {https://www.socialstyrelsen.se/globalassets/sharepoint-dokument/artikelkatalog/ovrigt/2019-10-6431.pdf}
+}
+
+@Article{Topol2019,
+AUTHOR = {Topol, Eric J.},
+TITLE = {High-performance medicine: the convergence of human and artificial intelligence.},
+JOURNAL = {Nature Medicine},
+VOLUME = {25},
+YEAR = {2019-01-07 00:00:00.0},
+NUMBER = {1},
+PAGES = {44-56},
+DOI = {10.1038/s41591-018-0300-7},
+ISSN = {1078-8956},
+}
+
+@ARTICLE{Liao2020,
+  author={Y. {Liao} and A. {Vakanski} and M. {Xian}},
+  journal={IEEE Transactions on Neural Systems and Rehabilitation Engineering},
+  title={A Deep Learning Framework for Assessing Physical Rehabilitation Exercises},
+  year={2020},
+  volume={28},
+  number={2},
+  pages={468-477},
+  doi={10.1109/TNSRE.2020.2966249}}
+
+@INPROCEEDINGS{Kianifar2016,
+    author={R. {Kianifar} and A. {Lee} and S. {Raina} and D. {Kulić}},
+    booktitle={2016 38th Annual International Conference of the IEEE Engineering in Medicine and Biology Society (EMBC)},
+    title={Classification of squat quality with inertial measurement units in the single leg squat mobility test},
+    year={2016},
+    volume={},
+    number={},
+    pages={6273-6276},
+    doi={10.1109/EMBC.2016.7592162}}
+
+  @article {Montalvo2019,
+    	author = {Montalvo, Alicia M and Schneider, Daniel K and Yut, Laura and Webster, Kate E and Beynnon, Bruce and Kocher, Mininder S and Myer, Gregory D},
+    	editor = {Veledar, Emir},
+    	title = {“What’s my risk of sustaining an ACL injury while playing sports?” A systematic review with meta-analysis},
+    	volume = {53},
+    	number = {16},
+    	pages = {1003--1012},
+    	year = {2019},
+    	doi = {10.1136/bjsports-2016-096274},
+    	publisher = {British Association of Sport and Excercise Medicine},
+    	issn = {0306-3674},
+    	journal = {British Journal of Sports Medicine}
+}
+
+
+@inproceedings{Pavllo2019,
+      title={3D human pose estimation in video with temporal convolutions and semi-supervised training},
+      author={Pavllo, Dario and Feichtenhofer, Christoph and Grangier, David and Auli, Michael},
+      booktitle={Conference on Computer Vision and Pattern Recognition (CVPR)},
+      year={2019}
+}
+
+@article{Nagelli2017,
+    author = {Nagelli, Christopher and Hewett, Timothy},
+    year = {2017},
+    month = {02},
+    pages = {},
+    title = {Should Return to Sport be Delayed Until 2 Years After Anterior Cruciate Ligament Reconstruction? Biological and Functional Considerations},
+    volume = {47},
+    journal = {Sports Medicine},
+    doi = {10.1007/s40279-016-0584-z}
+}

@@ -85,11 +85,11 @@ def re_est_bbox(img, folder_box, flip90, flip180, flip2right, device='cpu'):
 
     det_results = inference_detector(det_model, img)
     bbox = np.expand_dims(np.array(det_results[0])[0, :], axis=0)
-    dy = bbox[0,3] - bbox[0,1]
-    dx = bbox[0,2] - bbox[0,0]
-    bbox[0,3] += 0.1 * dy
-    bbox[0,0] -= 0.1 * dx
-    bbox[0,2] += 0.1 * dx
+    dy = bbox[0, 3] - bbox[0, 1]
+    dx = bbox[0, 2] - bbox[0, 0]
+    bbox[0, 3] += 0.1 * dy
+    bbox[0, 0] -= 0.1 * dx
+    bbox[0, 2] += 0.1 * dx
     # bbox[0, 2:4] = bbox[0, 2:4] + 100
     bbox[0, 4] = 1
 
@@ -160,7 +160,6 @@ def loop(args, rotate, fname, bbox, pose_model, flipped=False,
         if not flag:
             break
 
-        # if frame > 66:
         # check every nd frame
         if frame % args.skip_rate == 0:
             # test a single image, with a list of bboxes.
@@ -354,9 +353,6 @@ def start(args):
     bbox = re_est_bbox(img, args.folder_box, rotate, rotate_180, flip2right,
                        device=args.device)
 
-    # print('orig bbox: {}'.format(bbox))
-    # print('new bbox: {}'.format(comp_box))
-
     return loop(args, rotate, fname, bbox, pose_model, rotate_180=rotate_180,
                 flipped=flip2right)
 
@@ -398,7 +394,7 @@ def main():
     parser.add_argument('--folder_box', type=str, default='')
     parser.add_argument('--show_box', type=str2bool, nargs='?', const=True,
                         default=False, help="show bounding box.")
-    parser.add_argument('--allow_flip', type=str2bool, nargs='?',  # const=True,
+    parser.add_argument('--allow_flip', type=str2bool, nargs='?',
                         default=False, help='for FL')
     parser.add_argument('--save_pixels', type=str2bool, nargs='?',
                         const=True, default=False,

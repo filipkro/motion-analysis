@@ -1,0 +1,51 @@
+% !TEX root=../../mt-motion-analysis.tex
+% \newpage
+% Anterior Cruciate Ligament (ACL)
+\tableofcontents
+{\setstretch{1.1}
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+Injuries to the Anterior Cruciate Ligament (ACL) are severe and common among the physically active young to middle aged population. After suffering from such an injury, the patient typically face a lengthy rehabilitation process. Usually, it takes 1-2 years before an injured knee returns to pre-injury performance, if that is ever achieved. The risk of re-injury is high and is increased by early return to sports. One measure which has been suggested as an indicator of the increased risk of re-injury, and hence could work as an indicator of when to return to normal activity, is altered postural orientation. The postural orientation describes the positions of different body parts in relation to each other and the surroundings. Assessment of this is a time consuming task requiring human experts trained to find such alterations. This thesis propose a method to automate this task by analyzing videos recorded with a regular video camera, e.g. a mobile phone.
+
+The proposed method uses well established deep learning techniques, in this case HRNet with DARK-pose, to extract body part positions from each video frame. Deep learning based models are trained in a supervised fashion to classify the sequences of extracted keypoints. Models trained to perform according to different metrics were combined in ensembles classifying the quality of the postural orientation on an ordinal scale from 0 (Good), via 1 (Fair), to 2 (Poor).
+
+We evaluated the method on four different segment-specific Postural Orientation Errors (POEs) when the patient performed a single leg squat. The different POEs were trunk, pelvis, femoral valgus, and \gls{kmfp}. For femoral valgus and trunk a classification accuracy of 82.3\% and 80.0\%, respectively, was achieved. The corresponding number for \gls{kmfp} was 90.3\%, but this data was heavily imbalanced. The pelvis was the most difficult to analyze resulting in an accuracy of 73.3\%.
+
+The most important contribution of this thesis is to provide a foundation and a number of insights of what is needed before introducing a method like this for clinical use.
+
+
+\chapter*{Populärvetenskaplig sammanfattning}
+\addcontentsline{toc}{chapter}{Populärvetenskaplig sammanfattning}
+Skador på det främre korsbandet (ACL) är allvarliga och vanliga bland fysiskt aktiva och ofta unga personer. Efter att ha drabbats av en sådan skada står patienten inför en lång och svår rehabiliteringsprocess. Vanligtvis tar det 1-2 år innan ett skadat knä återgår till den nivå det hade innan skadan, om denna någonsin nås. Risken för nya skador är hög och höjs ytterligare av att återvända till idrott för tidigt.
+Ett mått som föreslagits visa på förhöjd skaderisk, och alltså skulle kunna fungera som en indikation på när det är möjligt att återgå till normal aktivitet, är postural orientering. Denna orientering beskriver förmågan att upprätthålla kroppsdelars positioner i förhållande till varandra och omgivningen. Bedömning av detta är en tidskrävande uppgift som kräver tränade experter. Denna uppsats föreslår en metod för att automatisera denna process baserat på filmer inspelade med vanliga videokameror, till exempel mobiltelefoner.
+
+Den föreslagna metoden använder etablerade djupinlärnings\-tekniker, HRNet med DARK-pose, för att hitta kroppsdelar för varje bildruta i filmerna.
+Andra djupinlärnings\-modeller tränas för att analysera sekvenserna som beskriver kroppsdelarnas positioner.
+Flera modeller kombineras för klassificera kvalitén på rörelserna på en skala från 0 (Bra), via 1 (Ganska bra), till 2 (Dålig).
+
+Vi utvärderade metoden för fyra olika segmentspecifika avvikelser i postural orientering, kallade Postural Orientation Errors (POEs). De POEs som utvärderades relaterade till positionen av bål, höft, lår och knä. För lår och bål uppnåddes en klassificerings\-noggrannhet på 82.3\% respektive 80.0\%. Motsvarande siffra för knäet var 90.3\%, men denna data var kraftigt obalanserad. Höften var svårast att analysera och en noggrannhet på 73.3\% uppnåddes.
+
+De viktigaste bidragen från denna uppsats är att visa att detta är ett problem där maskininlärning kan användas, utvecklingen av en grund att bygga vidare på samt ett antal insikter kring vad som behövs för att använda systemet kliniskt.
+
+\chapter*{Acknowledgements}
+\addcontentsline{toc}{chapter}{Acknowledgements}
+The computations were enabled by resources provided by the Swedish National Infrastructure for Computing (SNIC) at Chalmers Centre for Computational Science and Engineering (C3SE) partially funded by the Swedish Research Council through grant agreement no. 2018-05973.
+
+Regarding thank yous I would like to begin by giving a big one to Eva Ageberg and Mark Creaby for your ideas and insights. Secondly I would like to thank Jenny Älmqvist Nae for introducing this field to me, for explaining concepts which were very alien to me six months ago, and for assessing so many videos. Finally I would like to give a big thank you to Andreas Jakobsson for your enthusiasm and ideas throughout the project, for finding so many missing commas in this text, and for being a source of inspiration.
+
+}
+% “And now here is my secret, a very simple secret: It is only with the heart that one can see rightly; what is essential is invisible to the eye.”
+% ― Antoine de Saint-Exupéry, The Little Prince
+
+\newpage
+\etocdepthtag.toc{mtchapter}
+\etocsettagdepth{mtchapter}{subsection}
+\etocsettagdepth{mtappendix}{none}
+\thispagestyle{plain}
+% \setstretch{1}
+\addcontentsline{toc}{chapter}{Acronyms}
+\printglossary
+
+% \setstretch{1}
+% \listoffigures
+% \listoftables

@@ -1,0 +1,896 @@
+% \documentclass{beamer}
+% \usetheme{metropolis}           % Use metropolis theme
+% \title{Visual assessments of Postural
+% Orientation Errors using
+% ensembles of Deep Neural
+% Networks}
+% \date{\today}
+% \author{Filip Kronström}
+% \institute{Lund University}
+% \begin{document}
+%   \maketitle
+%   \section{First Section}
+%   \begin{frame}{First Frame}
+%     Hello, world!
+%   \end{frame}
+% \end{document}
+
+\documentclass[10pt]{beamer}
+
+\usetheme{metropolis}
+\usepackage{appendixnumberbeamer}
+% \usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+% \usepackage{footmisc}
+\usepackage{scrextend}
+% \usepackage{setspace}
+\usepackage{pgfplots}
+% \usepackage{multimedia}
+\usepackage{animate}
+\usepgfplotslibrary{dateplot}
+% \addbibresource{files/bibtex/pres_bib.bib}
+\usepackage{multirow}
+% \setsansfont{Ubuntu}
+% \setmonofont{Ubuntu Mono}
+\usepackage{tabu}
+
+\usepackage{xspace}
+% \usepackage{subcaption}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+% \renewcommand{\small}{\footnotesize}
+\renewcommand{\footnotesize}{\tiny}
+\title{Visual assessments of\\Postural
+Orientation\\Errors using
+ensembles\\of Deep Neural
+Networks}
+\subtitle{Master's Thesis}
+\date{\today}
+\author[me]{\textbf{\large Filip Kronström}\\[1.5mm]Supervisors: A. Jakobsson\footnote{Centre for Mathematical Sciences, Mathematical Statistics, Lund University}, J. Älmqvist\footnote{\label{hs}Department of Health Sciences, Lund University}, E. Ageberg$^{\ref{hs}}$, M. Creaby\footnote{School of Exercise Science, Australian Catholic University \newline}}
+\institute{\large Faculty of Engineering, Lund University}
+\titlegraphic{\hfill\includegraphics[height=2.6cm]{files/figs/presentation/lth_logo_en.eps}}
+
+\begin{document}
+
+\maketitle
+% \footnotetext[4]{\newline}
+
+\begin{frame}{Agenda}
+  \setbeamertemplate{section in toc}[sections numbered]
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+\section{Introduction}
+% \begin{frame}[fragile]{Sports injuries}
+%   % lol\footnote{LaBella et al., Anterior Cruciate Ligament Injuries: Diagnosis, Treatment, and Prevention. 2014}
+%     \begin{columns}[T,onlytextwidth]
+%       \column{0.45\textwidth}
+%         {\small50\% of amateur football players in Denmark experience hip/groin pain during season\footnotemark.}
+%       \column{0.45\textwidth}
+%         {\small Around 8000 yearly Anterior cruciate ligament injuries in Sweden\footnotemark.}
+%     \end{columns}
+%     \begin{figure}
+%       \centering
+%       \includegraphics[width=0.75\textwidth]{files/figs/presentation/acl-injury-per-ae.png}
+%       % \caption[Caption for LOF]{Injury rates among high school students, per 100 000 athlete exposures\footnote{LaBella et al., Anterior Cruciate Ligament Injuries: Diagnosis, Treatment, and Prevention. 2014}.}
+%
+%       {\scriptsize\textbf{Figure 1:} Injury rates among high school students, per 100 000 athlete exposures\footnotemark.}
+%       % \label{}
+%     \end{figure}
+%
+%
+% \footnotetext[1]{Thorborg et al., Prevalence
+% and severity of hip and groin pain in sub-elite male football: a cross-sectional cohort study of 695 players. 2017}
+% \footnotetext[2]{Svenska korsbandsregistret, Årsrapport 2019. 2020}
+% \footnotetext[3]{LaBella et al., Anterior Cruciate Ligament Injuries: Diagnosis, Treatment, and Prevention. 2014}
+%
+% \end{frame}
+
+\begin{frame}[fragile]{Anterior Cruciate Ligament injuries}
+  \begin{columns}[c,onlytextwidth]
+    \column{0.53\textwidth}
+      \begin{itemize}
+        % \small
+          \item Around 8000 yearly Anterior cruciate ligament injuries in Sweden.
+          \item Regular injury mechanism is sudden changes in direction or velocity while knee is bearing weight.
+          \item Rehabilitation typically up to 2 years.
+          \item Increased long and short term risk of, e.g., osteoarthritis, joint instability, and re-injury.
+      \end{itemize}
+
+    \column{0.52\textwidth}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\textwidth]{files/figs/intro/acl.png}
+      % \caption{}
+      % \label{}
+
+      {\scriptsize\textbf{Figure 1:} Illustration of ACL in the knee\footnotemark.}
+    \end{figure}
+
+  \end{columns}
+
+  \footnotetext[1]{Mayo Clinic, \url{https://www.mayoclinic.org/diseases-conditions/acl-injury/symptoms-causes/syc-20350738}}
+\end{frame}
+
+% \begin{frame}[c,fragile]{Anterior cruciate ligament injury and rehabilitation}
+%   \begin{columns}[c,onlytextwidth]
+%     \column{0.45\textwidth}
+%       \begin{itemize}
+%         % \small
+%           \item Regular injury mechanism is sudden changes in direction or velocity while knee is bearing weight\footnotemark.
+%           \item Rehabilitation typically up to 2 years\footnotemark.
+%           \item Increased long and short term risk of, e.g., osteoarthritis\footnotemark, joint instability\footnotemark, and re-injury\footnotemark.
+%       \end{itemize}
+%
+%     \column{0.55\textwidth}
+%     \begin{figure}
+%       \centering
+%       \includegraphics[width=0.9\textwidth]{files/figs/intro/acl.png}
+%       % \caption{}
+%       % \label{}
+%
+%       {\scriptsize\textbf{Figure 2:} Illustration of ACL in the knee\footnotemark.}
+%     \end{figure}
+%
+%   \end{columns}
+%
+%   \footnotetext[4]{Wetters et al., Mechanism of Injury and Risk Factors for Anterior Cruciate Ligament Injury. 2016}
+%   \footnotetext[5]{Nagelli and Hewett, Should Return to Sport be Delayed Until 2 Years After Anterior Cruciate Ligament Reconstruction? Biological and Functional Considerations. 2017}
+%   \footnotetext[6]{Mayo Clinic, \url{https://www.mayoclinic.org/diseases-conditions/acl-injury/symptoms-causes/syc-20350738}}
+%   \footnotetext[7]{Wetters et al., Mechanism of Injury and Risk Factors for Anterior Cruciate Ligament Injury. 2016}
+%   \footnotetext[8]{Nagelli and Hewett, Should Return to Sport be Delayed Until 2 Years After Anterior Cruciate Ligament Reconstruction? Biological and Functional Considerations. 2017}
+%   \footnotetext[9]{Mayo Clinic, \url{https://www.mayoclinic.org/diseases-conditions/acl-injury/symptoms-causes/syc-20350738}}
+%
+% \end{frame}
+
+\begin{frame}[fragile]{Postural Orientation}
+  \begin{columns}[T,onlytextwidth]
+    \centering
+    \column{0.55\textwidth}
+  \begin{columns}[T,onlytextwidth]
+      \column{0.49\textwidth}
+
+      \begin{figure}
+        \raggedleft
+        \includegraphics[angle=90,height=0.7\textheight]{files/figs/presentation/good-poe.png}
+        % \caption{}
+        % \label{}
+      \end{figure}
+
+      \column{0.49\textwidth}
+      \begin{figure}
+        \raggedright
+        \includegraphics[angle=90,height=0.7\textheight]{files/figs/presentation/poor-poe.png}
+        % \caption{}
+        % \label{}
+      \end{figure}
+  \end{columns}
+  % \vspace{0.1cm}
+  {\scriptsize\textbf{Figure 2:} Examples of maintained (left) and altered postural orientation (right) during a single leg squat. \newline}
+  \column{0.45\textwidth}
+  \begin{itemize}
+    \item Ability to uphold alignment of body parts.
+    \item Altered PO - seen to increase risk of re-injury.
+    \item No established and feasible method to assess for clinical use.
+    \item When used, found from motion capture systems.
+    % \item Proposed methods where experts assess motions on videos - time consuming\footnotemark.
+  \end{itemize}
+  \end{columns}
+
+  % \footnotetext[10]{\hspace Nae et al., Extended Version of a Test Battery for Visual Assessment of Postural Orientation Errors: Face Validity, Internal Consistency, and Reliability. 2020}
+
+  % \begin{figure}
+  %   \centering
+  %   \begin{subfigure}[t]{0.45/textwidth}
+  %       \raggedleft
+  %       \includegraphics[height=0.5\textheight,angle=90]{files/figs/presentation/good-poe.png}
+  %   \end{subfigure}
+  %   ~
+  %   \begin{subfigure}[t]{0.45\textwidth}
+  %     \raggedright
+  %     \includegraphics[height=0.5\textheight,angle=90]{files/figs/presentation/poor-poe.png}
+  %   \end{subfigure}
+    % \includegraphics[height=0.5\textheight]{files/figs/presentation/postural-orientation.jpeg}
+    %
+    % {\scriptsize\textbf{Figure 3:} Examples of postural orientation\footnotemark}
+    % \caption{}
+    % \label{}
+  % \end{figure}
+
+% \footnotetext[10]{Horak, Postural orientation and equilibrium: what do we need to know about neural control of balance to prevent falls?. 2006}
+\end{frame}
+
+\begin{frame}[fragile]{Postural Orientation Errors}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.6\textwidth}
+    \raggedleft
+    % \begin{columns}[T,onlytextwidth]
+    %   \column{0.03\textwidth}
+    %
+    %   \column{0.9\textwidth}
+      \raggedright
+      \vspace{0.3cm}
+      \begin{itemize}
+        \item Proposed methods where experts assess motions from videos\footnotemark.
+        \item Scoring on ordinal scale, 0 (Good) - 2 (Poor).
+        \item Patient score calculated as median of 4-5 repetition scores.
+        \item Assessments are time consuming, can they be automated?
+        % \item 6 different POEs for 5 different motions.
+        \item Trunk, Pelvis, Femoral valgus, and KMFP POEs evaluated in this work for Single leg squat.
+      \end{itemize}
+
+    % \end{columns}
+
+    \column{0.4\textwidth}
+    \begin{figure}
+      % \raggedleft
+      \includegraphics[height=0.76\textheight]{files/figs/presentation/poe-segments.png}
+
+      {\scriptsize \hspace{0.5cm}\textbf{Figure 3:} Evaluated POEs.\newline}
+    \end{figure}
+  \end{columns}
+
+  \footnotetext[2]{\hspace Nae et al., Extended Version of a Test Battery for Visual Assessment of Postural Orientation Errors: Face Validity, Internal Consistency, and Reliability. 2020}
+\end{frame}
+
+\section{Methods}
+
+\begin{frame}[fragile]{System overview}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\textwidth]{files/figs/presentation/sys-overview.eps}
+
+      {\scriptsize\textbf{Figure 4:} POE assessment system overview.}
+    \end{figure}
+\end{frame}
+
+\renewcommand{\thempfootnote}{\arabic{mpfootnote}}
+\begin{frame}[fragile]{Body part localization}
+  \begin{columns}[T,onlytextwidth]
+      \column{0.45\textwidth}
+      \animategraphics[loop,autoplay,controls={play,stop},height=0.9\textheight]{8}{files/figs/presentation/sls06-pngs/sls06L-imgs-}{1}{174}
+
+      \column{0.54\textwidth}
+      \begin{itemize}
+        \item Built upon MMPose framework\footnotemark.
+        \item HRNet\footnotemark with DARK-pose\footnotemark trained on COCO-wholebody dataset used for pose estimation.
+        \item Outputs 133 keypoint coordinates.
+      \end{itemize}
+
+      \vspace{3.4cm}
+
+      \hspace{0.1cm} \footnotetext[3]{MMPose - OpenMMLab, \url{https://github.com/open-mmlab/mmpose}}
+      \footnotetext[4]{Sun et al., Deep high-resolution representation learning for \newline human pose estimation. 2019}
+      \footnotetext[5]{Zhang et al., Distribution-Aware Coordinate Representation for \newline Human Pose Estimation. 2020}
+  \end{columns}
+
+
+\end{frame}
+% prata om hur pixel space reduceras till keypoint space,
+%
+
+\begin{frame}[fragile]{Time series classification - Network architectures}
+  \begin{columns}[c,onlytextwidth]
+    \column{0.55\textwidth}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\textwidth]{files/figs/tsc/inception-time-module.png}
+      {\scriptsize\textbf{Figure 5:} InceptionTime module$^6$.}
+    \end{figure}
+
+  \column{0.4\textwidth}
+  \begin{block}{IncetionTime\footnotemark}
+    Modules with convolutions of different lengths, global average pooling, and densely connected layers for classification.
+  \end{block}
+  \end{columns}
+
+  \begin{columns}[c,onlytextwidth]
+    \column{0.55\textwidth}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\textwidth]{files/figs/met/x-inception-w-masks.pdf}
+      {\scriptsize\textbf{Figure 6:} X-InceptionTime.}
+    \end{figure}
+
+  \column{0.4\textwidth}
+  \begin{block}{X-IncetionTime}
+    Like InceptionTime, but input channels are kept separate.
+  \end{block}
+  \end{columns}
+
+\footnotetext[6]{Fawaz et al., InceptionTime: Finding AlexNet for time series classification. 2020}
+\end{frame}
+
+\begin{frame}[fragile]{Inputs to classification}
+  \begin{columns}
+    \column{\dimexpr\paperwidth-20pt}
+  \begin{table}
+    \caption{Input variables for the different POEs. Videos have been mirrored such that action is performed with right leg, if applicable.}
+      \begin{center}
+          \tabulinesep=0.8mm
+          \begin{minipage}[t]{0.25\textwidth}
+            \begin{tabu}[t]{l}
+              \small
+              \textbf{Trunk} \\ \hline \hline
+              Left shoulder - $x$\\
+              Right shoulder - $x$\\
+              Right shoulder - $y$\\
+              Left hip - $x$\\
+              Left hip - $y$\\
+              Right hip - $x$\\
+              \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Difference: right\\ hip and knee - $x$\end{tabular}}
+            \end{tabu}
+          \end{minipage}%
+          \begin{minipage}[t]{0.25\textwidth}
+            \begin{tabu}[t]{l}
+              \small
+              \textbf{Pelvis} \\ \hline \hline
+              Right shoulder - $x$\\
+              Right shoulder - $y$\\
+              Right hip - $x$\\
+              Right hip - $y$\\
+              Left hip - $y$\\
+              \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Difference: right\\ hip and knee - $x$\end{tabular}}\\
+              \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Difference: right\\ knee and toes - $x$\end{tabular}}
+            \end{tabu}
+          \end{minipage}%
+          \begin{minipage}[t]{0.24\textwidth}
+            \begin{tabu}[t]{l}
+              \small
+              \textbf{Femoral Valgus} \\ \hline \hline
+              Right shoulder - $x$\\
+              Right hip - $x$\\
+              Right knee - $y$\\
+              \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Angle: right\\ knee and ankle\end{tabular}}
+            \end{tabu}
+          \end{minipage}%
+          \begin{minipage}[t]{0.25\textwidth}
+            \begin{tabu}[t]{l}
+              \small
+              \textbf{KMFP} \\ \hline \hline
+              Left shoulder - $y$\\
+              Right hip - $y$\\
+              \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Angle: right\\ ankle and toes\end{tabular}}\\
+              \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Difference: right\\ hip and knee - $x$\end{tabular}} \\
+              \multicolumn{1}{l}{\begin{tabular}[l]{@{}l@{}}Difference: right\\ knee and ankle - $x$\end{tabular}}
+            \end{tabu}
+          \end{minipage}%
+      \end{center}
+  \end{table}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Time series classification - Ensembles}
+\begin{columns}[onlytextwidth]
+\column{0.5\textwidth}
+\begin{itemize}
+  \item Each classification is obtained from ensembles of 5 classifier models.
+  \item 2 models perform well over all classes - CORAL\footnotemark ordinal classifiers.
+  \item Remaining models optimized for low false positive rates for one class each - class weights or modified cross-entropy loss.
+\end{itemize}
+
+\column{0.45\textwidth}
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{files/figs/presentation/ensemble.eps}
+\end{figure}
+{\scriptsize\newline\textbf{Figure 7:} Ensemble struture used for classification.}
+\end{columns}
+
+  \footnotetext[7]{Cao et al., Rank consistent ordinal regression for neural networks with application to age estimation. 2019}
+  \end{frame}
+
+\end{frame}
+
+\section{Results}
+\begin{frame}[fragile]{Data}
+  \begin{columns}[c]
+    \column{0.55\textwidth}
+    \begin{columns}
+      \centering
+      \column{0.6\textwidth}
+      \begin{figure}
+        \centering
+        \includegraphics[width=\textwidth]{files/figs/met/trunk-label-hist.png}
+      \end{figure}
+
+      \begin{figure}
+        \centering
+        \includegraphics[width=\textwidth]{files/figs/met/femval-label-hist.png}
+      \end{figure}
+
+      \column{0.6\textwidth}
+      \begin{figure}
+        \centering
+        \includegraphics[width=\textwidth]{files/figs/met/pelvis-label-hist.png}
+      \end{figure}
+
+      \begin{figure}
+        \centering
+        \includegraphics[width=\textwidth]{files/figs/met/kmfp-label-hist.png}
+      \end{figure}
+    \end{columns}
+
+    {\scriptsize\newline\textbf{Figure 8:} Class distributions for the different POEs.}
+
+    \column{0.45\textwidth}
+    \begin{itemize}
+      \small
+      \item Videos with 4-5 repetitions.
+      \item 103 unique subjects.
+      \item Assessments for right and left leg for some subjects/POEs - 105-107 assessed videos, 519-530 repetitions.
+      \item 20\% (22 unique subjects, 110 repetitions) test set.
+      \item 10-fold cross-validation used. Results shown are mean ($\pm$ std) of the 10 resulting models on test set.
+    \end{itemize}
+  \end{columns}
+
+\end{frame}
+
+\begin{frame}[fragile]{Trunk}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \textbf{\small~Accuracy (\%):} 73.7$\pm$4.5
+    \vspace{0.3cm}
+    \column{0.5\textwidth}
+    \centering
+    75.0$\pm$7.9
+    \vspace{0.3cm}
+  \end{columns}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{files/figs/res/trunk/cnf-reps.eps}
+    \column{0.5\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{files/figs/res/trunk/cnf-combined.eps}
+  \end{columns}
+  {\scriptsize\newline\textbf{Figure 9:} Confusion matrices for the classification of the repetitions (left) and the combined scores (right).}
+\end{frame}
+
+\begin{frame}[fragile]{Pelvis}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \textbf{\small~Accuracy (\%):} 63.6$\pm$10.7
+    \vspace{0.3cm}
+    \column{0.5\textwidth}
+    \centering
+    69.1$\pm$10.1
+    \vspace{0.3cm}
+  \end{columns}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{files/figs/res/pelvis/cnf-reps.eps}
+    \column{0.5\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{files/figs/res/pelvis/cnf-combined.eps}
+  \end{columns}
+  {\scriptsize\newline\textbf{Figure 10:} Confusion matrices for the classification of the repetitions (left) and the combined scores (right).}
+\end{frame}
+
+\begin{frame}[fragile]{Femoral Valgus}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \textbf{\small~Accuracy (\%):} 69.6$\pm$6.8
+    \vspace{0.3cm}
+    \column{0.5\textwidth}
+    \centering
+    79.1$\pm$9.3
+    \vspace{0.3cm}
+  \end{columns}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{files/figs/res/femval/cnf-reps.eps}
+    \column{0.5\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{files/figs/res/femval/cnf-combined.eps}
+  \end{columns}
+  {\scriptsize\newline\textbf{Figure 11:} Confusion matrices for the classification of the repetitions (left) and the combined scores (right).}
+\end{frame}
+
+\begin{frame}[fragile]{Knee Medial-to-Foot Position}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \textbf{\small~Accuracy (\%):} 82.3$\pm$3.1
+    \vspace{0.3cm}
+    \column{0.5\textwidth}
+    \centering
+    % 90.3$\pm$4.3
+    89.5$\pm$4.5
+    \vspace{0.3cm}
+  \end{columns}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{files/figs/res/kmfp/cnf-reps.eps}
+    \column{0.5\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{files/figs/res/kmfp/cnf-combined.eps}
+  \end{columns}
+  {\scriptsize\newline\textbf{Figure 12:} Confusion matrices for the classification of the repetitions (left) and the combined scores (right).}
+\end{frame}
+
+\begin{frame}[fragile]{Summary}
+  \begin{table}[h]
+    \caption{Summary of results, here the combined scores with thresholds removing samples the models are uncertain about.}
+    \centering
+    \begin{tabu}[c]{|c|c|c|c|c|}
+      \hline
+      & \textbf{Trunk} & \textbf{Pelvis} &\textbf{Femoral Valgus} & \textbf{KMFP} \\ \hline
+      \textbf{Accuracy (\%)}  & 80.0$\pm$7.8 & 73.3$\pm$18.9 & 82.3$\pm$6.0 & 90.3$\pm$4.3 \\\hline
+      \textbf{F1 score (\%)}  & 79.9$\pm$8.9 & 73.6$\pm$22.3 & 81.0$\pm$5.2 & 74.0$\pm$22.3 \\ \hline
+      \textbf{Recall (\%)}    & 81.6$\pm$7.2 & 77.9$\pm$14.9  & 79.5$\pm$5.5 & 81.1$\pm$24.7 \\ \hline
+      \textbf{Precision (\%)} & 83.0$\pm$6.8 & 74.9$\pm$23.8 & 86.5$\pm$5.6 & 71.4$\pm$22.6 \\\hline
+      % & \textbf{Trunk} & \textbf{Pelvis} &\textbf{Femoral Valgus} & \textbf{KMFP} \\ \hline
+      % \textbf{Accuracy (\%)}  & 80.0$\pm$4.9 & 73.3$\pm$11.9 & 82.3$\pm$3.8 & 90.3$\pm$2.7 \\\hline
+      % \textbf{F1 score (\%)}  & 79.9$\pm$5.6 & 73.6$\pm$14.1 & 81.0$\pm$3.3 & 74.0$\pm$14.1 \\ \hline
+      % \textbf{Recall (\%)}    & 81.6$\pm$4.6 & 77.9$\pm$9.4  & 79.5$\pm$3.5 & 81.1$\pm$15.6 \\ \hline
+      % \textbf{Precision (\%)} & 83.0$\pm$4.3 & 74.9$\pm$15.1 & 86.5$\pm$3.5 & 71.4$\pm$14.3 \\\hline
+    \end{tabu}
+  \end{table}
+\end{frame}
+
+\section{Conclusions and Future work}
+
+\begin{frame}[fragile]{Conclusions and Future work}
+  \begin{itemize}
+    \item The results suggests the proposed method could automate assessments.
+    \item Large variance in results suggests more data needed.
+    \item Future work:
+          \begin{itemize}
+            \item Label videos differently.
+            \item Evaluate 3D coordinates.% reconstruction.
+            % \item Non-uniform weighting in ensembles and when combining scores.
+            \item Assess more POEs and motions.
+          \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}[standout]
+  Thank you
+\end{frame}
+
+\appendix
+
+\begin{frame}[fragile]{Occluded body parts}
+  \begin{columns}[T,onlytextwidth]
+      \column{0.325\textwidth}
+      \includegraphics[height=0.74\textheight]{files/figs/res/hpe/36-5.png}
+      \column{0.335\textwidth}
+      \includegraphics[height=0.74\textheight]{files/figs/res/hpe/36-6.png}
+      \column{0.335\textwidth}
+      \includegraphics[height=0.74\textheight]{files/figs/res/hpe/36-7.png}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Confusion matrices for patient scores with thresholds}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.49\textwidth}
+      \includegraphics[width=\textwidth]{files/figs/res/trunk/cnf-combined-th.eps}
+
+      \includegraphics[width=\textwidth]{files/figs/res/femval/cnf-combined-th.eps}
+
+      \column{0.49\textwidth}
+        \includegraphics[width=\textwidth]{files/figs/res/pelvis/cnf-combined-th.eps}
+
+        \includegraphics[width=\textwidth]{files/figs/res/kmfp/cnf-combined-th.eps}
+  \end{columns}
+
+\end{frame}
+
+\begin{frame}[fragile]{Ensemble's confidence in predicted classes - Trunk}
+  \begin{columns}[T,onlytextwidth]
+      \column{0.33\textwidth}
+      \includegraphics[width=\textwidth]{files/figs/res/trunk/pc0.eps}
+
+      \column{0.33\textwidth}
+      \includegraphics[width=\textwidth]{files/figs/res/trunk/pc1.eps}
+
+      \column{0.33\textwidth}
+      \includegraphics[width=\textwidth]{files/figs/res/trunk/pc2.eps}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Ensemble's confidence in predicted classes - Pelvis}
+  \begin{columns}[T,onlytextwidth]
+      \column{0.33\textwidth}
+      \includegraphics[width=\textwidth]{files/figs/res/pelvis/pc0.eps}
+
+      \column{0.33\textwidth}
+      \includegraphics[width=\textwidth]{files/figs/res/pelvis/pc1.eps}
+
+      \column{0.33\textwidth}
+      \includegraphics[width=\textwidth]{files/figs/res/pelvis/pc2.eps}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Ensemble's confidence in predicted classes - Femoral Valgus}
+  \begin{columns}[T,onlytextwidth]
+      \column{0.33\textwidth}
+      \includegraphics[width=\textwidth]{files/figs/res/femval/pc0.eps}
+
+      \column{0.33\textwidth}
+      \includegraphics[width=\textwidth]{files/figs/res/femval/pc1.eps}
+
+      \column{0.33\textwidth}
+      \includegraphics[width=\textwidth]{files/figs/res/femval/pc2.eps}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Ensemble's confidence in predicted classes - KMFP}
+  \begin{columns}[T,onlytextwidth]
+      \column{0.33\textwidth}
+      \includegraphics[width=\textwidth]{files/figs/res/kmfp/pc0.eps}
+
+      \column{0.33\textwidth}
+      \includegraphics[width=\textwidth]{files/figs/res/kmfp/pc1.eps}
+
+      \column{0.33\textwidth}
+      \includegraphics[width=\textwidth]{files/figs/res/kmfp/pc2.eps}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Descriptions for the visual assessments}
+  \begin{table}
+   \centering
+   \footnotesize
+   {\tabulinesep=0.8mm
+   \begin{tabu}[t]{c|ccc}
+
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}\textbf{Segment-specific}\\\textbf{POEs}\end{tabular}} &
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}\textbf{Scoring of 0:}\\\textbf{Good (no POE)}\end{tabular}} &
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}\textbf{Scoring of 1:}\\\textbf{Fair (minor POE)}\end{tabular}} &
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}\textbf{Scoring of 2:}\\\textbf{Poor (major POE)}\end{tabular}}\\ \hline \hline
+    % {\renewcommand{\arraystretch}{1}
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}\textbf{Deviation}\\
+                                                  \textbf{of trunk}\\
+                                                  \textbf{in any plane}\end{tabular}} &
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}The absence of a trunk\\
+                                                  position into forward\\
+                                                  lean, lateral lean\\
+                                                  and/or rotation\\
+                                                  indicates no POE\end{tabular}} &
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}A slight position of the\\
+                                                  trunk into forward lean,\\
+                                                  lateral lean and/or\\
+                                                  rotation indicates\\
+                                                  minor POE\end{tabular}} &
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}A clear position of\\
+                                                  the trunk into forward\\
+                                                  lean, lateral lean\\
+                                                  and/or rotation\\
+                                                  indicates major POE\end{tabular}} \\
+    % {\renewcommand{\arraystretch}{1}
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}\textbf{Deviation}\\
+                                                  \textbf{of pelvis}\\
+                                                  \textbf{in any plane}\end{tabular}} &
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}The absence of\\
+                                                  pelvis into lateral\\
+                                                  deviation, pelvic tilt\\
+                                                  and/or rotation of\\
+                                                  pelvis respectively\\
+                                                  indicates no POE \end{tabular}} &
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}A slight position of the\\
+                                                  pelvis into lateral\\
+                                                  deviation, pelvic tilt\\
+                                                  and/or rotation of\\
+                                                  pelvis respectively\\
+                                                  indicates minor POE \end{tabular}} &
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}A clear position of the\\
+                                                  pelvis into lateral\\
+                                                  deviation, pelvic tilt\\
+                                                  and/or rotation of\\
+                                                  pelvis respectively\\
+                                                  indicates major POE \end{tabular}} \\
+    % {\renewcommand{\arraystretch}{1}
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}\textbf{Femoral}\\
+                                                  \textbf{valgus} \end{tabular}} &
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}The absence of\\
+                                                  femoral valgus\\
+                                                  indicates no POE \end{tabular}} &
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}A slight position of\\
+                                                  femoral valgus\\
+                                                  indicates minor POE \end{tabular}}&
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}A clear position of\\
+                                                  femoral valgus\\
+                                                  indicates major POE \end{tabular}}\\
+    % {\renewcommand{\arraystretch}{1}
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}\textbf{Knee}\\
+                                                  \textbf{Medial-to-Foot}\\
+                                                  \textbf{Position} \end{tabular}} &
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}Mid-point of patella\\
+                                                  is in line with or\\
+                                                  lateral to the\\
+                                                  second toe \end{tabular}} &
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}Mid-point of patella\\
+                                                  is placed medial to\\
+                                                  the second toe \end{tabular}} &
+    \multicolumn{1}{l}{\begin{tabular}[t]{@{}l@{}}Mid-point of patella\\
+                                                  is clearly placed\\
+                                                  medial to the big toe \end{tabular}}
+  \end{tabu}}
+
+  \end{table}
+
+\end{frame}
+
+\begin{frame}[fragile]{Loss functions}
+  \textbf{CORAL:}
+  \begin{align}
+    \begin{split}
+   \mathcal{L}(\pmb{x}, \pmb{W}, \pmb{b}) = &- \sum_{n=1}^N \sum_{k=1}^{K-1} \lambda^{(k)} [\log(\sigma(g(\pmb{x}_n, \pmb{W}) + b_k))y_n^{(k)} +\\
+   &\log(1 - \sigma(g(\pmb{x}_n, \pmb{W}) + b_k))(1 - y_n^{(k)})]
+ \end{split}
+ \end{align}
+
+ \textbf{Confusion-entropy:}
+ \begin{equation}
+     \mathcal{L}(\pmb{x}, \pmb{W}, U) = - \sum_{i=1}^K \sum_{j=1}^K u_{ij} \log \sum_{n=1}^N y_n^{(i)} \hat{y}_n^{(j)}(x_n, \pmb{W})
+ \end{equation}
+
+ with $U$, e.g., $\begin{bmatrix}
+   0.6 & 0.05 & 0.05 \\
+   0 & 1 & 1\\
+   0 & 1 & 1
+ \end{bmatrix}$
+
+\end{frame}
+
+\begin{frame}[fragile]{Data available for the different POEs}
+  \begin{table}
+   \centering
+  \begin{tabu}[t]{cccc}
+    \textbf{POE} &
+    \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}\textbf{Number of}\\\textbf{unique subjects}\end{tabular}} &
+    \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}\textbf{Number of}\\\textbf{repetition sequences}\end{tabular}} &
+    \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}\textbf{Number of}\\ \textbf{repetitions}\end{tabular}} \\ \hline \hline
+    \textbf{Trunk} & 103 & 105 & 520 \\
+    \textbf{Pelvis} & 103 & 105 & 519 \\
+    \textbf{Femoral Valgus} & 103 & 107 & 530 \\
+    \textbf{KMFP} & 103 & 107 & 530
+
+  \end{tabu}
+
+ \end{table}
+\end{frame}
+
+\begin{frame}[fragile]{Detailed results - Trunk}
+  \begin{table}[h]
+    \centering
+    \tiny
+    \begin{tabu}[c]{|c|c|c|c||c|c|c|}
+      \hline
+      & \multirow{2}{*}{\textbf{Rep.}} & \multirow{2}{*}{\textbf{Comb.}} & \multirow{2}{*}{\textbf{Thresh.}} & \multicolumn{3}{c|}{\textbf{Certainties}}\\ \cline{5-7}
+      & & & &1($n$=15)&2($n$=6)&3($n$=1)\\ \hline
+      Accuracy (\%)   &73.7$\pm$4.5&75.0$\pm$7.9&\textbf{80.0$\pm$7.8}&
+                      \textbf{81.3$\pm$7.1}&56.7$\pm$15.2&90.0$\pm$30.0\\ \hline
+      F1 score (\%)   &73.1$\pm$3.4&75.0$\pm$5.8&\textbf{79.9$\pm$8.9}&
+                      \textbf{80.4$\pm$7.1}&25.8$\pm$6.3&90.0$\pm$30.0\\ \hline
+      Recall (\%)     &73.3$\pm$3.7&76.7$\pm$3.8&\textbf{81.6$\pm$7.2}&
+                      \textbf{81.1$\pm$5.0}&28.0$\pm$11.0&30.0$\pm$10.0\\ \hline
+      Precision (\%)  &76.7$\pm$4.1&78.7$\pm$5.2&\textbf{83.0$\pm$6.8}&
+                      \textbf{84.9$\pm$5.9}&28.9$\pm$6.8&30.0$\pm$10.0\\ \hline
+    \end{tabu}
+  \end{table}
+\end{frame}
+
+\begin{frame}[fragile]{Detailed results - Pelvis}
+  \begin{table}[h]
+    \centering
+    \tiny
+    \begin{tabu}[c]{|c|c|c|c||c|c|c|}
+      \hline
+      & \multirow{2}{*}{\textbf{Rep.}} & \multirow{2}{*}{\textbf{Comb.}} & \multirow{2}{*}{\textbf{Thresh.}} & \multicolumn{3}{c|}{\textbf{Certainties}}\\ \cline{5-7}
+      & & & &1($n$=14)&2($n$=7)&3($n$=1)\\ \hline
+      Accuracy (\%)   &63.6$\pm$10.7&69.1$\pm$10.1&\textbf{73.3$\pm$18.9}&
+                      67.9$\pm$15.0&\textbf{70.0$\pm$19.6}&80.0$\pm$40.0\\ \hline
+      F1 score (\%)   &55.7$\pm$13.4&66.5$\pm$15.0&\textbf{73.6$\pm$22.3}&
+                      58.0$\pm$20.1&\textbf{63.7$\pm$23.8}&31.7$\pm$17.4\\ \hline
+      Recall (\%)     &57.3$\pm$12.0&75.3$\pm$14.0&\textbf{77.9$\pm$14.9}&
+                      56.8$\pm$20.7&\textbf{64.6$\pm$22.8}&31.7$\pm$17.4\\ \hline
+      Precision (\%)  &58.3$\pm$14.9&67.0$\pm$14.4&\textbf{74.9$\pm$23.8}&
+                      62.5$\pm$19.7&\textbf{68.4$\pm$24.0}&31.7$\pm$17.4\\ \hline
+    \end{tabu}
+  \end{table}
+\end{frame}
+
+\begin{frame}[fragile]{Detailed results - Femoral Valgus}
+  \begin{table}[h]
+    \centering
+    \tiny
+      \begin{tabu}[c]{|c|c|c|c||c|c|c|}
+        \hline
+        & \multirow{2}{*}{\textbf{Rep.}} & \multirow{2}{*}{\textbf{Comb.}} & \multirow{2}{*}{\textbf{Thresh.}} & \multicolumn{3}{c|}{\textbf{Certainties}}\\ \cline{5-7}
+        & & & &1($n$=15)&2($n$=7)&3($n$=0)\\ \hline
+        Accuracy (\%)   &69.6$\pm$6.8&79.1$\pm$9.3&\textbf{82.3$\pm$6.0}&\textbf{82.7$\pm$9.5}&71.4$\pm$11.0&-\\ \hline
+        F1 score (\%)   &69.0$\pm$6.6&77.6$\pm$8.6&\textbf{81.0$\pm$5.2}&\textbf{80.8$\pm$8.6}&70.1$\pm$9.4&-\\ \hline
+        Recall (\%)     &68.4$\pm$6.3&76.3$\pm$8.1&\textbf{79.5$\pm$5.5}&\textbf{80.4$\pm$7.4}&71.1$\pm$9.5&-\\ \hline
+        Precision (\%)  &74.0$\pm$7.4&83.8$\pm$7.4&\textbf{86.5$\pm$5.6}&\textbf{85.2$\pm$7.6}&81.8$\pm$6.6&-\\ \hline
+      \end{tabu}
+  \end{table}
+\end{frame}
+
+\begin{frame}[fragile]{Detailed results - KMFP}
+  \begin{table}
+    \centering
+    \tiny
+      \begin{tabu}[c]{|c|c|c|c||c|c|c|}
+        \hline
+        & \multirow{2}{*}{\textbf{Rep.}} & \multirow{2}{*}{\textbf{Comb.}} & \multirow{2}{*}{\textbf{Thresh.}} & \multicolumn{3}{c|}{\textbf{Certainties}}\\ \cline{5-7}
+        & & & &1($n$=19)&2($n$=2)&3($n$=1)\\ \hline
+        Accuracy (\%)   &82.3$\pm$3.1&89.5$\pm$4.5&\textbf{90.3$\pm$4.3}
+                        &\textbf{92.6$\pm$5.3}&90.0$\pm$20.0&30.0$\pm$45.8\\ \hline
+        F1 score (\%)   &65.1$\pm$13.7&69.0$\pm$24.6&\textbf{74.0$\pm$22.3}
+                        &\textbf{69.3$\pm$28.6}&57.8$\pm$17.8&10.0$\pm$15.3\\ \hline
+        Recall (\%)     &63.8$\pm$14.4&75.9$\pm$26.7&\textbf{81.1$\pm$24.7}
+                        &\textbf{75.3$\pm$29.4}&60.0$\pm$13.3&10.0$\pm$15.3\\ \hline
+        Precision (\%)  &\textbf{78.5$\pm$8.2}&66.1$\pm$24.0&71.4$\pm$22.6
+                        &\textbf{67.2$\pm$28.9}&56.7$\pm$20.0&10.0$\pm$15.2\\ \hline
+      \end{tabu}
+  \end{table}
+\end{frame}
+
+\begin{frame}[fragile]{Histograms over accuracies and F1 scores - Trunk}
+  \vspace{0.2cm}
+  \begin{columns}
+    \column{0.5\textwidth}
+  \includegraphics[width=\textwidth]{files/figs/res/trunk/acc.eps}
+
+  \includegraphics[width=\textwidth]{files/figs/res/trunk/acc-ind.eps}
+
+  \column{0.5\textwidth}
+  \includegraphics[width=\textwidth]{files/figs/res/trunk/f1.eps}
+
+  \includegraphics[width=\textwidth]{files/figs/res/trunk/f1-ind.eps}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Histograms over accuracies and F1 scores - Pelvis}
+  \vspace{0.2cm}
+  \begin{columns}
+    \column{0.5\textwidth}
+  \includegraphics[width=\textwidth]{files/figs/res/pelvis/acc.eps}
+
+  \includegraphics[width=\textwidth]{files/figs/res/pelvis/acc-ind.eps}
+
+  \column{0.5\textwidth}
+  \includegraphics[width=\textwidth]{files/figs/res/pelvis/f1.eps}
+
+  \includegraphics[width=\textwidth]{files/figs/res/pelvis/f1-ind.eps}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Histograms over accuracies and F1 scores - Femoral Valgus}
+  \vspace{0.2cm}
+  \begin{columns}
+    \column{0.5\textwidth}
+  \includegraphics[width=\textwidth]{files/figs/res/femval/acc.eps}
+
+  \includegraphics[width=\textwidth]{files/figs/res/femval/acc-ind.eps}
+
+  \column{0.5\textwidth}
+  \includegraphics[width=\textwidth]{files/figs/res/femval/f1.eps}
+
+  \includegraphics[width=\textwidth]{files/figs/res/femval/f1-ind.eps}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Histograms over accuracies and F1 scores - KMFP}
+  \vspace{0.2cm}
+  \begin{columns}
+    \column{0.5\textwidth}
+  \includegraphics[width=\textwidth]{files/figs/res/kmfp/acc.eps}
+
+  \includegraphics[width=\textwidth]{files/figs/res/kmfp/acc-ind.eps}
+
+  \column{0.5\textwidth}
+  \includegraphics[width=\textwidth]{files/figs/res/kmfp/f1.eps}
+
+  \includegraphics[width=\textwidth]{files/figs/res/kmfp/f1-ind.eps}
+\end{columns}
+\end{frame}
+
+\end{document}
