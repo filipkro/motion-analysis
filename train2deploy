@@ -39,8 +39,8 @@ cd motion-analysis/classification/tsc
 pip install -r utils/requirements-cluster.txt
 
 
-python cross-val-train-classifier.py $TMPDIR/results $TMPDIR/datasets/$data_set $classifier --itr $itr --idx $TMPDIR/motion-analysis/classification/tsc/idx.npz
+python train-model.py $TMPDIR/results $TMPDIR/datasets/$data_set $classifier --itr $itr --idx $TMPDIR/motion-analysis/classification/tsc/idx2.npz
 
 #python train-classifier.py $TMPDIR/results $TMPDIR/$data_set $classifier --train_idx $TMPDIR/$train_idx --test_idx $TMPDIR/$test_idx --itr $itr
 
-cp -r $TMPDIR/results/. $HOME/training/
+cp -r $TMPDIR/results/. $HOME/deploy/

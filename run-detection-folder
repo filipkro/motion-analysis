@@ -4,8 +4,7 @@
 #SBATCH --gpus-per-node=T4:1
 #SBATCH -t 0-20:00:0 # 1h
 
-vid="healthy-SLS"
-
+vid="hipp-SLS"
 cp -r $HOME/motion-analysis $TMPDIR
 cp -r $HOME/vids/$vid $TMPDIR
 
