@@ -1,15 +1,14 @@
 import os
 import boto3
 from configparser import ConfigParser
-from botocore.exceptions import NoCredentialsError
+from botocore.exceptions import NoCredentialsError, ClientError
 from dateutil import tz
 from numpy import argmax
 import re
 import datetime
 from rq import Queue
 import redis
-
-import inference_rq as inference_rq # noqa
+import pipeline
 
 if os.environ.get("REDIS_URL") is not None:
     r = redis.from_url(os.environ.get("REDIS_URL"))
@@ -30,6 +29,7 @@ del config, ConfigParser
 
 def get_variable_from_req(request, key):
     var = request.form.get(key)
+    print(var)
     if var is None:
         print('args')
         var = request.args.get(key)
@@ -43,8 +43,8 @@ def get_variable_from_req(request, key):
 def get_results(id, attempt, with_reps=False):
 
     file = 'result.pkl'
-    downloaded = download_from_aws(file,
-                                   f'users/{id}/ATTEMPT{attempt}/results.pkl')
+    s3_file = f'users/{id}/ATTEMPT{attempt}/results.pkl'
+    downloaded, error = download_from_aws(file, s3_file)
 
     if downloaded:
         import pickle
@@ -61,20 +61,25 @@ def get_results(id, attempt, with_reps=False):
             conf[poe] = tuple(results[poe]['conf'])
             if with_reps:
                 individual = results[poe]['detailed']
-                reps[poe] = {}
+                reps[poe] = {'pred': [], 'conf': []}
                 for i, rep in enumerate(individual):
-                    reps[poe][f'rep{i}'] = int(argmax(rep))
-                    reps[poe][f'rep{i}confs'] = tuple(rep)
+                    reps[poe]['pred'].append(int(argmax(rep)))
+                    reps[poe]['conf'].append(tuple(rep))
+                # reps[poe] = {}
+                # for i, rep in enumerate(individual):
+                #     reps[poe][f'rep{i}'] = int(argmax(rep))
+                #     reps[poe][f'rep{i}confs'] = tuple(rep)
 
         vid = f'users/{id}/ATTEMPT{attempt}/vid.mts'
         utc = get_modified_time(vid)
 
         if with_reps:
-            return {'time': str(utc), 'pred': pred, 'conf': conf, 'reps': reps}
+            return {'combined': {'time': str(utc), 'pred': pred, 'conf': conf},
+                    'reps': reps}
         else:
             return {'time': str(utc), 'pred': pred, 'conf': conf}
 
-    return "File could not be downloaded from S3"
+    return error
 
 
 def fix_id(id):
@@ -147,6 +152,9 @@ def upload_to_aws(local_file, s3_file):
     except NoCredentialsError:
         print("Credentials not available")
         return False
+    except ClientError:
+        print("ClientError")
+        return False
 
 
 def download_from_aws(local_file, s3_file):
@@ -158,28 +166,28 @@ def download_from_aws(local_file, s3_file):
         s3.download_file(bucket, s3_file, local_file)
         del s3
         print("Download Successful")
-        return True
+        return True, 'Download Successful'
     except FileNotFoundError:
         print("The file was not found")
-        return False
+        return False, 'The file was not found'
     except NoCredentialsError:
         print("Credentials not available")
-        return False
+        return False, 'Credentials not available'
+    except ClientError:
+        print("ClientError")
+        return False, 'ClientError'
 
 
 def get_result_for_user(id):
     return 0
 
 
-def predict(vid='03SLS1R_MUSSE.mts', id='', leg='R', attempt=1):
-    if id != '':
-        job = q.enqueue(inference_rq.pipe, args=(vid, id, leg, attempt),
-                        job_timeout=-1)
+def predict(vid, id, leg, attempt=1):
+    job = q.enqueue(pipeline.pipe, args=(vid, id, leg, attempt),
+                    job_timeout=-1)
 
-        return (f"Prediction for {vid} started!\nTask ({job.id})" +
-                " added to queue at {job.enqueued_at}")
-    else:
-        return "no id"
+    return (f"Prediction for {vid} started!\nTask ({job.id})" +
+            " added to queue at {job.enqueued_at}")
 
 
 if __name__ == '__main__':

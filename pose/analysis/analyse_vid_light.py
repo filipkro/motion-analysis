@@ -8,15 +8,8 @@ import numpy as np
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 
-# print(BASE)
-# print(sys.path)
 sys.path.append(os.path.join(BASE, 'mmpose'))
 sys.path.append(os.path.join(BASE, 'mmpose/mmdetection'))
-# print(sys.path)
-
-# from mmdet.apis import inference_detector, init_detector
-
-# from mmpose.apis import (inference_top_down_pose_model, init_pose_model,                       vis_pose_result) # noqa
 
 
 def box_check(img, folder_box, show_box=False, device='cpu'):
@@ -61,8 +54,6 @@ def check_pose4_flip180(img, rotate, bbox, args, size, pose_config,
     print(bbox)
     if rotate:
         img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
-        # img = rotate(img, ROTATE_90_CLOCKWISE)
-        # img = mmcv.imrotate(img, 90)
 
     pose = inference_top_down_pose_model(pose_model, img, bbox,
                                          bbox_thr=args.box_thr,
@@ -123,8 +114,8 @@ def flip_box(bbox, width):
     return bbox
 
 
-def loop(args, rotate, fname, bbox, rotate_180=False,
-         t0=time.perf_counter(), cap=None):
+def loop(args, rotate, bbox, rotate_180=False, t0=time.perf_counter(),
+         cap=None):
 
     from mmpose.apis import (inference_top_down_pose_model,
                              init_pose_model, vis_pose_result) # noqa
@@ -145,9 +136,10 @@ def loop(args, rotate, fname, bbox, rotate_180=False,
     print(size)
 
     m_dim = max(size)
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    fname = fname.split('.')[0] + '.mp4'
-    videoWriter = cv2.VideoWriter(fname, fourcc, fps, size)
+    if args.save_vid:
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        fname = os.path.basename(args.video_path).split('.')[0] + '-out.mp4'
+        videoWriter = cv2.VideoWriter(fname, fourcc, fps, size)
     pose_model = init_pose_model(args.pose_config, args.pose_checkpoint,
                                  device=args.device)
     poses = np.zeros((frames,
@@ -159,6 +151,7 @@ def loop(args, rotate, fname, bbox, rotate_180=False,
     while (cap.isOpened()):
         t1 = time.perf_counter()
         flag, img = cap.read()
+
         if rotate:
             img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
         if rotate_180:
@@ -172,7 +165,6 @@ def loop(args, rotate, fname, bbox, rotate_180=False,
             # check every nd frame
             if frame % args.skip_rate == 0:
                 # test a single image, with a list of bboxes.
-                # print("before")
                 pose_results = inference_top_down_pose_model(pose_model, img,
                                                              bbox,
                                                              bbox_thr=args.box_thr,
@@ -189,10 +181,9 @@ def loop(args, rotate, fname, bbox, rotate_180=False,
                 if np.shape(pose_results)[0] > 0:
                     prev_pose = pose_results
 
-                    ratios = pose_results[0]['keypoints'][:, 0:2] / m_dim
-
                     poses[frame, ...] = pose_results[0]['keypoints'][:, 0:2] \
-                        if args.save_pixels else ratios
+                        if args.save_pixels else \
+                        pose_results[0]['keypoints'][:, 0:2] / m_dim
 
                 else:
                     pose_results = prev_pose  # or maybe just skip saving
@@ -210,12 +201,13 @@ def loop(args, rotate, fname, bbox, rotate_180=False,
                 print(f'rest: {frame % args.skip_rate == 0}')
                 cv2.imshow('Image', vis_img)
 
-            # if save_out_video:
-            if args.flip:  # flip to produce video as original
-                vis_img = cv2.flip(vis_img, 1)
-
-            videoWriter.write(vis_img)
+            if args.save_vid:
+                if args.flip:  # flip to produce video as original
+                    vis_img = cv2.flip(vis_img, 1)
+                videoWriter.write(vis_img)
             if frame == 10:
+                if args.flip:  # flip to produce video as original
+                    vis_img = cv2.flip(vis_img, 1)
                 img2save = cv2.resize(vis_img, (int(vis_img.shape[0]/5),
                                                 int(vis_img.shape[1])),
                                       interpolation=cv2.INTER_AREA)
@@ -230,19 +222,15 @@ def loop(args, rotate, fname, bbox, rotate_180=False,
     del pose_model
 
     cap.release()
-    # if save_out_video:
-    videoWriter.release()
-    out_file = fname.replace('.mp4', '.npy')
-    if args.save_numpy:
-        np.save(out_file, poses)
+    if args.save_vid:
+        videoWriter.release()
 
     cv2.destroyAllWindows()
 
-    # meta[name]
     meta = {'w': size[0], 'h': size[1], 'fps': fps}
+    print(poses.shape)
 
     return poses, meta, os.path.basename(args.video_path)
-    # return time.perf_counter() - t0
 
 
 def start(args):
@@ -250,7 +238,6 @@ def start(args):
     cap = cv2.VideoCapture(args.video_path)
     print(cap)
     print(int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))
-    # cap = VideoCapture(args.video_path)
     print('loaded video...')
     print('checking orientation and position')
 
@@ -258,23 +245,10 @@ def start(args):
     print(fps)
 
     print('Frame rate: {} fps'.format(fps))
-
     flag, img = cap.read()
 
-    print(f'FIRST cap: {flag},\n{img},\n{flag}')
-    # assert False
-    # cv2.imshow('Image', img)
-
-    print(args.only_box)
-    if args.only_box:
-        cv2.waitKey(0)
-        return
-
-    orig_fname = os.path.basename(args.video_path)
-
     # person upright or not:
-    bbox, rotate = box_check(img, args.folder_box, device=args.device,
-                             show_box=args.show_box)
+    bbox, rotate = box_check(img, args.folder_box, device=args.device)
 
     if rotate:
         size = (int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
@@ -283,7 +257,7 @@ def start(args):
         size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
                 int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
 
-    # cap.release()
+    cap.release()
     # upside down or not:
     rotate_180, bbox = check_pose4_flip180(img, rotate, bbox, args, size,
                                            args.pose_config,
@@ -294,9 +268,7 @@ def start(args):
     bbox = re_est_bbox(img, args.folder_box, rotate, rotate_180,
                        flip2right_leg, device=args.device)
 
-    print('BEFORE LOOOOOOOOOP')
-
-    return loop(args, rotate, orig_fname, bbox, rotate_180=rotate_180, cap=cap)
+    return loop(args, rotate, bbox, rotate_180=rotate_180)
 
 
 def str2bool(v):
@@ -321,38 +293,19 @@ def main():
     parser.add_argument('--video-path', type=str, help='Video path')
     parser.add_argument('--show', type=str2bool, nargs='?',
                         default=False, help="show results.")
-    parser.add_argument('--out-video-root', default='',
-                        help='Root of the output video file. '
-                        'Default not saving the visualization video.')
     parser.add_argument('--device', default='cpu',
                         help='Device used for inference')
     parser.add_argument('--box-thr', type=float, default=0.1,
                         help='Bounding box score threshold')
     parser.add_argument('--kpt-thr', type=float, default=0.1,
                         help='Keypoint score threshold')
-    parser.add_argument('--file_name', type=str, default='')
-    parser.add_argument('--only_box', type=str2bool, nargs='?', const=True,
-                        default=False, help="only show bounding box")
     parser.add_argument('--folder_box', type=str, default='')
-    parser.add_argument('--show_box', type=str2bool, nargs='?', const=True,
-                        default=False, help="show bounding box.")
-    parser.add_argument('--allow_flip', type=str2bool, nargs='?',
-                        default=False, help='for FL')
     parser.add_argument('--save_pixels', type=str2bool, nargs='?',
                         const=True, default=False,
                         help='saveposes as pixels or ratio of im')
-    parser.add_argument('--save4_3d', type=str2bool, nargs='?',
-                        const=True, default=False,
-                        help='save poses along with meta data for 3d')
-    parser.add_argument('--flip2right', type=str2bool, nargs='?',
-                        const=True, default=False,
-                        help='flips video if name contains L')
-    parser.add_argument('--fname_format', type=str2bool, nargs='?',
-                        default=True,
-                        help='if filename has format of marked videos')
     parser.add_argument('--skip_rate', type=int, default=1)
-    parser.add_argument('--save_numpy', type=str2bool, help='Specify whether to save poses as numpy files or just save video and return poses', default=True)
     parser.add_argument('--flip', type=str2bool, default=False)
+    parser.add_argument('--save_vid', type=str2bool, default=False)
 
     args = parser.parse_args()
 
