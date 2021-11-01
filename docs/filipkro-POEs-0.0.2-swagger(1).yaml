@@ -1,0 +1,415 @@
+openapi: 3.0.0
+info:
+  # description: 
+  version: 0.0.2
+  title: POE Evaluation
+  # termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: filip.kronstrom@gmail.com
+  # license:
+  #   name: Apache 2.0
+  #   url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: POE API
+    url: 'https://poe-analysis.herokuapp.com/'
+tags:
+  - name: POEs
+    description: Endpoints for POE evaluations
+paths:
+  /create_user:
+    post:
+      tags:
+        - POEs
+      summary: Create user in database, specify id, leg, weight, and length.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User successfully created
+        '400':
+          description: No id provided
+        '401':
+          description: User already exist
+        '501':
+          description: Error when downloading files from S3
+        '500':
+          description: Error
+  /get_user:
+    get:
+      tags:
+        - POEs
+      summary: Download user information, specified by id.
+      parameters:
+        - in: query
+          name: id
+          required: true
+          description: unique identification number
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User successfully downloaded
+          content:
+            # example:
+            #   id: '000101-XXXX'
+            #   leg: 'R'
+            #   weight: '75'
+            #   length: '185'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: No id provided
+        '401':
+          description: User already exist
+        '501':
+          description: Error when downloading files from S3
+        '500':
+          description: Error
+  /upload:
+    post:
+      tags:
+        - POEs
+      summary: Upload video to assess.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssessUser'
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: >
+                    Video to evaluate, more information on how to upload,
+                    http://flask.palletsprojects.com/en/2.0.x/patterns/fileuploads/
+              required:
+                - file
+      responses:
+        '200':
+          description: Evaluation successfully started
+        '400':
+          description: No id or leg provided
+        '404':
+          description: User not in database
+        '501':
+          description: Error when uploading files to S3
+        '500':
+          description: Error
+       
+  /ongoing:
+    post:
+      tags:
+        - POEs
+      summary: Check if assessment is ongoing for user, specified by id.
+      parameters:
+        - in: query
+          name: id
+          required: true
+          description: unique identification number
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Evaluation ongoing
+        '201':
+          description: Evaluation finished
+        '400':
+          description: No id provided
+        '404':
+          description: User not in database
+        '500':
+          description: Error
+
+  /get_video:
+    get:
+      tags:
+        - POEs
+      summary: Download video, specified by id and attempt.
+      parameters:
+        - in: query
+          name: id
+          required: true
+          description: unique identification number
+          schema:
+            type: string
+        - in: query
+          name: attempt
+          description: >
+            Specifies which video to download, attempt 1 is the first video
+            uploaded for the user. If not specified latest video is downloaded.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Download successful
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: No id provided
+        '404':
+          description: User or attempt not in database
+        '501':
+          description: Error when downloading files from S3
+        '500':
+          description: Error
+  /get_result:
+    get:
+      tags:
+        - POEs
+      summary: Download result, specified by id and attempt.
+      parameters:
+        - in: query
+          name: id
+          required: true
+          description: unique identification number
+          schema:
+            type: string
+        - in: query
+          name: attempt
+          description: >
+            Specifies which result to download, attempt 1 corresponds to the
+            first video uploaded for the user. If not specified latest result
+            is downloaded.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Download successful
+          content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Result'
+        '201':
+          description: Assessment not completed.
+        '400':
+          description: No id provided
+        '404':
+          description: User or attempt not in database
+        '501':
+          description: Error when downloading files from S3
+        '500':
+          description: Error
+  /get_all:
+    get:
+      tags:
+        - POEs
+      summary: Download all results for user, specified by id.
+      parameters:
+        - in: query
+          name: id
+          required: true
+          description: unique identification number
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Download successful
+          content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/AllResults'
+        '201':
+          description: Assessment not completed.
+        '400':
+          description: No id provided
+        '404':
+          description: User not in database
+        '501':
+          description: Error when downloading files from S3
+        '500':
+          description: Error
+  /get_repetition_result:
+    get:
+      tags:
+        - POEs
+      summary: >
+        Download predictions for all individual repetitions,
+        specified by id and attempt.
+      parameters:
+        - in: query
+          name: id
+          required: true
+          description: unique identification number
+          schema:
+            type: string
+        - in: query
+          name: attempt
+          description: >
+            Specifies which predictions to download, attempt 1 corresponds to
+            the first video uploaded for the user. If not specified the latest
+            predictions are downloaded.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Download successful
+          content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/RepetitionResults'
+        '201':
+          description: Assessment not completed.
+        '400':
+          description: No id provided
+        '404':
+          description: User or attempt not in database
+        '501':
+          description: Error when downloading files from S3
+        '500':
+          description: Error
+  /delete_user/{id}:
+    delete:
+      tags:
+        - POEs
+      summary: Delete user, including all data, specified by id.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: unique identification number
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Delete successful
+        '400':
+          description: No id provided
+        '404':
+          description: User not in database
+        '501':
+          description: Error when deleting files from S3
+        '500':
+          description: Error
+externalDocs:
+  description: Find out more about Swagger
+  url: 'http://swagger.io'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 000101-XXXX
+          description: unique identification number - required
+        leg:
+          type: string
+          example: L
+          description: injured leg, L or R - not required
+        length:
+          type: string
+          example: 185
+          description: length of subject in cm - not required
+        weight:
+          type: string
+          example: 75
+          description: weight of subject in kg - not required
+      required:
+            - id
+    Result:
+      type: object
+      properties:
+        time:
+          type: string
+          description: Date and time when video was uploaded.
+        pred:
+          # additionalProperties:
+          $ref: '#/components/schemas/Predictions'
+        conf:
+          # additionalProperties:
+          $ref: '#/components/schemas/Confidences'
+    Predictions:
+      type: object
+      properties:
+        femval:
+          type: integer
+        trunk:
+          type: integer
+        hip:
+          type: integer
+        kmfp:
+          type: integer
+    Confidences:
+      type: object
+      properties:
+        femval:
+          type: array
+          items:
+            type: number
+          minItems: 3
+          maxItems: 3
+        trunk:
+          type: array
+          items:
+            type: number
+          minItems: 3
+          maxItems: 3
+        hip:
+          type: array
+          items:
+            type: number
+          minItems: 3
+          maxItems: 3
+        kmfp:
+          type: array
+          items:
+            type: number
+          minItems: 3
+          maxItems: 3
+    AssessUser:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 000101-XXXX
+          description: unique identification number - required
+        leg:
+          type: string
+          example: L
+          description: leg to evaluate, L or R - required
+      required:
+        - id
+        - leg
+    AllResults:
+      type: array
+      description: array with the results of each attempt
+      items:
+        $ref: '#/components/schemas/Result'
+    RepetitionResults:
+      type: object
+      properties:
+        combined:
+          $ref: '#/components/schemas/Result'
+        reps:
+          type: object
+          properties:
+            femval:
+              $ref: '#/components/schemas/Repetition'
+            trunk:
+              $ref: '#/components/schemas/Repetition'
+            hip:
+              $ref: '#/components/schemas/Repetition'
+            kmfp:
+              $ref: '#/components/schemas/Repetition'
+    Repetition:
+      type: object
+      properties:
+        pred:
+          type: array
+          items:
+            type: integer
+        conf:
+          type: array
+          items:
+            type: number

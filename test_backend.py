@@ -45,7 +45,8 @@ def upload_video(url_base, id):
                   b'No file part', b'No video selected for uploading',
                   b'File could not be uploaded to S3']
     url = url_base + 'upload'
-    file_name = '/home/filipkr/Documents/xjob/vids/real/Videos/MUSSE/musse-SLS/03SLS1R_MUSSE.mts'
+    file_name = '/home/filipkr/Documents/xjob/vids/real/Videos/' + \
+        'MUSSE/musse-SLS/03SLS1R_MUSSE.mts'
     leg = 'R' if 'R' in file_name.split('/')[-1] else 'L'
     data = {'id': id, 'frames': [1, 4, 20, 600], 'leg': leg}
     file = {'file': open(file_name, 'rb')}
@@ -104,7 +105,7 @@ def get_video(url_base, id):
     return False
 
 
-def get_latest(url_base, id):
+def get_result(url_base, id):
     error_msgs = [b'No id provided', b'User not in database',
                   b'Assessment not finished', b'Attempt not in database',
                   b'File could not be downloaded from S3']
@@ -198,7 +199,7 @@ def main(args):
             completed = completed + 1 if status else completed
             status = get_video(url_base, id)
             completed = completed + 1 if status else completed
-            status = get_latest(url_base, id)
+            status = get_result(url_base, id)
             completed = completed + 1 if status else completed
             status = get_all(url_base, id)
             completed = completed + 1 if status else completed
