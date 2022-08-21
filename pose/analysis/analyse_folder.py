@@ -4,6 +4,7 @@ import analyse_vid
 import numpy as np
 import utils.dict_utils as du
 
+import torch
 
 FILE_FORMATS = ('.avi', '.mp4', '.MTS', '.MOV', '.mp2t', '.mts')
 
@@ -20,6 +21,11 @@ def str2bool(v):
 
 
 def main():
+
+    print('CUDA enabled:', torch.cuda.is_available())
+
+    assert torch.cuda.is_available()
+
     print('parsing arguments...')
     parser = ArgumentParser()
     parser.add_argument('pose_config', help='Config file for pose')
