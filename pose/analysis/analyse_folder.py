@@ -51,7 +51,7 @@ def main():
                         const=True, default=True,
                         help='save poses in format for VidePose3D.')
     parser.add_argument('--flip2right', type=str2bool, nargs='?',
-                        const=True, default=False,
+                        const=True, default=True,
                         help='flips video if name contains L')
     parser.add_argument('--fname_format', type=str2bool, nargs='?',
                         default=True,
