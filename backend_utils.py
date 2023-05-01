@@ -178,12 +178,29 @@ def download_from_aws(local_file, s3_file):
         return False, 'ClientError'
 
 
+def delete_from_aws(file):
+    s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
+                      aws_secret_access_key=SECRET_KEY)
+
+    bucket='poe-uploads'
+    try:
+        s3.delete_object(Bucket=bucket, Key=file)
+        print("Delete Successful")
+        return True
+    except FileNotFoundError:
+        print("The file was not found")
+        return False
+    except NoCredentialsError:
+        print("Credentials not available")
+        return False
+
+
 def get_result_for_user(id):
     return 0
 
 
-def predict(vid, id, leg, attempt=1):
-    job = q.enqueue(pipeline.pipe, args=(vid, id, leg, attempt),
+def predict(vid, id, leg, attempt=1, debug=None):
+    job = q.enqueue(pipeline.pipe, args=(vid, id, leg, attempt, debug),
                     job_timeout=-1)
 
     return (f"Prediction for {vid} started!\nTask ({job.id})" +

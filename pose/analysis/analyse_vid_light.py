@@ -25,21 +25,25 @@ def box_check(img, folder_box, show_box=False, device='cpu'):
     det_results = inference_detector(det_model, img)
     del det_model
 
-    bbox = np.expand_dims(np.array(det_results[0])[0, :], axis=0)
-    bbox[0, 2:4] = bbox[0, 2:4] + 100
-    bbox[0, 4] = 1
+    if len(det_results[0]) > 0:
+        
+        bbox = np.expand_dims(np.array(det_results[0])[0, :], axis=0)
+        bbox[0, 2:4] = bbox[0, 2:4] + 100
+        bbox[0, 4] = 1
 
-    if abs(bbox[0, 0] - bbox[0, 2]) > abs(bbox[0, 1] - bbox[0, 3]):
-        flip = True
-        bbox[0, 1] -= 100
-        bbox = [[bbox[0, 1], bbox[0, 0], bbox[0, 3], bbox[0, 2], bbox[0, 4]]]
-        print('frames will be flipped')
+        if abs(bbox[0, 0] - bbox[0, 2]) > abs(bbox[0, 1] - bbox[0, 3]):
+            flip = True
+            bbox[0, 1] -= 100
+            bbox = [[bbox[0, 1], bbox[0, 0], bbox[0, 3], bbox[0, 2], bbox[0, 4]]]
+            print('frames will be flipped')
+        else:
+            bbox[0, 0] -= 100
+
+        bbox = np.array(bbox)
+
+        return bbox, flip
     else:
-        bbox[0, 0] -= 100
-
-    bbox = np.array(bbox)
-
-    return bbox, flip
+        return det_results[0], flip
 
 
 def check_pose4_flip180(img, rotate, bbox, args, size, pose_config,
@@ -232,6 +236,40 @@ def loop(args, rotate, bbox, rotate_180=False, t0=time.perf_counter(),
 
     return poses, meta, os.path.basename(args.video_path)
 
+def find_bbox(args, cap):
+    fps = int(np.round(cap.get(cv2.CAP_PROP_FPS)))
+    print(fps)
+
+    print('Frame rate: {} fps'.format(fps))
+    flag, img = cap.read()
+
+    # person upright or not:
+    # print(img)
+    bbox, rotate = box_check(img, args.folder_box, device=args.device)
+
+    if len(bbox) > 0:
+
+        if rotate:
+            size = (int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
+                    int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)))
+        else:
+            size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
+                    int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+
+        cap.release()
+        # upside down or not:
+        rotate_180, bbox = check_pose4_flip180(img, rotate, bbox, args, size,
+                                            args.pose_config,
+                                            args.pose_checkpoint)
+
+        flip2right_leg = args.flip
+
+        bbox = re_est_bbox(img, args.folder_box, rotate, rotate_180,
+                        flip2right_leg, device=args.device)
+
+        return loop(args, rotate, bbox, rotate_180=rotate_180)
+    else:
+        return find_bbox(args, cap)
 
 def start(args):
     print(args.video_path)
@@ -241,34 +279,7 @@ def start(args):
     print('loaded video...')
     print('checking orientation and position')
 
-    fps = int(np.round(cap.get(cv2.CAP_PROP_FPS)))
-    print(fps)
-
-    print('Frame rate: {} fps'.format(fps))
-    flag, img = cap.read()
-
-    # person upright or not:
-    bbox, rotate = box_check(img, args.folder_box, device=args.device)
-
-    if rotate:
-        size = (int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
-                int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)))
-    else:
-        size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
-                int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
-
-    cap.release()
-    # upside down or not:
-    rotate_180, bbox = check_pose4_flip180(img, rotate, bbox, args, size,
-                                           args.pose_config,
-                                           args.pose_checkpoint)
-
-    flip2right_leg = args.flip
-
-    bbox = re_est_bbox(img, args.folder_box, rotate, rotate_180,
-                       flip2right_leg, device=args.device)
-
-    return loop(args, rotate, bbox, rotate_180=rotate_180)
+    return find_bbox(args, cap)
 
 
 def str2bool(v):

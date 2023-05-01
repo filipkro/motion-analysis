@@ -1,4 +1,5 @@
 from flask import Flask, request, send_file
+import flask
 import os
 import json
 from werkzeug.utils import secure_filename
@@ -66,6 +67,7 @@ def get_video():
                 description: error message
     """
     id = backend_utils.get_variable_from_req(request, 'id')
+    print(f'Get video for user with id {id}')
     if id is None:
         return "No id provided", 400
     attempt = backend_utils.get_variable_from_req(request, 'attempt')
@@ -92,7 +94,7 @@ def get_video():
 
     if downloaded:
         return send_file(file, download_name='vid.' + s3_file.split('.')[-1],
-                         mimetype='video/MP2T'), 200
+                         mimetype='video/mp4'), 200
         # return "file sent ?"
 
     return error, 501
@@ -122,6 +124,7 @@ def delete_user(id=None):
               description: Error
     """
     # id = backend_utils.get_variable_from_req(request, 'id')
+    print(f'Deleting user with id {id}')
     if id is None:
         return "No id provided", 400
 
@@ -157,10 +160,9 @@ def get_user():
         Specified by id.
     '''
     id = backend_utils.get_variable_from_req(request, 'id')
+    print(f'Get user with id {id}')
     if id is None:
         return "No id provided", 400
-
-    print(f'get user with ID: {id}')
 
     if not backend_utils.check_user_exist(id):
         print('user not in database')
@@ -176,7 +178,7 @@ def get_user():
         f = open(file, 'r')
         data = json.load(f)
         f.close()
-        return str(data), 200
+        return flask.jsonify(data), 200
         # return "file sent ?"
 
     return error, 501
@@ -189,6 +191,7 @@ def get_result():
     '''
 
     id = backend_utils.get_variable_from_req(request, 'id')
+    print(f'Get result for user with id {id}')
     if id is None:
         return "No id provided", 400
 
@@ -196,6 +199,7 @@ def get_result():
         return "User not in database", 404
 
     attempt = backend_utils.get_variable_from_req(request, 'attempt')
+    print(f'Attempt {id}')
     if attempt is None:
         attempt = backend_utils.get_attempt_nbr(id) - 1
 
@@ -206,7 +210,7 @@ def get_result():
 
     res = backend_utils.get_results(id, attempt)
     if type(res) == dict:
-        return json.dumps(res), 200
+        return flask.jsonify(res), 200
     else:
         return res, 501
 
@@ -219,6 +223,7 @@ def get_ongoing():
         completed.
     '''
     id = backend_utils.get_variable_from_req(request, 'id')
+    print(f'Check ongoing for user with id {id}')
     if id is None:
         return "No id provided", 400
 
@@ -239,6 +244,7 @@ def get_all_results():
     '''
 
     id = backend_utils.get_variable_from_req(request, 'id')
+    print(f'Get all for user with id {id}')
     if id is None:
         return "No id provided", 400
 
@@ -260,7 +266,7 @@ def get_all_results():
         else:
             results.append(backend_utils.get_results(id, attempt))
 
-    return json.dumps(results), 200
+    return flask.jsonify(results), 200
 
 
 @app.route('/get_repetition_result', methods=['GET'])
@@ -270,6 +276,7 @@ def get_repetition():
     '''
 
     id = backend_utils.get_variable_from_req(request, 'id')
+    print(f'Get repetition for user with id {id}')
     if id is None:
         return "No id provided", 400
     attempt = backend_utils.get_variable_from_req(request, 'attempt')
@@ -285,7 +292,7 @@ def get_repetition():
 
     res = backend_utils.get_results(id, attempt, with_reps=True)
     if type(res) == dict:
-        return json.dumps(res), 200
+        return flask.jsonify(res), 200
     else:
         return res, 500
 
@@ -298,6 +305,7 @@ def upload_video():
         Video provided as file in files.
     '''
     id = backend_utils.get_variable_from_req(request, 'id')
+    print(f'Upload for user with id {id}')
     if id is None:
         print("No id provided")
         return "No id provided", 400
@@ -305,6 +313,9 @@ def upload_video():
     if leg is None:
         print("No leg provided")
         return "No leg provided", 400
+
+    debug = backend_utils.get_variable_from_req(request, 'debug')
+    print(f'DEBUG: {debug}')
 
     if not backend_utils.check_user_exist(id):
         print("User not in database")
@@ -345,12 +356,16 @@ def upload_video():
         file.save(file_path)
         file.close()
 
-        s3_name = f'users/{id}/ATTEMPT{attempt}/vid.' + filename.split('.')[-1]
+        s3_name = f'users/{id}/ATTEMPT{attempt}/vid.'
+        s3_name = s3_name + filename.split('.')[-1] if '.' in filename else \
+            s3_name + 'mp4'
+        print(s3_name)
         uploaded = backend_utils.upload_to_aws(file_path, s3_name)
         os.remove(file_path)
         if uploaded:
             print('upload_video filename: ' + filename)
-            status = backend_utils.predict(s3_name, id, leg, attempt=attempt)
+            status = backend_utils.predict(s3_name, id, leg, attempt=attempt,
+                                           debug=debug)
             return f"{filename} uploaded,\n{status}", 200
         else:
             print("not uploaded to aws correctly")
@@ -368,18 +383,24 @@ def create_user():
         Create user in database, provide id, injured leg, weight, and length.
     '''
     id = backend_utils.get_variable_from_req(request, 'id')
-    if id is None:
+    print(f'Creating user with id {id}')
+    if id is None or id == '':
         return "No id provided", 400
     leg = request.form.get('leg')
 
     weight = request.form.get('weight')
     length = request.form.get('length')
+    name = request.form.get('name')
+    injury = request.form.get('injury')
+    sex = request.form.get('sex')
+    date = request.form.get('date')
 
     if backend_utils.check_user_exist(id):
         # overwrite previous information??
         return "User already exists", 401
 
-    params = {'id': id, 'leg': leg, 'weight': weight, 'length': length}
+    params = {'id': id, 'leg': leg, 'weight': weight, 'length': length,
+              'name': name, 'injury': injury, 'sex': sex, 'date': date}
 
     f = open('user_params', 'w')
     json.dump(params, f)
