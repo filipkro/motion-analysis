@@ -1,3 +1,5 @@
+Look at the `cleaned` branch instead - it is at least in a slightly better state.. And it has some more thorough instructions.
+
 # motion-analysis
 
 master's thesis project, assessments of POEs in videos.
