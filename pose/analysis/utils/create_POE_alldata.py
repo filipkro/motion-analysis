@@ -15,6 +15,18 @@ data_dirs = ('healthy-SLS', 'hipp-SLS', 'marked-SLS', 'musse-SLS',
              'shield-SLS', 'ttb-SLS')
 NAME_PATH = '/home/filipkr/Documents/xjob/motion-analysis/names/lit-names-datasets.npy'
 
+names = ['trunk_full', 'hip_full', 'femval_full',
+         'kmfp_full', 'fem_med_shank_full',
+         'foot_full']
+# names = ['trunk_consensus_train', 'hip_consensus_train', 'femval_consensus_train',
+#          'kmfp_consensus_train', 'fem_med_shank_consensus_train',
+#          'foot_consensus_train']
+# names = ['trunk_test', 'hip_test', 'femval_test',
+#          'kmfp_test', 'fem_med_shank_test',
+#          'foot_test']
+
+POE_lit_name = names[poe_index]
+
 # KPTS = np.array([[6, 0], [12, 0], [14, 0], [16, 0]])
 # KPTS = np.array([[5, 0], [6, 0], [11, 1], [12, 1], [20, 0]])
 # KPTS = np.array([[5, 0], [5, 1], [6, 0], [6, 1], [11, 0], [11, 1],
@@ -49,6 +61,33 @@ DIFFS = np.array([[[12,0],[14,0]]])
 
 # if len(KPTS) < 1:
 #     KPTS =[[]]
+
+if POE_fields[poe_index] == '_trunk':
+    KPTS = np.array([[5, 0], [6, 0], [6, 1], [11, 0], [11, 1], [12, 0]])
+    DIFFS = np.array([[[12, 0], [14, 0]], [[14, 0], [20, 0]]])
+    ANGLES = []
+elif POE_fields[poe_index] == '_hip':
+    KPTS = np.array([[6, 0], [6, 1], [11, 1], [16, 1]])
+    ANGLES = [[12, 14]]
+    DIFFS = np.array([[[14,0], [16,0]], [[14, 0], [20, 0]]])
+elif POE_fields[poe_index] == '_femval':
+    KPTS = np.array([[6, 1], [12, 0], [14, 0]])
+    ANGLES = [[14, 16]]
+    DIFFS = np.array([[]])
+elif POE_fields[poe_index] == '_KMFP':
+    KPTS = np.array([[5, 1], [12, 1]])
+    ANGLES = [[16, 20]]
+    DIFFS = np.array([[[12, 0], [14, 0]], [[14, 0], [16, 0]], [[14, 0], [20, 0]]])
+elif POE_fields[poe_index] == '_fem_med_shank':
+    KPTS = np.array([[5, 0], [5, 1], [11, 1], [12, 1], [14, 0], [14, 1], [20, 1],
+                 [21, 1], [22, 1]])
+    ANGLES = [[12, 14], [14, 16], [14, 20], [16, 20]]
+    DIFFS = np.array([[[12, 0], [14, 0]], [[14, 0], [16, 0]], [[12, 0], [20, 0]],
+                    [[14, 0], [20, 0]]])
+elif POE_fields[poe_index] == '_foot':
+    KPTS = np.array([[6, 1], [14, 1], [20, 1], [21, 1]])                 
+    ANGLES = [[14, 16], [14, 20], [20, 22], [16, 22]]
+    DIFFS = np.array([[[14, 0], [20, 0]]])
 
 lower_peaks = ('hipp12-SLS-L-25.npy', 'marked04-SLS-L-25.npy',
                'musse05-SLS-R-25.npy', 'musse08-SLS-R-25.npy',
@@ -155,10 +194,10 @@ def main(args):
     dataset = []
     k = 0
     glob_subject_nbr = 0
-    for dir in os.listdir(args.root):
-        if dir in data_dirs:
-            cohort = dir.split('-')[0]
-            dir_path = os.path.join(args.root, dir)
+    for directory in os.listdir(args.root):
+        if directory in data_dirs:
+            cohort = directory.split('-')[0]
+            dir_path = os.path.join(args.root, directory)
             label_file = os.path.join(dir_path, cohort + '-labels.csv')
             labels = pd.read_csv(label_file, delimiter=',')
             for file_name in os.listdir(dir_path):
@@ -219,38 +258,24 @@ def main(args):
                                     motions[i, :max_idx, ...])
 
                             for i in range(5):
-
                                 field = action + POE_field + str(i + 1)
                                 label = labels.filter(like=field).values[idx]
-                                # print(label)
-                                # print(dir)
-                                # print(cohort)
                                 if label.size > 0 and not np.isnan(label):
-                                    # print('in if')
-                                    # if KPTS == 'all':
                                     if False:
                                         feats = motions[i, ...]
                                         feats = feats.reshape(
                                             feats.shape[0], -1)
                                     else:
-                                        # print(f'cohort: {cohort}, sub: {subject}, leg: {leg}, rep: {i}')
                                         angles = calc_angle(
                                             motions[i, ...], ANGLES)
-                                        # kpts = np.moveaxis(motions[i, :, KPTS, :], 1, 0)
-                                        # kpts = kpts.reshape(kpts.shape[0], -1)
-
                                         if KPTS.size > 0:
                                             kpts = motions[i, :,
                                                            KPTS[:, 0], KPTS[:, 1]].T
-
-                                            # diff = np.expand_dims(motions[i, :, 12, 0] - motions[i, :, 14, 0], axis=-1)
                                         else:
                                             kpts = np.moveaxis(
                                                 motions[i, :, [], :], 1, 0)
                                             kpts = kpts.reshape(
                                                 kpts.shape[0], -1)
-                                        # print(motions[i,:,KPTS].shape)
-                                        # print(kpts - motions[i,:,KPTS])
                                         feats = np.append(
                                             kpts, angles, axis=-1)
                                         if DIFFS.size > 3:
@@ -259,9 +284,6 @@ def main(args):
                                             feats = np.append(feats, diffs,
                                                               axis=-1)
 
-                                        # print(feats.shape)
-                                        # print(diff.shape)
-                                        # feats = np.append(feats, diff, axis=-1)
                                     dataset.append(feats)
                                     dataset_labels.append(label)
 
