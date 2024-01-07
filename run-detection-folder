@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-#SBATCH -A SNIC2020-33-20 -p alvis
+#SBATCH -A SNIC2021-7-97 -p alvis
 #SBATCH -n 4 
 #SBATCH --gpus-per-node=T4:1
 #SBATCH -t 0-20:00:0 # 1h
 
-vid="hipp-SLS"
+vid="new-vids"
 cp -r $HOME/motion-analysis $TMPDIR
 cp -r $HOME/vids/$vid $TMPDIR
 
@@ -22,7 +22,8 @@ source detect/bin/activate
 cd motion-analysis
 
 bash install/install-pose-cluster.sh
-
+python -c "import numpy as np; print('np version: ' + np.__version__)"
+module load SciPy-bundle/2019.10-Python-3.7.4
 cd pose/analysis
 
 echo "runnning bash script"

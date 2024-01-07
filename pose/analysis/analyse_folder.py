@@ -63,7 +63,9 @@ def main():
                         default=True,
                         help='if filename has format of marked videos')
     parser.add_argument('--skip_rate', type=int, default=1)
-
+    parser.add_argument('--keep_fname', type=str2bool, nargs='?',
+                        default=True,
+                        help='assumes new format of fname, which will be kept - fix this')
     args = parser.parse_args()
 
     if not args.fname_format:

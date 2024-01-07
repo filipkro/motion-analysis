@@ -125,6 +125,7 @@ def loop(args, rotate, fname, bbox, pose_model, flipped=False,
                 int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
 
     print(size)
+    #if args.keep_fname:
 
     if args.fname_format and args.flip2right and False:
         if os.path.basename(fname).split('-')[2] == 'L':
@@ -271,6 +272,8 @@ def start(args):
     print('Frame rate: {} fps'.format(fps))
 
     flag, img = cap.read()
+    while np.sum(img) == 0:
+        flag, img = cap.read()
 
     print(args.only_box)
     if args.only_box:
@@ -295,7 +298,11 @@ def start(args):
     print('model used {0}'.format(mod_used))
 
     orig_fname = os.path.basename(args.video_path)
-    if args.fname_format:
+    orig_fname = orig_fname.split('.')
+    orig_fname = '.'.join(orig_fname[:-1]) + f'-{fps}.' + orig_fname[-1]
+    if args.keep_fname:
+        fname = os.path.join(args.out_video_root, orig_fname)
+    elif args.fname_format:
         subject = orig_fname[0:2]
         action = orig_fname[2:5]
         leg = orig_fname[6]
@@ -346,7 +353,10 @@ def start(args):
     #
     # if rotate or rotate_180:
     flip2right = False
-    if args.fname_format and args.flip2right:
+    if args.keep_fname:
+        if not '_R_' in os.path.basename(fname):
+            flip2right = True
+    elif args.fname_format and args.flip2right:
         if os.path.basename(fname).split('-')[2] == 'L':
             flip2right = True
 
@@ -409,7 +419,8 @@ def main():
                         default=True,
                         help='if filename has format of marked videos')
     parser.add_argument('--skip_rate', type=int, default=1)
-
+    parser.add_argument('--keep_fname', type=str2bool, nargs='?',
+                        default=True, help='assumes new format of fname, which will be kept - fix this')
     args = parser.parse_args()
 
     if not args.fname_format:
