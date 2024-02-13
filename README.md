@@ -11,6 +11,8 @@ Running on a folder will call [`pose/analysis/run-folder-cluster.sh`](pose/analy
 
 In `pose/analysis/utils` there are a bunch of `create_POE_*.py` files. These are used to create the actual dataset used for specific POEs. For the different POEs different keypoints are used etc. These are atm incredibly messy - I will write a new one generating test and train sets in a more comprehensible way... Note that for such train and test sets repetitions from the same individual should not be in both datasets. And finding which keypoints to use for different POEs wasn't trivial, a lot of time can be spent on this. I looked at gradients for different channels to try to identify important features (more info on this in the classification code, and I wrote a bit about in the thesis).
 
+I will rewrite the `create_POE` script to make it clearer, but haven't had time yet...
+
 # motion-analysis
 
 master's thesis project, assessments of POEs in videos.
