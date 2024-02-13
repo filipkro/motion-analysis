@@ -10,7 +10,11 @@ from datetime import datetime
 
 POE_fields = ['_trunk', '_hip', '_femval', '_KMFP',
               '_fem_med_shank', '_foot']
-poe_index = 0
+full_POE = ['Trunk', 'Pelvis', 'Femoral valgus', 'KMFP',
+            'Femur-medial-to-shank', 'Foot pronation']
+
+poe_index = 1
+POE_lit_name = 'hip'
 data_dirs = ('healthy-SLS', 'hipp-SLS', 'marked-SLS', 'musse-SLS',
              'shield-SLS', 'ttb-SLS')
 NAME_PATH = '/home/filipkr/Documents/xjob/motion-analysis/names/lit-names-datasets.npy'
@@ -34,30 +38,87 @@ POE_lit_name = names[poe_index]
 #                  [20, 0], [20, 1]])
 # KPTS = np.array([[11, 1], [12, 0], [12, 1], [14, 0]])
 # KPTS = np.array([[5, 1], [12, 1]])
-KPTS = np.array([[5, 0], [5, 1], [6, 0], [6, 1], [11, 1], [12, 1], [14, 0], [14, 1], [20, 0]])
-KPTS = np.array([[5, 0], [6, 1], [11, 1], [12, 0], [12, 1]])
-KPTS = np.array([[6, 0], [6, 1], [11, 1], [12,0], [12, 1], [14, 0], [16,1]])
-KPTS = np.array([[6, 0], [6, 1], [11,1], [12, 0],[12,1]])
+KPTS = np.array([[5, 0], [5, 1], [6, 0], [6, 1], [11, 0], [11, 1], [12, 0],
+                 [12, 1], [14, 0], [14, 1], [16, 0], [16, 1], [20, 0], [20, 1],
+                 [21, 0], [21, 1], [22, 0], [22, 1]])
+ANGLES = [[12, 14], [14, 16], [14, 20], [16, 20]]
+DIFFS = np.array([[[12, 0], [14, 0]], [[14, 0], [16, 0]], [[12,0],[20,0]],
+                  [[14, 0], [20, 0]]])
+
+KPTS = np.array([[5, 0], [5, 1], [11, 1], [12, 1], [14, 0], [14, 1], [20, 1],
+                 [21, 1], [22, 1]])
+ANGLES = [[12, 14], [14, 16], [14, 20], [16, 20]]
+DIFFS = np.array([[[12, 0], [14, 0]], [[14, 0], [16, 0]], [[12,0], [20,0]],
+                  [[14, 0], [20, 0]]])
+
+KPTS = np.array([[5, 0], [11, 1], [12, 1], [14, 0], [14, 1], [21, 1]])
+ANGLES = [[12, 14], [14, 16], [14, 20], [16, 20]]
+DIFFS = np.array([[[12, 0], [14, 0]], [[14, 0], [16, 0]], [[12,0], [20,0]],
+                  [[14, 0], [20, 0]]])
+
+KPTS = np.array([[5, 0], [5, 1], [6, 0], [6, 1], [11, 0], [11, 1], [12, 0],
+                 [12, 1], [14, 0], [14, 1], [16, 0], [16, 1], [20, 0], [20, 1],
+                 [21, 0], [21, 1], [22, 0], [22, 1]])
+ANGLES = [[12, 14], [14, 16], [14, 20], [16, 20], [21, 22], [20, 22], [16, 22]]
+DIFFS = np.array([[[12, 0], [14, 0]], [[14, 0], [16, 0]], [[12,0], [20,0]],
+                  [[14, 0], [20, 0]], [[20, 0], [22, 0]]])
+
+
+KPTS = np.array([[5, 1], [6, 1], [14, 1], [16, 1], [20, 1], [21, 1]])                 
+ANGLES = [[12, 14], [14, 16], [14, 20], [16, 20], [21, 22], [20, 22], [16, 22]]
+DIFFS = np.array([[[12,0], [20,0]], [[14, 0], [20, 0]]])
+
+KPTS = np.array([[6, 1], [14, 1], [20, 1], [21, 1]])                 
+ANGLES = [[14, 16], [14, 20], [20, 22], [16, 22]]
+DIFFS = np.array([[[14, 0], [20, 0]]])
+
+# KPTS =np.array([[6, 1],[12,  0], [14,  0]])
+# ANGLES = [[14,  16]]
+
+# KPTS = np.array([[5, 0], [6, 1], [11, 1], [12, 0], [12, 1]])
+# KPTS = np.array([[6, 0], [6, 1], [11, 1], [12,0], [12, 1], [14, 0], [16,1]])
+# KPTS = np.array([[6, 0], [6, 1], [11,1], [12, 0],[12,1]])
 # KPTS = np.array([[6, 0], [6, 1], [11, 1], [14, 1]])
 
-KPTS = np.array([[5,0],[6, 0], [6, 1],[11,0], [11,1], [12, 0]])
+# KPTS = np.array([[5,0],[6, 0], [6, 1],[11,0], [11,1], [12, 0]])
 
 # KPTS = np.array([[]])
 # ANGLES = [[12, 14], [14, 16], [14, 20], [16, 20]]
-ANGLES = [[12, 14],[14,20]]
-ANGLES = [[12, 14], [14,16]]
-ANGLES = [[12, 14]]
-ANGLES = []
+# ANGLES = [[12, 14],[14,20]]
+# ANGLES = [[12, 14], [14,16]]
+# ANGLES = [[12, 14]]
+# ANGLES = []
 # KPTS = 'all'
 # ANGLES = [[16, 20]]
 # KPTS = np.array([[6, 1], [12, 0], [14, 0]])
 
-# DIFFS = np.array([[[12, 0], [14, 0]], [[14, 0], [20, 0]]])
-# DIFFS = np.array([[[14, 0], [20, 0]]])
-DIFFS = np.array([[[12, 0], [14, 0]], [[14, 0], [16, 0]],[[12,0],[20,0]],
+KPTS = np.array([[5, 0], [6, 0], [6, 1], [11, 0], [11, 1], [12, 0]])
+DIFFS = np.array([[[12, 0], [14, 0]], [[14, 0], [20, 0]]])
+ANGLES = []
+
+KPTS = np.array([[5, 1], [12, 1]])
+ANGLES = [[16, 20]]
+DIFFS = np.array([[[12, 0], [14, 0]], [[14, 0], [16, 0]], [[14, 0], [20, 0]]])
+
+KPTS = np.array([[5, 0], [5, 1], [11, 1], [12, 1], [14, 0], [14, 1], [20, 1],
+                 [21, 1], [22, 1]])
+ANGLES = [[12, 14], [14, 16], [14, 20], [16, 20]]
+DIFFS = np.array([[[12, 0], [14, 0]], [[14, 0], [16, 0]], [[12,0], [20,0]],
                   [[14, 0], [20, 0]]])
-DIFFS = np.array([[[14, 0], [20, 0]]])
-DIFFS = np.array([[[12,0],[14,0]]])
+
+
+KPTS = np.array([[6, 0], [6, 1], [11, 1], [16, 1]])
+ANGLES = [[12, 14]]
+DIFFS = np.array([[[14,0], [16,0]], [[14, 0], [20, 0]]])
+# DIFFS = np.array([[[14, 0], [20, 0]]])
+# DIFFS = np.array([[[12, 0], [14, 0]], [[14, 0], [16, 0]],[[12,0],[20,0]],
+#                   [[14, 0], [20, 0]]])
+# DIFFS = np.array([[[14, 0], [20, 0]]])
+# DIFFS = np.array([[[12,0],[14,0]]])
+
+# KPTS = np.array([[6, 1], [12, 0], [14, 0]])
+# ANGLES = [[14, 16]]
+# DIFFS = np.array([[]])
 
 # if len(KPTS) < 1:
 #     KPTS =[[]]
@@ -160,15 +221,72 @@ def calc_diffs(poses, kpts):
     return diffs
 
 
+def get_new_vids(path, dataset, dataset_labels, k, poe,
+                 rate=25, ifile=None, debug=False):
+
+    print(full_POE[poe_index])
+
+
+    labelfile = np.genfromtxt(os.path.join(path, 'new-vids/new-labels.csv'),
+                            delimiter=',', dtype=object)
+
+    for file_name in os.listdir(os.path.join(path, 'new-vids')):
+        if file_name.endswith('.npy'):
+            if args.debug:
+                print('new vid')
+                print(file_name)
+
+            fps = int(file_name.split('-')[-1].split('.')[0])
+            orig_filename = file_name.split('/')[0].replace(f'-{fps}.', '.mp4')
+            leg = 'R' if '_R_' in orig_filename else 'L'
+
+            data = np.load(os.path.join(path, file_name))
+            data = resample(data, fps / args.rate)
+            b, a = scipy.signal.butter(4, 0.2)
+            data = scipy.signal.filtfilt(b, a, data, axis=0)
+            # plt.plot(data[:,5,1])
+            data = normalize_coords(data)
+
+            subj_ind = np.where(labelfile[:,[1,2]] ==
+                                [orig_filename, full_POE[poe_index]])[0][0]
+            label = int(labelfile[subj_ind, 3])
+
+            angles = calc_angle(data, ANGLES)
+            if KPTS.size > 0:
+                kpts = data[:, KPTS[:, 0], KPTS[:, 1]].T
+            else:
+                kpts = np.moveaxis(data[:, [], :], 1, 0)
+                kpts = kpts.reshape(kpts.shape[0], -1)
+
+            feats = np.append(kpts, angles, axis=-1)
+            if DIFFS.size > 3:
+                diffs = calc_diffs(data, DIFFS)
+                feats = np.append(feats, diffs, axis=-1)
+
+            dataset.append(feats)
+            dataset_labels.append(label)
+
+            if ifile is not None:
+                ifile.write('{},{},{},{},{},{}\n'.format(k+1+subj_ind,
+                                                         k+1+subj_ind, 0,
+                                                         subj_ind, leg,
+                                                         'new-vids'))
+
+
+
+    return dataset, dataset_labels, ifile
+
+
 def main(args):
     # labels = pd.read_csv(args.labels, delimiter=',')
     POE_field = POE_fields[poe_index]
     pad = 4 * args.rate
 
     if args.info_file:
-        lit_names = np.load(NAME_PATH, allow_pickle=True)
-        lit_idx = np.random.choice(lit_names.size)
-        lit_name = lit_names[lit_idx]
+        # lit_names = np.load(NAME_PATH, allow_pickle=True)
+        # lit_idx = np.random.choice(lit_names.size)
+        # lit_name = lit_names[lit_idx]
+        lit_name = POE_lit_name
         coco_data = args.root.split('poses/')[1]
 
         # lit_name = 'Jean-Paul-Sartre'
@@ -266,6 +384,16 @@ def main(args):
                                         feats = feats.reshape(
                                             feats.shape[0], -1)
                                     else:
+                                        # print(f'cohort: {cohort}, sub: {subject}, leg: {leg}, rep: {i}')
+                                        # print(motions.shape)
+                                        # print(i)
+                                        # print(label)
+                                        # print(field)
+                                        # print(subject)
+                                        # print(action)
+                                        # print(leg)
+                                        # print(cohort)
+                                        # print(motions[i, ...].shape)
                                         angles = calc_angle(
                                             motions[i, ...], ANGLES)
                                         if KPTS.size > 0:
@@ -315,9 +443,9 @@ def main(args):
     if args.info_file:
         np.savez(save_path, mts=dataset, labels=dataset_labels)
         ifile.close()
-        lit_names = np.delete(lit_names, lit_idx)
-        print('Names left: {}'.format(lit_names.size))
-        np.save(NAME_PATH, lit_names)
+        # lit_names = np.delete(lit_names, lit_idx)
+        # print('Names left: {}'.format(lit_names.size))
+        # np.save(NAME_PATH, lit_names)
 
 
 if __name__ == '__main__':
