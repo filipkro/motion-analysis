@@ -45,18 +45,14 @@ def normalize_coords(poses):
     dist = abs(poses[10, 0, 1] - poses[10, 16, 1])
 
     poses = poses / dist
-    # poses = np.divide(poses, dist)
     poses = poses - poses[0, 12, :]  # np.expand_dims(poses[0, 0, :], 1)
     return poses
 
 
 def normalize_coords_motions(poses):
-    # print(poses.shape)
     poses = poses - np.mean(poses[:5, 12, :], axis=0)
     poses = poses / np.linalg.norm(np.mean(poses[:5, 5, :], axis=0))
-    # dist = np.norm(np.mean(poses[:5, 5, :] - poses[:5, 12, :], axis=0))
-    # poses = poses / dist
-    # np.expand_dims(poses[0, 0, :], 1)
+
 
     return poses
 
@@ -105,20 +101,12 @@ def main(args, data, fps):
     pad = 4 * args.rate
 
     data = resample(data, fps / args.rate)
-    # plt.plot(data[:,5,1])
-    # plt.show()
+
     b, a = scipy.signal.butter(4, 0.2)
     data = scipy.signal.filtfilt(b, a, data, axis=0)
 
     data = normalize_coords(data)
     motions, _ = split_peaks_pad(data, args.rate, xtra_samp=pad, joint=5)
-
-    # if cohort + file_name in lower_peaks:
-    #     motions, _ = split_peaks_pad(data, args.rate,
-    #                                  xtra_samp=pad,
-    #                                  joint=5,
-    #                                  prom=0.02,
-    #                                  debug=args.debug)
 
     if args.debug:
         print('data shape: {}'.format(data.shape))

@@ -3,6 +3,7 @@ import boto3
 from configparser import ConfigParser
 from botocore.exceptions import NoCredentialsError, ClientError
 from dateutil import tz
+from datetime import date
 from numpy import argmax
 import re
 import datetime
@@ -41,8 +42,10 @@ def get_variable_from_req(request, key):
 
 
 def get_results(id, attempt, with_reps=False):
-
-    file = 'result.pkl'
+    id = '950203'
+    attempt = 1
+    # file = 'result.pkl'
+    file = 'dummy-data/950203/ATTEMPT1/result.pkl'
     s3_file = f'users/{id}/ATTEMPT{attempt}/results.pkl'
     downloaded, error = download_from_aws(file, s3_file)
 
@@ -98,21 +101,25 @@ def fix_id(id):
     return id, ''
 
 
+# def get_attempt_nbr(id):
+#     nbr = 1
+#     base = f'users/{id}/ATTEMPT'
+
+#     while file_on_aws(base + str(nbr)):
+#         nbr += 1
+
+#     return nbr
 def get_attempt_nbr(id):
-    nbr = 1
-    base = f'users/{id}/ATTEMPT'
 
-    while file_on_aws(base + str(nbr)):
-        nbr += 1
-
-    return nbr
-
+    return 2
 
 def file_on_aws(file):
-    s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
-                      aws_secret_access_key=SECRET_KEY)
+    return True
+# def file_on_aws(file):
+#     s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
+#                       aws_secret_access_key=SECRET_KEY)
 
-    return 'Contents' in s3.list_objects(Bucket='poe-uploads', Prefix=file)
+#     return 'Contents' in s3.list_objects(Bucket='poe-uploads', Prefix=file)
 
 
 def check_user_exist(id):
@@ -128,71 +135,80 @@ def check_result_available(id, attempt):
 
 
 def get_modified_time(file):
-    s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
-                      aws_secret_access_key=SECRET_KEY)
+    return date.today()
+# def get_modified_time(file):
+#     s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
+#                       aws_secret_access_key=SECRET_KEY)
 
-    to_zone = tz.gettz('Europe/Stockholm')
-    utc = s3.list_objects(Bucket='poe-uploads',
-                          Prefix=file)['Contents'][0]['LastModified']
-    return utc.astimezone(to_zone)
-
+#     to_zone = tz.gettz('Europe/Stockholm')
+#     utc = s3.list_objects(Bucket='poe-uploads',
+#                           Prefix=file)['Contents'][0]['LastModified']
+#     return utc.astimezone(to_zone)
 
 def upload_to_aws(local_file, s3_file):
-    s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
-                      aws_secret_access_key=SECRET_KEY)
+    print("Upload Successful")
+    return True
+# def upload_to_aws(local_file, s3_file):
+#     s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
+#                       aws_secret_access_key=SECRET_KEY)
 
-    bucket = 'poe-uploads'
-    try:
-        s3.upload_file(local_file, bucket, s3_file)
-        print("Upload Successful")
-        return True
-    except FileNotFoundError:
-        print("The file was not found")
-        return False
-    except NoCredentialsError:
-        print("Credentials not available")
-        return False
-    except ClientError:
-        print("ClientError")
-        return False
+#     bucket = 'poe-uploads'
+#     try:
+#         s3.upload_file(local_file, bucket, s3_file)
+#         print("Upload Successful")
+#         return True
+#     except FileNotFoundError:
+#         print("The file was not found")
+#         return False
+#     except NoCredentialsError:
+#         print("Credentials not available")
+#         return False
+#     except ClientError:
+#         print("ClientError")
+#         return False
 
 
 def download_from_aws(local_file, s3_file):
-    s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
-                      aws_secret_access_key=SECRET_KEY)
+    return True, 'Download Successful'
+# def download_from_aws(local_file, s3_file):
+#     s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
+#                       aws_secret_access_key=SECRET_KEY)
 
-    bucket = 'poe-uploads'
-    try:
-        s3.download_file(bucket, s3_file, local_file)
-        del s3
-        print("Download Successful")
-        return True, 'Download Successful'
-    except FileNotFoundError:
-        print("The file was not found")
-        return False, 'The file was not found'
-    except NoCredentialsError:
-        print("Credentials not available")
-        return False, 'Credentials not available'
-    except ClientError:
-        print("ClientError")
-        return False, 'ClientError'
-
+#     bucket = 'poe-uploads'
+#     try:
+#         s3.download_file(bucket, s3_file, local_file)
+#         del s3
+#         print("Download Successful")
+#         return True, 'Download Successful'
+#     except FileNotFoundError:
+#         print("The file was not found")
+#         return False, 'The file was not found'
+#     except NoCredentialsError:
+#         print("Credentials not available")
+#         return False, 'Credentials not available'
+#     except ClientError:
+#         print("ClientError")
+#         return False, 'ClientError'
 
 def delete_from_aws(file):
-    s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
-                      aws_secret_access_key=SECRET_KEY)
+    print("Delete Successful")
+    return True
+    
+# def delete_from_aws(file):
+#     s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
+#                       aws_secret_access_key=SECRET_KEY)
 
-    bucket='poe-uploads'
-    try:
-        s3.delete_object(Bucket=bucket, Key=file)
-        print("Delete Successful")
-        return True
-    except FileNotFoundError:
-        print("The file was not found")
-        return False
-    except NoCredentialsError:
-        print("Credentials not available")
-        return False
+#     bucket='poe-uploads'
+#     try:
+#         s3.delete_object(Bucket=bucket, Key=file)
+#         print("Delete Successful")
+#         return True
+#     except FileNotFoundError:
+#         print("The file was not found")
+#         return False
+#     except NoCredentialsError:
+#         print("Credentials not available")
+#         return False
 
 
 def get_result_for_user(id):
@@ -200,6 +216,7 @@ def get_result_for_user(id):
 
 
 def predict(vid, id, leg, attempt=1, debug=None):
+    vid = '/app/dummy-data/950203/ATTEMPT1/vid.mts'
     job = q.enqueue(pipeline.pipe, args=(vid, id, leg, attempt, debug),
                     job_timeout=-1)
 

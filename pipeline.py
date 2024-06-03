@@ -50,7 +50,8 @@ def pipe(vid, id, leg, attempt, debug):
     print(id)
     open('ONGOING', 'w').close()
     s3_base = os.path.dirname(vid)
-    local_vid_path = 'vid.' + vid.split('.')[-1]
+    # local_vid_path = 'vid.' + vid.split('.')[-1]
+    local_vid_path = '/app/dummy-data/950203/ATTEMPT1/vid.mts'
     ONGOING = os.path.join(s3_base, 'ONGOING')
 
     uploaded = backend_utils.upload_to_aws('ONGOING', ONGOING)

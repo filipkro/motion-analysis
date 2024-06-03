@@ -10,13 +10,13 @@ import backend_utils
 app = Flask(__name__)
 
 BASE = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
-config = ConfigParser()
+# config = ConfigParser()
 
-config.read(os.path.join(BASE, 'configs/config'))
-ACCESS_KEY = config.get('aws', 'access')
-SECRET_KEY = config.get('aws', 'secret')
+# config.read(os.path.join(BASE, 'configs/config'))
+# ACCESS_KEY = config.get('aws', 'access')
+# SECRET_KEY = config.get('aws', 'secret')
 
-del config, ConfigParser
+# del config, ConfigParser
 
 app.config['UPLOAD_FOLDER'] = '/data'
 app.config['UPLOAD_EXTENSIONS'] = ['mts', 'mp4', 'mpeg4', 'avi']
@@ -82,14 +82,16 @@ def get_video():
     if not backend_utils.file_on_aws(prefix):
         return "Attempt not in database", 404
 
-    s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
-                      aws_secret_access_key=SECRET_KEY)
+    # s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
+    #                   aws_secret_access_key=SECRET_KEY)
 
-    s3_file = s3.list_objects(Bucket='poe-uploads',
-                              Prefix=prefix)['Contents'][0]['Key']
+    # s3_file = s3.list_objects(Bucket='poe-uploads',
+    #                           Prefix=prefix)['Contents'][0]['Key']
 
-    file = 'vid.' + s3_file.split('.')[-1]
-
+    # file = 'vid.' + s3_file.split('.')[-1]
+    file = '/app/dummy-data/950203/ATTEMPT1/vid.mts'
+    s3_file = 'dummy-data/950203/ATTEMPT1/vid.mts'
+    # file = 'inference/test-flask/02SLS1L.mp4'
     downloaded, error = backend_utils.download_from_aws(file, s3_file)
 
     if downloaded:
@@ -134,17 +136,17 @@ def delete_user(id=None):
         print('user not in database')
         return "User not in database", 404
 
-    s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
-                      aws_secret_access_key=SECRET_KEY)
+    # s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
+    #                   aws_secret_access_key=SECRET_KEY)
 
-    files = s3.list_objects(Bucket='poe-uploads',
-                            Prefix=f'users/{id}')['Contents']
-    keys = [{'Key': key['Key']} for key in files]
-    keys.append({'Key': f'users/{id}'})
-    keys = {'Objects': keys}
+    # files = s3.list_objects(Bucket='poe-uploads',
+    #                         Prefix=f'users/{id}')['Contents']
+    # keys = [{'Key': key['Key']} for key in files]
+    # keys.append({'Key': f'users/{id}'})
+    # keys = {'Objects': keys}
 
-    deleted = s3.delete_objects(Bucket='poe-uploads', Delete=keys)
-
+    # deleted = s3.delete_objects(Bucket='poe-uploads', Delete=keys)
+    deleted = True
     if deleted:
         print(f'Successfully deleted user {id}')
         return 'Delete successful', 200
@@ -168,12 +170,12 @@ def get_user():
         print('user not in database')
         return "User not in database", 404
 
-    s3_file = f'users/{id}/user_params.json'
+    s3_file = 'dummy-data/950203/user_params.json'
 
-    file = 'user_params.json'
+    file = '/app/dummy-data/950203/user_params.json'
 
     downloaded, error = backend_utils.download_from_aws(file, s3_file)
-
+    print(os.listdir('/app'))
     if downloaded:
         f = open(file, 'r')
         data = json.load(f)

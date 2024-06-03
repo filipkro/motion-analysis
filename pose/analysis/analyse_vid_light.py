@@ -22,6 +22,7 @@ def box_check(img, folder_box, show_box=False, device='cpu'):
     det_model = folder_box + '/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth'
     det_model = init_detector(det_config, det_model, device=device)
     print('loaded detection model')
+    print(img)
     det_results = inference_detector(det_model, img)
     del det_model
 
